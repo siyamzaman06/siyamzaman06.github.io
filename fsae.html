@@ -161,16 +161,6 @@
             <div class="tags" style="margin-top:1rem"><span class="tag">Dyno Observation</span><span class="tag">Volumetric Efficiency</span><span class="tag">Engine Tuning</span><span class="tag">Drivetrain Behavior</span></div>
           </div>
         </article>
-        <article class="timeline-item text-only left">
-          <div class="dot"></div>
-          <div class="timeline-copy">
-            <span class="timeline-date">Stage 08 · Current Development</span>
-            <span class="status progress">In Progress</span>
-            <h3 style="margin-top:.9rem">Researching rigidity and developing the '27 mount tabs</h3>
-            <p>Currently designing the differential-mount tabs for the '27 test mule and running FEA to evaluate them before manufacturing. In parallel, I am researching torsional rigidity and how stiffness measurements can be incorporated into the design and testing process.</p>
-            <div class="tags" style="margin-top:1rem"><span class="tag">Mounting Tabs</span><span class="tag">FEA</span><span class="tag">Torsional Rigidity</span><span class="tag">Stiffness Validation</span></div>
-          </div>
-        </article>
         <article class="timeline-item">
           <div class="dot"></div>
           <div class="timeline-media">
@@ -180,15 +170,63 @@
             </figure>
           </div>
           <div class="timeline-copy">
-            <span class="timeline-date">Stage 09 · Physical Prototyping</span>
+            <span class="timeline-date">Stage 08 · Physical Prototyping</span>
             <h3>3D printing the '27 test mule mounts</h3>
             <p>3D printing the differential mounts for physical fit checks, packaging review, assembly practice, and hands-on prototype validation before final manufacturing decisions.</p>
             <div class="tags" style="margin-top:1rem"><span class="tag">3D Printing</span><span class="tag">Physical Prototype</span><span class="tag">Fit Checks</span><span class="tag">Packaging Review</span></div>
           </div>
         </article>
+        <article class="timeline-item tab-fea-item">
+          <div class="dot"></div>
+          <div class="timeline-media">
+            <div class="tab-fea-gallery" aria-label="Left and right differential mount tab FEA results">
+              <figure class="tab-fea-card">
+                <img src="assets/left mount tabs.png" alt="FEA model of the left differential mount tab with fixed welded edge and load applied at the bolt hole">
+                <figcaption>Left Mount Tab</figcaption>
+                <button class="preview-button" type="button" aria-haspopup="dialog" data-preview-src="assets/left mount tabs.png" data-preview-title="Left Mount Tab FEA" data-preview-alt="FEA model of the left differential mount tab with fixed welded edge and load applied at the bolt hole">Preview</button>
+              </figure>
+              <figure class="tab-fea-card">
+                <img src="assets/right mount tabs.png" alt="FEA model of the right differential mount tab with fixed welded edge and load applied at the bolt hole">
+                <figcaption>Right Mount Tab</figcaption>
+                <button class="preview-button" type="button" aria-haspopup="dialog" data-preview-src="assets/right mount tabs.png" data-preview-title="Right Mount Tab FEA" data-preview-alt="FEA model of the right differential mount tab with fixed welded edge and load applied at the bolt hole">Preview</button>
+              </figure>
+            </div>
+          </div>
+          <div class="timeline-copy">
+            <span class="timeline-date">Stage 09 · Differential-Mount Tab CAD &amp; FEA</span>
+            <h3>Designed and analyzed the differential-mount tabs</h3>
+            <p>Created the left and right differential-mount tab geometry in CAD, then ran multiple FEA-driven design iterations. I adjusted each profile for its own reaction load until both designs achieved the target factor of safety of 3. These parts are planned for installation on the test mule in the coming months.</p>
+            <div class="fea-load-grid" aria-label="Differential mount tab loads">
+              <div class="fea-load-card"><span>Left tab load</span><strong>1,047.9 lbf</strong><small>per tab · 2,095.8 lbf tab-pair load</small></div>
+              <div class="fea-load-card"><span>Right tab load</span><strong>496.65 lbf</strong><small>per tab · 993.3 lbf tab-pair load</small></div>
+            </div>
+            <ul class="fea-assumptions">
+              <li><strong>Material:</strong> AISI 4130 steel, annealed at 865°C</li>
+              <li><strong>Boundary condition:</strong> welded mounting edge fixed</li>
+              <li><strong>Load application:</strong> 50% of each tab-pair load applied to the inner semicylindrical bolt-hole surface</li>
+              <li><strong>Chain-force direction:</strong> 60° estimate used in the FEA model</li>
+            </ul>
+            <div class="tags" style="margin-top:1rem"><span class="tag">Mounting Tabs</span><span class="tag">FEA Iteration</span><span class="tag">Factor of Safety</span><span class="tag">Test Mule</span></div>
+          </div>
+        </article>
       </div>
     </section>
   </main>
+  <dialog class="image-lightbox" id="imageLightbox" aria-labelledby="imageLightboxTitle" aria-describedby="imageLightboxHint">
+    <div class="image-lightbox-panel">
+      <div class="image-lightbox-header">
+        <div>
+          <span>Differential Mount Analysis</span>
+          <h2 id="imageLightboxTitle">FEA Preview</h2>
+        </div>
+        <button class="image-lightbox-close" type="button" aria-label="Close FEA preview">&times;</button>
+      </div>
+      <div class="image-lightbox-stage">
+        <img id="imageLightboxImage" alt="">
+      </div>
+      <p id="imageLightboxHint">Press Escape or click outside the preview to close.</p>
+    </div>
+  </dialog>
   <footer class="footer">
     <div class="container footer-row"><span>© <span data-year></span> Siyam Zaman</span><span>Mechanical engineering portfolio</span></div>
   </footer>

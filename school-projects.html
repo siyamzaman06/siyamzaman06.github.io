@@ -41,16 +41,14 @@
           <article class="project-card featured table-vise-card reveal">
             <div class="project-gallery">
               <figure class="media">
-                <div class="placeholder show" role="img" aria-label="Exploded assembly view pending">
-                  <div><strong>Exploded Assembly View</strong><span>Project media pending</span></div>
-                </div>
+                <img src="assets/Reverse Engineering Table Vise Assembly - Exploded View.png" alt="Exploded CAD drawing of the reverse engineered table vise assembly with numbered component callouts">
                 <figcaption>Exploded CAD View</figcaption>
+                <button class="preview-button" type="button" aria-haspopup="dialog" data-preview-src="assets/Reverse Engineering Table Vise Assembly - Exploded View.png" data-preview-title="Exploded CAD View" data-preview-alt="Exploded CAD drawing of the reverse engineered table vise assembly with numbered component callouts">Preview</button>
               </figure>
               <figure class="media">
-                <div class="placeholder show" role="img" aria-label="GD&T drawing set pending">
-                  <div><strong>GD&amp;T Drawing Set</strong><span>Project media pending</span></div>
-                </div>
-                <figcaption>GD&amp;T Drawings</figcaption>
+                <img src="assets/Reverse Engineering Table Vise Assembly - GD&amp;T.png" alt="Engineering drawing of a table vise component with dimensions, datums, and a GD&amp;T position tolerance">
+                <figcaption>GD&amp;T Drawing</figcaption>
+                <button class="preview-button" type="button" aria-haspopup="dialog" data-preview-src="assets/Reverse Engineering Table Vise Assembly - GD&amp;T.png" data-preview-title="GD&amp;T Drawing" data-preview-alt="Engineering drawing of a table vise component with dimensions, datums, and a GD&amp;T position tolerance">Preview</button>
               </figure>
             </div>
             <div class="project-body">
@@ -115,6 +113,21 @@
       </div>
     </section>
   </main>
+  <dialog class="image-lightbox" id="imageLightbox" aria-labelledby="imageLightboxTitle" aria-describedby="imageLightboxHint">
+    <div class="image-lightbox-panel">
+      <div class="image-lightbox-header">
+        <div>
+          <span>Table Vise Drawing</span>
+          <h2 id="imageLightboxTitle">Drawing Preview</h2>
+        </div>
+        <button class="image-lightbox-close" type="button" aria-label="Close drawing preview">&times;</button>
+      </div>
+      <div class="image-lightbox-stage">
+        <img id="imageLightboxImage" alt="">
+      </div>
+      <p id="imageLightboxHint">Press Escape or click outside the preview to close.</p>
+    </div>
+  </dialog>
   <footer class="footer">
     <div class="container footer-row"><span>© <span data-year></span> Siyam Zaman</span><span>Mechanical engineering portfolio</span></div>
   </footer>
