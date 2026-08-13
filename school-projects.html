@@ -38,18 +38,24 @@
     <section class="section school-projects-section">
       <div class="container">
         <div class="project-grid">
-          <article class="project-card featured table-vise-card reveal">
-            <div class="project-gallery">
-              <figure class="media">
-                <img src="assets/Reverse Engineering Table Vise Assembly - Exploded View.png" alt="Exploded CAD drawing of the reverse engineered table vise assembly with numbered component callouts">
+          <article class="project-card featured table-vise-card reveal" id="table-vise">
+            <div class="project-gallery drawing-switcher" data-drawing-switcher>
+              <div class="drawing-tabs" role="tablist" aria-label="Table vise engineering drawings">
+                <button id="explodedDrawingTab" type="button" role="tab" aria-selected="false" aria-controls="explodedDrawingPanel" data-drawing-tab>Exploded CAD</button>
+                <button id="gdtDrawingTab" type="button" role="tab" aria-selected="true" aria-controls="gdtDrawingPanel" data-drawing-tab>GD&amp;T Drawing</button>
+              </div>
+              <div class="drawing-stage">
+              <figure class="media drawing-slide" id="explodedDrawingPanel" role="tabpanel" aria-labelledby="explodedDrawingTab" aria-hidden="true" data-drawing-panel>
+                <img src="assets/Reverse Engineering Table Vise Assembly - Exploded View.png" alt="Exploded CAD drawing of the reverse engineered table vise assembly with numbered component callouts" width="1006" height="777" decoding="async">
                 <figcaption>Exploded CAD View</figcaption>
-                <button class="preview-button" type="button" aria-haspopup="dialog" data-preview-src="assets/Reverse Engineering Table Vise Assembly - Exploded View.png" data-preview-title="Exploded CAD View" data-preview-alt="Exploded CAD drawing of the reverse engineered table vise assembly with numbered component callouts">Preview</button>
+                <button class="preview-button" type="button" aria-haspopup="dialog" data-preview-src="assets/Reverse Engineering Table Vise Assembly - Exploded View.png" data-preview-title="Exploded CAD View" data-preview-alt="Exploded CAD drawing of the reverse engineered table vise assembly with numbered component callouts">View</button>
               </figure>
-              <figure class="media">
-                <img src="assets/Reverse Engineering Table Vise Assembly - GD&amp;T.png" alt="Engineering drawing of a table vise component with dimensions, datums, and a GD&amp;T position tolerance">
+              <figure class="media drawing-slide active" id="gdtDrawingPanel" role="tabpanel" aria-labelledby="gdtDrawingTab" data-drawing-panel>
+                <img src="assets/Reverse Engineering Table Vise Assembly - GD&amp;T.png" alt="Engineering drawing of a table vise component with dimensions, datums, and a GD&amp;T position tolerance" width="944" height="724" decoding="async">
                 <figcaption>GD&amp;T Drawing</figcaption>
-                <button class="preview-button" type="button" aria-haspopup="dialog" data-preview-src="assets/Reverse Engineering Table Vise Assembly - GD&amp;T.png" data-preview-title="GD&amp;T Drawing" data-preview-alt="Engineering drawing of a table vise component with dimensions, datums, and a GD&amp;T position tolerance">Preview</button>
+                <button class="preview-button" type="button" aria-haspopup="dialog" data-preview-src="assets/Reverse Engineering Table Vise Assembly - GD&amp;T.png" data-preview-title="GD&amp;T Drawing" data-preview-alt="Engineering drawing of a table vise component with dimensions, datums, and a GD&amp;T position tolerance">View</button>
               </figure>
+              </div>
             </div>
             <div class="project-body">
               <span class="status done">Featured CAD Project</span>
@@ -68,9 +74,9 @@
               </div>
             </div>
           </article>
-          <article class="project-card featured reverse reveal">
+          <article class="project-card featured reverse reveal" id="acrylic-bridge">
             <figure class="media">
-              <img src="assets/acrylic-bridge.jpeg" alt="Laser-cut acrylic bridge during load testing">
+              <img src="assets/acrylic-bridge.jpeg" alt="Laser-cut acrylic bridge during load testing" width="4032" height="3024" loading="lazy" decoding="async">
               <div class="placeholder">
                 <div><strong>Acrylic Bridge Load Test</strong><span>Project media unavailable</span></div>
               </div>
@@ -89,9 +95,9 @@
               </div>
             </div>
           </article>
-          <article class="project-card featured reveal">
+          <article class="project-card featured reveal" id="machine-shop">
             <figure class="media">
-              <img src="assets/machine-shop-training.jpeg" alt="Aluminum workpiece from machine shop training">
+              <img src="assets/machine-shop-training.jpeg" alt="Aluminum workpiece from machine shop training" width="4032" height="3024" loading="lazy" decoding="async">
               <div class="placeholder">
                 <div><strong>Machine Shop Training</strong><span>Project media unavailable</span></div>
               </div>
@@ -118,14 +124,14 @@
       <div class="image-lightbox-header">
         <div>
           <span>Table Vise Drawing</span>
-          <h2 id="imageLightboxTitle">Drawing Preview</h2>
+          <h2 id="imageLightboxTitle">Drawing Viewer</h2>
         </div>
-        <button class="image-lightbox-close" type="button" aria-label="Close drawing preview">&times;</button>
+        <button class="image-lightbox-close" type="button" aria-label="Close drawing viewer">&times;</button>
       </div>
       <div class="image-lightbox-stage">
         <img id="imageLightboxImage" alt="">
       </div>
-      <p id="imageLightboxHint">Press Escape or click outside the preview to close.</p>
+      <p id="imageLightboxHint">Press Escape or click outside the viewer to close.</p>
     </div>
   </dialog>
   <footer class="footer">
