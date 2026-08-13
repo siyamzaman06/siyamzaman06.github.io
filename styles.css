@@ -166,7 +166,8 @@ body.light .sound-warning strong{color:#a51926}
 
 /* Sitewide interaction and motion layer */
 @property --card-outline-angle{syntax:"<angle>";inherits:false;initial-value:0deg}
-@view-transition{navigation:auto}
+/* Keep page-to-page navigation opaque; cross-document snapshots can expose a white browser canvas. */
+@view-transition{navigation:none}
 .site-header{view-transition-name:site-header}
 main{view-transition-name:page-content}
 ::view-transition-group(site-header){z-index:1001}
@@ -243,6 +244,7 @@ body.light .spotlight-surface:before{background:radial-gradient(380px circle at 
 .interactive-tilt{--card-tilt-x:0deg;--card-tilt-y:0deg;--card-lift:0px;--card-depth:0px;--card-scale:1;--card-shadow-x:0px;--card-shadow-y:32px;z-index:1;transform:perspective(750px) translate3d(0,var(--card-lift),var(--card-depth)) rotateX(var(--card-tilt-x)) rotateY(var(--card-tilt-y)) scale(var(--card-scale));transform-style:preserve-3d;transform-origin:center;will-change:transform,filter;transition:transform .52s cubic-bezier(.16,1,.3,1),filter .3s,border-color .25s,box-shadow .38s}
 .interactive-tilt.is-tilting{transition:transform .06s linear,filter .2s,border-color .18s,box-shadow .1s linear}
 .interactive-tilt:hover{--card-lift:-8px;--card-depth:14px;--card-scale:1.01;z-index:20;border-color:rgba(97,199,255,.46);filter:brightness(1.025) saturate(1.04);box-shadow:var(--card-shadow-x) var(--card-shadow-y) 76px -22px rgba(0,0,0,.44),0 12px 30px -14px rgba(0,0,0,.38),0 0 34px rgba(97,199,255,.11),inset 0 1px 0 rgba(255,255,255,.07)}
+.interactive-tilt:is(.fea-load-card,.certificate-attachment):hover{--card-lift:-4px;--card-depth:7px;--card-scale:1.006}
 .interactive-tilt>*{transform-style:preserve-3d}
 .tags .tag,.skills span{transition:color .2s,border-color .2s,background .2s,transform .2s}
 .tags .tag:hover,.skills span:hover{transform:translateY(-2px);color:var(--text);border-color:rgba(97,199,255,.32);background:rgba(97,199,255,.07)}
@@ -396,3 +398,26 @@ body.user-reduce-motion .reveal,body.user-reduce-motion .timeline-copy,body.user
 }
 .fsae-page-grid{grid-template-columns:minmax(0,1.45fr) minmax(320px,.55fr);gap:clamp(3rem,5vw,5rem)}
 @media(max-width:980px){.fsae-page-grid{grid-template-columns:1fr;gap:3rem}}
+
+/* Match the saved theme before the main script runs to prevent a bright first-paint flash. */
+:root{background:#07111f;color-scheme:dark}
+:root.theme-preload-light{background:#eef3f8;color-scheme:light}
+:root.theme-preload-light body{--bg:#eef3f8;--bg2:#e5ecf4;--panel:rgba(255,255,255,.88);--solid:#fff;--text:#112038;--muted:#5e6c7e;--line:rgba(17,32,56,.12);--shadow:0 22px 55px rgba(38,56,80,.13)}
+
+/* Clean, restrained type system: readable Inter body copy with geometric Manrope display text. */
+body{font-family:"Inter",ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-optical-sizing:auto;font-feature-settings:"liga" 1,"calt" 1}
+:where(h1,h2,h3,.brand,.eyebrow,.page-no,.timeline-date,.button){font-family:"Manrope","Inter",ui-sans-serif,system-ui,sans-serif}
+h1,h2,h3{text-wrap:balance;letter-spacing:-.04em}
+
+/* Compact vise feature: constrained side-by-side columns without media overflow. */
+.project-card.featured.table-vise-card{grid-template-columns:minmax(0,1.12fr) minmax(320px,.88fr);align-items:stretch}
+.table-vise-card>.project-gallery,.table-vise-card>.project-body{width:100%;min-width:0}
+.table-vise-card>.project-gallery{grid-column:1;grid-row:1;border-right:1px solid var(--line);border-bottom:0}
+.table-vise-card>.project-body{grid-column:2;grid-row:1}
+.table-vise-card .drawing-stage{width:100%;min-width:0;overflow:hidden}
+.table-vise-card>.drawing-switcher{grid-template-rows:max-content auto;align-content:start}
+.table-vise-card .drawing-tabs{align-self:start;align-items:center}
+.table-vise-card .drawing-tabs button{height:42px;min-height:42px;padding:.45rem .8rem}
+@media(max-width:980px){.project-card.featured.table-vise-card{grid-template-columns:minmax(0,1fr)}.table-vise-card>.project-gallery,.table-vise-card>.project-body{grid-column:1}.table-vise-card>.project-gallery{grid-row:1;border-right:0;border-bottom:1px solid var(--line)}.table-vise-card>.project-body{grid-row:2}}
+
+.home-grid{grid-template-columns:minmax(0,850px)}

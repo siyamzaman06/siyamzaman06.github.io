@@ -76,6 +76,7 @@ const themeColor = document.querySelector('meta[name="theme-color"]') || documen
 try {
   if (localStorage.getItem('portfolio-theme') === 'light') document.body.classList.add('light');
 } catch {}
+root.classList.remove('theme-preload-light');
 
 const syncThemeUi = () => {
   const light = document.body.classList.contains('light');
@@ -292,6 +293,24 @@ if (finePointer.matches && !motionReduced()) {
   let pointerFrame = 0;
   let pointerX = innerWidth / 2;
   let pointerY = innerHeight / 3;
+  const tiltStates = new Map();
+
+  const resetTilt = (surface, state = tiltStates.get(surface)) => {
+    if (state?.frame) cancelAnimationFrame(state.frame);
+    if (state) {
+      state.frame = 0;
+      state.rect = null;
+    }
+    surface.classList.remove('is-tilting');
+    surface.style.setProperty('--card-tilt-x', '0deg');
+    surface.style.setProperty('--card-tilt-y', '0deg');
+    surface.style.setProperty('--card-shadow-x', '0px');
+    surface.style.setProperty('--card-shadow-y', '32px');
+  };
+
+  const resetAllTilts = () => {
+    spotlightSurfaces.forEach((surface) => resetTilt(surface));
+  };
 
   addEventListener('pointermove', (event) => {
     pointerX = event.clientX;
@@ -306,32 +325,39 @@ if (finePointer.matches && !motionReduced()) {
   }, { passive: true });
 
   spotlightSurfaces.forEach((surface) => {
-    let surfaceFrame = 0;
-    let surfaceX = 0;
-    let surfaceY = 0;
+    const state = { frame: 0, rect: null, x: 0, y: 0 };
+    tiltStates.set(surface, state);
+
+    surface.addEventListener('pointerenter', (event) => {
+      if (event.pointerType === 'touch') return;
+      resetTilt(surface, state);
+      state.rect = surface.getBoundingClientRect();
+    }, { passive: true });
+
     surface.addEventListener('pointermove', (event) => {
       if (event.pointerType === 'touch') return;
       const closestSurface = event.target.closest(spotlightSelector);
       if (closestSurface !== surface) {
-        surface.classList.remove('is-tilting');
-        surface.style.setProperty('--card-tilt-x', '0deg');
-        surface.style.setProperty('--card-tilt-y', '0deg');
-        surface.style.setProperty('--card-shadow-x', '0px');
-        surface.style.setProperty('--card-shadow-y', '32px');
+        resetTilt(surface, state);
         return;
       }
-      surfaceX = event.clientX;
-      surfaceY = event.clientY;
-      if (surfaceFrame) return;
-      surfaceFrame = requestAnimationFrame(() => {
-        surfaceFrame = 0;
-        const rect = surface.getBoundingClientRect();
-        const localX = surfaceX - rect.left;
-        const localY = surfaceY - rect.top;
-        const normalizedX = Math.max(-1, Math.min(1, ((localX / rect.width) - 0.5) * 2));
-        const normalizedY = Math.max(-1, Math.min(1, ((localY / rect.height) - 0.5) * 2));
-        const tiltX = -normalizedY * 9;
-        const tiltY = normalizedX * 12;
+      state.x = event.clientX;
+      state.y = event.clientY;
+      if (state.frame) return;
+      state.frame = requestAnimationFrame(() => {
+        state.frame = 0;
+        const rect = state.rect || surface.getBoundingClientRect();
+        if (rect.width < 1 || rect.height < 1) {
+          resetTilt(surface, state);
+          return;
+        }
+        const localX = Math.max(0, Math.min(rect.width, state.x - rect.left));
+        const localY = Math.max(0, Math.min(rect.height, state.y - rect.top));
+        const normalizedX = Math.max(-0.82, Math.min(0.82, ((localX / rect.width) - 0.5) * 2));
+        const normalizedY = Math.max(-0.82, Math.min(0.82, ((localY / rect.height) - 0.5) * 2));
+        const isCompactCard = surface.matches('.fea-load-card, .certificate-attachment');
+        const tiltX = -normalizedY * (isCompactCard ? 5 : 9);
+        const tiltY = normalizedX * (isCompactCard ? 7 : 12);
         const shadowX = -normalizedX * 20;
         const shadowY = 32 - normalizedY * 8;
         surface.classList.add('is-tilting');
@@ -343,15 +369,15 @@ if (finePointer.matches && !motionReduced()) {
         surface.style.setProperty('--card-shadow-y', `${shadowY.toFixed(1)}px`);
       });
     }, { passive: true });
-    surface.addEventListener('pointerleave', () => {
-      surface.classList.remove('is-tilting');
-      surface.style.setProperty('--card-tilt-x', '0deg');
-      surface.style.setProperty('--card-tilt-y', '0deg');
-      surface.style.setProperty('--card-shadow-x', '0px');
-      surface.style.setProperty('--card-shadow-y', '32px');
-    });
+    surface.addEventListener('pointerleave', () => resetTilt(surface, state));
+    surface.addEventListener('pointercancel', () => resetTilt(surface, state));
   });
 
+  addEventListener('blur', resetAllTilts);
+  document.documentElement.addEventListener('pointerleave', resetAllTilts);
+  document.addEventListener('mouseout', (event) => {
+    if (!event.relatedTarget) resetAllTilts();
+  });
 }
 
 const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
@@ -1010,4 +1036,580 @@ if (location.hash === '#contact' && contactTrigger) {
 
 if (location.hash === '#work' && projectOverviewTrigger) {
   setTimeout(() => projectOverviewTrigger.click(), motionReduced() ? 0 : 260);
+}
+
+const kineticFidget = document.getElementById('kineticFidget');
+const fidgetScene = kineticFidget?.querySelector('.fidget-scene');
+if (kineticFidget && fidgetScene) {
+  let rotationX = -12;
+  let rotationY = 22;
+  let rotationZ = -8;
+  let velocityX = 0;
+  let velocityY = 0;
+  let velocityZ = 0;
+  let momentumFrame = 0;
+  let dragging = false;
+  let moved = false;
+  let suppressClick = false;
+  let lastX = 0;
+  let lastY = 0;
+
+  const clampVelocity = (value) => Math.max(-7, Math.min(7, value));
+  const renderFidget = () => {
+    fidgetScene.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY}deg) rotateZ(${rotationZ}deg)`;
+  };
+
+  const runMomentum = () => {
+    cancelAnimationFrame(momentumFrame);
+    if (motionReduced()) {
+      kineticFidget.classList.remove('is-spinning');
+      renderFidget();
+      return;
+    }
+    kineticFidget.classList.add('is-spinning');
+    const tick = () => {
+      if (dragging || motionReduced()) {
+        momentumFrame = 0;
+        kineticFidget.classList.remove('is-spinning');
+        return;
+      }
+      rotationX += velocityX;
+      rotationY += velocityY;
+      rotationZ += velocityZ;
+      velocityX *= .965;
+      velocityY *= .965;
+      velocityZ *= .965;
+      renderFidget();
+      if (Math.max(Math.abs(velocityX), Math.abs(velocityY), Math.abs(velocityZ)) > .025) {
+        momentumFrame = requestAnimationFrame(tick);
+      } else {
+        momentumFrame = 0;
+        kineticFidget.classList.remove('is-spinning');
+      }
+    };
+    momentumFrame = requestAnimationFrame(tick);
+  };
+
+  const boostFidget = () => {
+    if (motionReduced()) {
+      rotationX -= 8;
+      rotationY += 16;
+      rotationZ += 6;
+      renderFidget();
+      return;
+    }
+    velocityX = clampVelocity(velocityX + 2.2);
+    velocityY = clampVelocity(velocityY + 5.2);
+    velocityZ = clampVelocity(velocityZ + 2.7);
+    runMomentum();
+  };
+
+  kineticFidget.addEventListener('pointerdown', (event) => {
+    if (event.button !== 0 && event.pointerType === 'mouse') return;
+    cancelAnimationFrame(momentumFrame);
+    momentumFrame = 0;
+    kineticFidget.classList.remove('is-spinning');
+    kineticFidget.classList.add('is-dragging');
+    kineticFidget.setPointerCapture(event.pointerId);
+    dragging = true;
+    moved = false;
+    lastX = event.clientX;
+    lastY = event.clientY;
+  });
+
+  kineticFidget.addEventListener('pointermove', (event) => {
+    if (!dragging) return;
+    const deltaX = event.clientX - lastX;
+    const deltaY = event.clientY - lastY;
+    if (Math.abs(deltaX) + Math.abs(deltaY) > 2) moved = true;
+    rotationX -= deltaY * .55;
+    rotationY += deltaX * .55;
+    rotationZ += deltaX * .09;
+    velocityX = clampVelocity(-deltaY * .34);
+    velocityY = clampVelocity(deltaX * .34);
+    velocityZ = clampVelocity(deltaX * .075);
+    lastX = event.clientX;
+    lastY = event.clientY;
+    renderFidget();
+  });
+
+  const releaseFidget = (event) => {
+    if (!dragging) return;
+    dragging = false;
+    suppressClick = moved;
+    kineticFidget.classList.remove('is-dragging');
+    if (kineticFidget.hasPointerCapture(event.pointerId)) kineticFidget.releasePointerCapture(event.pointerId);
+    if (moved) runMomentum();
+  };
+
+  kineticFidget.addEventListener('pointerup', releaseFidget);
+  kineticFidget.addEventListener('pointercancel', releaseFidget);
+  kineticFidget.addEventListener('click', () => {
+    if (suppressClick) {
+      suppressClick = false;
+      return;
+    }
+    boostFidget();
+  });
+  kineticFidget.addEventListener('keydown', (event) => {
+    const keyRotation = {
+      ArrowUp: [-9, 0],
+      ArrowDown: [9, 0],
+      ArrowLeft: [0, -9],
+      ArrowRight: [0, 9]
+    }[event.key];
+    if (!keyRotation) return;
+    event.preventDefault();
+    rotationX += keyRotation[0];
+    rotationY += keyRotation[1];
+    renderFidget();
+  });
+
+  renderFidget();
+}
+
+const kineticFidgetCanvas = document.getElementById('kineticFidgetCanvas');
+if (kineticFidget && kineticFidgetCanvas) {
+  const initWebglFidget = () => {
+    const gl = kineticFidgetCanvas.getContext('webgl', { alpha: true, antialias: true, powerPreference: 'high-performance' });
+    if (!gl) throw new Error('WebGL is unavailable');
+
+    const vertexSource = `
+      attribute vec3 aPosition;
+      attribute vec3 aNormal;
+      uniform mat4 uProjection;
+      uniform mat4 uView;
+      uniform mat4 uModel;
+      varying vec3 vNormal;
+      varying vec3 vWorldPosition;
+      void main() {
+        vec4 worldPosition = uModel * vec4(aPosition, 1.0);
+        vWorldPosition = worldPosition.xyz;
+        vNormal = normalize(mat3(uModel) * aNormal);
+        gl_Position = uProjection * uView * worldPosition;
+      }
+    `;
+    const fragmentSource = `
+      precision mediump float;
+      uniform vec3 uColor;
+      uniform vec3 uCamera;
+      varying vec3 vNormal;
+      varying vec3 vWorldPosition;
+      void main() {
+        vec3 normal = normalize(vNormal);
+        vec3 lightDirection = normalize(vec3(-0.45, 0.8, 1.0));
+        vec3 viewDirection = normalize(uCamera - vWorldPosition);
+        float diffuse = max(dot(normal, lightDirection), 0.0);
+        float backLight = max(dot(normal, -lightDirection), 0.0) * 0.16;
+        vec3 reflected = reflect(-lightDirection, normal);
+        float specular = pow(max(dot(viewDirection, reflected), 0.0), 54.0);
+        float fresnel = pow(1.0 - max(dot(viewDirection, normal), 0.0), 2.35);
+        vec3 color = uColor * (0.28 + diffuse * 0.78 + backLight);
+        color += vec3(0.75, 0.93, 1.0) * specular * 1.15;
+        color += mix(vec3(0.08, 0.32, 0.65), vec3(0.52, 0.34, 1.0), fresnel) * fresnel * 0.9;
+        gl_FragColor = vec4(color, 1.0);
+      }
+    `;
+
+    const compileShader = (type, source) => {
+      const shader = gl.createShader(type);
+      gl.shaderSource(shader, source);
+      gl.compileShader(shader);
+      if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(shader));
+      return shader;
+    };
+    const program = gl.createProgram();
+    gl.attachShader(program, compileShader(gl.VERTEX_SHADER, vertexSource));
+    gl.attachShader(program, compileShader(gl.FRAGMENT_SHADER, fragmentSource));
+    gl.linkProgram(program);
+    if (!gl.getProgramParameter(program, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(program));
+    gl.useProgram(program);
+
+    const locations = {
+      position: gl.getAttribLocation(program, 'aPosition'),
+      normal: gl.getAttribLocation(program, 'aNormal'),
+      projection: gl.getUniformLocation(program, 'uProjection'),
+      view: gl.getUniformLocation(program, 'uView'),
+      model: gl.getUniformLocation(program, 'uModel'),
+      color: gl.getUniformLocation(program, 'uColor'),
+      camera: gl.getUniformLocation(program, 'uCamera')
+    };
+
+    const identity = () => new Float32Array([1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]);
+    const multiply = (a, b) => {
+      const result = new Float32Array(16);
+      for (let column = 0; column < 4; column += 1) {
+        for (let row = 0; row < 4; row += 1) {
+          result[column * 4 + row] =
+            a[row] * b[column * 4] +
+            a[4 + row] * b[column * 4 + 1] +
+            a[8 + row] * b[column * 4 + 2] +
+            a[12 + row] * b[column * 4 + 3];
+        }
+      }
+      return result;
+    };
+    const translation = (x, y, z) => {
+      const matrix = identity();
+      matrix[12] = x;
+      matrix[13] = y;
+      matrix[14] = z;
+      return matrix;
+    };
+    const scaling = (x, y = x, z = x) => new Float32Array([x, 0, 0, 0, 0, y, 0, 0, 0, 0, z, 0, 0, 0, 0, 1]);
+    const rotateX = (angle) => {
+      const cosine = Math.cos(angle);
+      const sine = Math.sin(angle);
+      return new Float32Array([1, 0, 0, 0, 0, cosine, sine, 0, 0, -sine, cosine, 0, 0, 0, 0, 1]);
+    };
+    const rotateY = (angle) => {
+      const cosine = Math.cos(angle);
+      const sine = Math.sin(angle);
+      return new Float32Array([cosine, 0, -sine, 0, 0, 1, 0, 0, sine, 0, cosine, 0, 0, 0, 0, 1]);
+    };
+    const rotateZ = (angle) => {
+      const cosine = Math.cos(angle);
+      const sine = Math.sin(angle);
+      return new Float32Array([cosine, sine, 0, 0, -sine, cosine, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]);
+    };
+    const perspective = (fieldOfView, aspect, near, far) => {
+      const scale = 1 / Math.tan(fieldOfView / 2);
+      const range = 1 / (near - far);
+      return new Float32Array([scale / aspect, 0, 0, 0, 0, scale, 0, 0, 0, 0, (far + near) * range, -1, 0, 0, 2 * far * near * range, 0]);
+    };
+    const compose = (...matrices) => matrices.reduce((result, matrix) => multiply(result, matrix), identity());
+
+    const buildTorus = (majorRadius, tubeRadius, majorSegments = 72, tubeSegments = 20) => {
+      const positions = [];
+      const normals = [];
+      const indices = [];
+      for (let major = 0; major <= majorSegments; major += 1) {
+        const u = major / majorSegments * Math.PI * 2;
+        const cosineU = Math.cos(u);
+        const sineU = Math.sin(u);
+        for (let tube = 0; tube <= tubeSegments; tube += 1) {
+          const v = tube / tubeSegments * Math.PI * 2;
+          const cosineV = Math.cos(v);
+          const sineV = Math.sin(v);
+          positions.push((majorRadius + tubeRadius * cosineV) * cosineU, (majorRadius + tubeRadius * cosineV) * sineU, tubeRadius * sineV);
+          normals.push(cosineU * cosineV, sineU * cosineV, sineV);
+        }
+      }
+      for (let major = 0; major < majorSegments; major += 1) {
+        for (let tube = 0; tube < tubeSegments; tube += 1) {
+          const first = major * (tubeSegments + 1) + tube;
+          const second = first + tubeSegments + 1;
+          indices.push(first, second, first + 1, second, second + 1, first + 1);
+        }
+      }
+      return { positions, normals, indices };
+    };
+
+    const buildSphere = (radius, latitudeSegments = 26, longitudeSegments = 34) => {
+      const positions = [];
+      const normals = [];
+      const indices = [];
+      for (let latitude = 0; latitude <= latitudeSegments; latitude += 1) {
+        const theta = latitude / latitudeSegments * Math.PI;
+        const sineTheta = Math.sin(theta);
+        const cosineTheta = Math.cos(theta);
+        for (let longitude = 0; longitude <= longitudeSegments; longitude += 1) {
+          const phi = longitude / longitudeSegments * Math.PI * 2;
+          const x = Math.cos(phi) * sineTheta;
+          const y = cosineTheta;
+          const z = Math.sin(phi) * sineTheta;
+          positions.push(radius * x, radius * y, radius * z);
+          normals.push(x, y, z);
+        }
+      }
+      for (let latitude = 0; latitude < latitudeSegments; latitude += 1) {
+        for (let longitude = 0; longitude < longitudeSegments; longitude += 1) {
+          const first = latitude * (longitudeSegments + 1) + longitude;
+          const second = first + longitudeSegments + 1;
+          indices.push(first, second, first + 1, second, second + 1, first + 1);
+        }
+      }
+      return { positions, normals, indices };
+    };
+
+    const buildGear = (teeth, rootRadius, tipRadius, thickness) => {
+      const positions = [];
+      const normals = [];
+      const indices = [];
+      const profile = [];
+      const steps = teeth * 4;
+      for (let step = 0; step < steps; step += 1) {
+        const angle = step / steps * Math.PI * 2;
+        const radius = step % 4 === 1 || step % 4 === 2 ? tipRadius : rootRadius;
+        profile.push([Math.cos(angle) * radius, Math.sin(angle) * radius]);
+      }
+      const addTriangle = (points, normal) => {
+        const start = positions.length / 3;
+        points.forEach((point) => positions.push(...point));
+        points.forEach(() => normals.push(...normal));
+        indices.push(start, start + 1, start + 2);
+      };
+      const addQuad = (points, normal) => {
+        const start = positions.length / 3;
+        points.forEach((point) => positions.push(...point));
+        points.forEach(() => normals.push(...normal));
+        indices.push(start, start + 1, start + 2, start, start + 2, start + 3);
+      };
+      for (let step = 0; step < steps; step += 1) {
+        const next = (step + 1) % steps;
+        const point = profile[step];
+        const nextPoint = profile[next];
+        addTriangle([[0, 0, thickness / 2], [point[0], point[1], thickness / 2], [nextPoint[0], nextPoint[1], thickness / 2]], [0, 0, 1]);
+        addTriangle([[0, 0, -thickness / 2], [nextPoint[0], nextPoint[1], -thickness / 2], [point[0], point[1], -thickness / 2]], [0, 0, -1]);
+        const midpointAngle = Math.atan2(point[1] + nextPoint[1], point[0] + nextPoint[0]);
+        addQuad([
+          [point[0], point[1], thickness / 2],
+          [point[0], point[1], -thickness / 2],
+          [nextPoint[0], nextPoint[1], -thickness / 2],
+          [nextPoint[0], nextPoint[1], thickness / 2]
+        ], [Math.cos(midpointAngle), Math.sin(midpointAngle), 0]);
+      }
+      return { positions, normals, indices };
+    };
+
+    const buildRingGear = (teeth, innerRootRadius, innerTipRadius, outerRadius, thickness) => {
+      const positions = [];
+      const normals = [];
+      const indices = [];
+      const steps = teeth * 4;
+      const addQuad = (points, normal) => {
+        const start = positions.length / 3;
+        points.forEach((point) => positions.push(...point));
+        points.forEach(() => normals.push(...normal));
+        indices.push(start, start + 1, start + 2, start, start + 2, start + 3);
+      };
+      for (let step = 0; step < steps; step += 1) {
+        const next = (step + 1) % steps;
+        const angle = step / steps * Math.PI * 2;
+        const nextAngle = (step + 1) / steps * Math.PI * 2;
+        const innerRadius = step % 4 === 1 || step % 4 === 2 ? innerTipRadius : innerRootRadius;
+        const nextInnerRadius = next % 4 === 1 || next % 4 === 2 ? innerTipRadius : innerRootRadius;
+        const outerPoint = [Math.cos(angle) * outerRadius, Math.sin(angle) * outerRadius];
+        const nextOuterPoint = [Math.cos(nextAngle) * outerRadius, Math.sin(nextAngle) * outerRadius];
+        const innerPoint = [Math.cos(angle) * innerRadius, Math.sin(angle) * innerRadius];
+        const nextInnerPoint = [Math.cos(nextAngle) * nextInnerRadius, Math.sin(nextAngle) * nextInnerRadius];
+        addQuad([
+          [outerPoint[0], outerPoint[1], thickness / 2], [nextOuterPoint[0], nextOuterPoint[1], thickness / 2],
+          [nextInnerPoint[0], nextInnerPoint[1], thickness / 2], [innerPoint[0], innerPoint[1], thickness / 2]
+        ], [0, 0, 1]);
+        addQuad([
+          [outerPoint[0], outerPoint[1], -thickness / 2], [innerPoint[0], innerPoint[1], -thickness / 2],
+          [nextInnerPoint[0], nextInnerPoint[1], -thickness / 2], [nextOuterPoint[0], nextOuterPoint[1], -thickness / 2]
+        ], [0, 0, -1]);
+        const midpointAngle = (angle + nextAngle) / 2;
+        addQuad([
+          [outerPoint[0], outerPoint[1], thickness / 2], [outerPoint[0], outerPoint[1], -thickness / 2],
+          [nextOuterPoint[0], nextOuterPoint[1], -thickness / 2], [nextOuterPoint[0], nextOuterPoint[1], thickness / 2]
+        ], [Math.cos(midpointAngle), Math.sin(midpointAngle), 0]);
+        addQuad([
+          [innerPoint[0], innerPoint[1], thickness / 2], [nextInnerPoint[0], nextInnerPoint[1], thickness / 2],
+          [nextInnerPoint[0], nextInnerPoint[1], -thickness / 2], [innerPoint[0], innerPoint[1], -thickness / 2]
+        ], [-Math.cos(midpointAngle), -Math.sin(midpointAngle), 0]);
+      }
+      return { positions, normals, indices };
+    };
+
+    const createMesh = ({ positions, normals, indices }) => {
+      const positionBuffer = gl.createBuffer();
+      gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
+      const normalBuffer = gl.createBuffer();
+      gl.bindBuffer(gl.ARRAY_BUFFER, normalBuffer);
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(normals), gl.STATIC_DRAW);
+      const indexBuffer = gl.createBuffer();
+      gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
+      gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(indices), gl.STATIC_DRAW);
+      return { positionBuffer, normalBuffer, indexBuffer, count: indices.length };
+    };
+
+    const ringGear = createMesh(buildRingGear(36, 2.18, 1.96, 2.48, .42));
+    const sunGear = createMesh(buildGear(16, .7, .92, .36));
+    const planetGear = createMesh(buildGear(10, .43, .6, .32));
+    const carrierRing = createMesh(buildTorus(1.33, .055, 64, 12));
+    const axle = createMesh(buildSphere(.17, 16, 20));
+    const drawMesh = (mesh, model, color) => {
+      gl.bindBuffer(gl.ARRAY_BUFFER, mesh.positionBuffer);
+      gl.enableVertexAttribArray(locations.position);
+      gl.vertexAttribPointer(locations.position, 3, gl.FLOAT, false, 0, 0);
+      gl.bindBuffer(gl.ARRAY_BUFFER, mesh.normalBuffer);
+      gl.enableVertexAttribArray(locations.normal);
+      gl.vertexAttribPointer(locations.normal, 3, gl.FLOAT, false, 0, 0);
+      gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, mesh.indexBuffer);
+      gl.uniformMatrix4fv(locations.model, false, model);
+      gl.uniform3fv(locations.color, color);
+      gl.drawElements(gl.TRIANGLES, mesh.count, gl.UNSIGNED_SHORT, 0);
+    };
+
+    gl.enable(gl.DEPTH_TEST);
+    gl.depthFunc(gl.LEQUAL);
+    gl.clearColor(0, 0, 0, 0);
+    gl.uniform3f(locations.camera, 0, 0, 8);
+
+    let rotationX = -.55;
+    let rotationY = .2;
+    let rotationZ = -.08;
+    let velocityX = 0;
+    let velocityY = .32;
+    let velocityZ = 0;
+    let orbitAngle = 0;
+    let driveVelocity = 0;
+    let dragging = false;
+    let moved = false;
+    let suppressClick = false;
+    let lastPointerX = 0;
+    let lastPointerY = 0;
+    let lastFrameTime = performance.now();
+    let animationFrame = 0;
+    let visible = true;
+
+    const resizeCanvas = () => {
+      const rectangle = kineticFidgetCanvas.getBoundingClientRect();
+      const pixelRatio = Math.min(devicePixelRatio || 1, 2);
+      const width = Math.max(1, Math.round(rectangle.width * pixelRatio));
+      const height = Math.max(1, Math.round(rectangle.height * pixelRatio));
+      if (kineticFidgetCanvas.width !== width || kineticFidgetCanvas.height !== height) {
+        kineticFidgetCanvas.width = width;
+        kineticFidgetCanvas.height = height;
+      }
+      gl.viewport(0, 0, width, height);
+      return width / height;
+    };
+
+    const renderWebglFidget = () => {
+      const aspect = resizeCanvas();
+      gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+      gl.uniformMatrix4fv(locations.projection, false, perspective(38 * Math.PI / 180, aspect, .1, 40));
+      gl.uniformMatrix4fv(locations.view, false, translation(0, 0, -8));
+      const globalRotation = compose(rotateY(rotationY), rotateX(rotationX), rotateZ(rotationZ));
+      const carrierAngle = orbitAngle * (16 / 52);
+      const planetSpin = carrierAngle - (16 / 10) * (orbitAngle - carrierAngle);
+      drawMesh(ringGear, globalRotation, new Float32Array([.28, .23, .72]));
+      drawMesh(carrierRing, compose(globalRotation, translation(0, 0, -.28)), new Float32Array([.2, .72, 1]));
+      drawMesh(sunGear, compose(globalRotation, rotateZ(orbitAngle)), new Float32Array([.08, .55, 1]));
+      drawMesh(axle, compose(globalRotation, translation(0, 0, .3), scaling(1.15, 1.15, .7)), new Float32Array([.66, .9, 1]));
+      for (let index = 0; index < 3; index += 1) {
+        const carrierPosition = carrierAngle + index / 3 * Math.PI * 2;
+        const x = Math.cos(carrierPosition) * 1.33;
+        const y = Math.sin(carrierPosition) * 1.33;
+        drawMesh(planetGear, compose(globalRotation, translation(x, y, 0), rotateZ(planetSpin)), new Float32Array([.54, .76, 1]));
+        drawMesh(axle, compose(globalRotation, translation(x, y, .28), scaling(.88, .88, .58)), new Float32Array([.77, .91, 1]));
+      }
+    };
+
+    const startRendering = () => {
+      if (animationFrame || !visible || document.hidden) return;
+      lastFrameTime = performance.now();
+      const loop = (now) => {
+        const deltaTime = Math.min((now - lastFrameTime) / 1000, .04);
+        lastFrameTime = now;
+        if (!dragging && !motionReduced()) {
+          rotationX += velocityX * deltaTime;
+          rotationY += (velocityY + .16) * deltaTime;
+          rotationZ += velocityZ * deltaTime;
+          orbitAngle += (.72 + driveVelocity) * deltaTime;
+          velocityX *= Math.pow(.055, deltaTime);
+          velocityY *= Math.pow(.12, deltaTime);
+          velocityZ *= Math.pow(.08, deltaTime);
+          driveVelocity *= Math.pow(.09, deltaTime);
+        }
+        renderWebglFidget();
+        if (visible && !document.hidden && !motionReduced()) animationFrame = requestAnimationFrame(loop);
+        else animationFrame = 0;
+      };
+      animationFrame = requestAnimationFrame(loop);
+    };
+
+    const requestFidgetFrame = () => {
+      if (motionReduced()) renderWebglFidget();
+      else startRendering();
+    };
+
+    kineticFidget.addEventListener('pointerdown', (event) => {
+      if (event.button !== 0 && event.pointerType === 'mouse') return;
+      kineticFidget.setPointerCapture(event.pointerId);
+      kineticFidget.classList.add('is-dragging');
+      dragging = true;
+      moved = false;
+      lastPointerX = event.clientX;
+      lastPointerY = event.clientY;
+    });
+    kineticFidget.addEventListener('pointermove', (event) => {
+      if (!dragging) return;
+      const deltaX = event.clientX - lastPointerX;
+      const deltaY = event.clientY - lastPointerY;
+      if (Math.abs(deltaX) + Math.abs(deltaY) > 2) moved = true;
+      rotationY += deltaX * .012;
+      rotationX += deltaY * .012;
+      velocityY = Math.max(-5, Math.min(5, deltaX * .12));
+      velocityX = Math.max(-5, Math.min(5, deltaY * .12));
+      lastPointerX = event.clientX;
+      lastPointerY = event.clientY;
+      requestFidgetFrame();
+    });
+    const releaseWebglFidget = (event) => {
+      if (!dragging) return;
+      dragging = false;
+      suppressClick = moved;
+      kineticFidget.classList.remove('is-dragging');
+      if (kineticFidget.hasPointerCapture(event.pointerId)) kineticFidget.releasePointerCapture(event.pointerId);
+      requestFidgetFrame();
+    };
+    kineticFidget.addEventListener('pointerup', releaseWebglFidget);
+    kineticFidget.addEventListener('pointercancel', releaseWebglFidget);
+    kineticFidget.addEventListener('click', () => {
+      if (suppressClick) {
+        suppressClick = false;
+        return;
+      }
+      if (motionReduced()) {
+        rotationY += .35;
+        rotationX += .14;
+        orbitAngle += .38;
+      } else {
+        velocityY += 3.8;
+        velocityX += 1.2;
+        velocityZ += 1.35;
+        driveVelocity += 4.8;
+      }
+      requestFidgetFrame();
+    });
+    kineticFidget.addEventListener('keydown', (event) => {
+      const keyRotation = { ArrowUp: [-.16, 0], ArrowDown: [.16, 0], ArrowLeft: [0, -.16], ArrowRight: [0, .16] }[event.key];
+      if (!keyRotation) return;
+      event.preventDefault();
+      rotationX += keyRotation[0];
+      rotationY += keyRotation[1];
+      requestFidgetFrame();
+    });
+
+    new ResizeObserver(requestFidgetFrame).observe(kineticFidgetCanvas);
+    new IntersectionObserver(([entry]) => {
+      visible = entry.isIntersecting;
+      if (visible) requestFidgetFrame();
+      else if (animationFrame) {
+        cancelAnimationFrame(animationFrame);
+        animationFrame = 0;
+      }
+    }, { threshold: .05 }).observe(kineticFidgetCanvas);
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden) requestFidgetFrame();
+    });
+    kineticFidgetCanvas.addEventListener('webglcontextlost', (event) => {
+      event.preventDefault();
+      kineticFidget.classList.add('webgl-failed');
+    });
+    renderWebglFidget();
+    startRendering();
+  };
+
+  try {
+    initWebglFidget();
+  } catch {
+    kineticFidget.classList.add('webgl-failed');
+  }
 }
