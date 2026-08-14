@@ -3,16 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="theme-color" content="#07111f">
-  <style>html{background:#07111f;color-scheme:dark}html.theme-preload-light{background:#eef3f8;color-scheme:light}</style>
-  <script>try{if(localStorage.getItem('portfolio-theme')==='light'){document.documentElement.classList.add('theme-preload-light');document.querySelector('meta[name="theme-color"]').content='#eef3f8'}}catch{}</script>
+  <meta name="theme-color" content="#16161e">
+  <style>html{background:#16161e;color-scheme:dark}html.theme-preload-light{background:#e1e2e7;color-scheme:light}</style>
+  <script>try{if(localStorage.getItem('portfolio-theme')==='light'){document.documentElement.classList.add('theme-preload-light');document.querySelector('meta[name="theme-color"]').content='#e1e2e7'}}catch{}</script>
   <meta name="description" content="A timeline of Siyam Zaman's Dallas Formula Racing drivetrain work, including eccentric differential mounts, 2027 test-mule mounting tabs, FEA, and prototyping.">
   <title>Formula SAE | Siyam Zaman</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..900&amp;family=Manrope:wght@400..800&amp;display=swap">
   <link rel="stylesheet" href="styles.css">
-</head>
+<link rel="canonical" href="https://siyamzaman06.github.io/fsae.html"><meta name="author" content="Siyam Zaman"><meta property="og:type" content="website"><meta property="og:site_name" content="Siyam Zaman Engineering Portfolio"><meta property="og:title" content="Formula SAE | Siyam Zaman"><meta property="og:description" content="A timeline of Siyam Zaman&#39;s Dallas Formula Racing drivetrain work, including eccentric differential mounts, 2027 test-mule mounting tabs, FEA, and prototyping."><meta property="og:url" content="https://siyamzaman06.github.io/fsae.html"><meta name="twitter:card" content="summary"><meta name="twitter:title" content="Formula SAE | Siyam Zaman"><meta name="twitter:description" content="A timeline of Siyam Zaman&#39;s Dallas Formula Racing drivetrain work, including eccentric differential mounts, 2027 test-mule mounting tabs, FEA, and prototyping."></head>
 <body data-page="fsae">
   <a class="skip" href="#main">Skip to main content</a>
   <header class="site-header">
@@ -26,8 +26,8 @@
         <li><a data-page-link="certifications" href="certifications.html">Certifications</a></li>
       </ul>
       <div class="nav-actions">
-        <button class="icon-btn" id="themeToggle" aria-label="Toggle color theme">☼</button>
-        <button class="menu-btn" id="menuButton" aria-label="Open navigation" aria-expanded="false">☰</button>
+        <button type="button" class="icon-btn" id="themeToggle" aria-label="Toggle color theme">☼</button>
+        <button type="button" class="menu-btn" id="menuButton" aria-label="Open navigation" aria-expanded="false">☰</button>
       </div>
     </nav>
   </header>
@@ -145,7 +145,7 @@
           <div class="dot"></div>
           <div class="timeline-media">
             <figure class="media">
-              <video controls loop playsinline preload="metadata" data-default-volume="0.25">
+              <video controls loop playsinline preload="metadata" data-default-volume="0.25" aria-label="Formula SAE drivetrain dyno session video">
                 <source src="assets/fsae-dyno-session.mp4" type="video/mp4">
               </video>
               <div class="placeholder"><div><strong>Dyno Session</strong><span>Video unavailable</span></div></div>
@@ -160,21 +160,6 @@
             <h3>Observed live testing and asked system-level questions</h3>
             <p>Observed a recent dyno session used to evaluate engine output and drivetrain behavior. I asked experienced Formula SAE members questions, watched the drivetrain run in real time, compared a turnbuckle-style tensioning setup with another differential mount approach, and learned more about how the volumetric efficiency map relates to engine tuning and horsepower testing.</p>
             <div class="tags" style="margin-top:1rem"><span class="tag">Dyno Observation</span><span class="tag">Volumetric Efficiency</span><span class="tag">Engine Tuning</span><span class="tag">Drivetrain Behavior</span></div>
-          </div>
-        </article>
-        <article class="timeline-item">
-          <div class="dot"></div>
-          <div class="timeline-media">
-            <figure class="media">
-              <img src="assets/'27 Test Mule 3D Printing Mounts.jpeg" alt="A 2027 test mule differential mount being manufactured on a 3D printer" width="2866" height="3821" loading="lazy" decoding="async">
-              <div class="placeholder"><div><strong>2027 Test Mule Mount Prototype</strong><span>Prototype media unavailable</span></div></div>
-            </figure>
-          </div>
-          <div class="timeline-copy">
-            <span class="timeline-date">Stage 08 · Physical Prototyping</span>
-            <h3>3D printing the '27 test mule mounts</h3>
-            <p>3D printing the differential mounts for physical fit checks, packaging review, assembly practice, and hands-on prototype validation before final manufacturing decisions.</p>
-            <div class="tags" style="margin-top:1rem"><span class="tag">3D Printing</span><span class="tag">Physical Prototype</span><span class="tag">Fit Checks</span><span class="tag">Packaging Review</span></div>
           </div>
         </article>
         <article class="timeline-item tab-fea-item" id="tab-fea">
@@ -194,7 +179,7 @@
             </div>
           </div>
           <div class="timeline-copy">
-            <span class="timeline-date">Stage 09 · Differential-Mount Tab CAD &amp; FEA</span>
+            <span class="timeline-date">Stage 08 · Differential-Mount Tab CAD &amp; FEA</span>
             <h3>Designed and analyzed the differential-mount tabs</h3>
             <p>Created the left and right differential-mount tab geometry in CAD, then ran multiple FEA-driven design iterations. I adjusted each profile for its own reaction load until both designs achieved the target factor of safety of 3. These parts are planned for installation on the test mule in the coming months.</p>
             <div class="fea-load-grid" aria-label="Differential mount tab loads">
@@ -208,6 +193,21 @@
               <li><strong>Chain-force direction:</strong> 60° estimate used in the FEA model</li>
             </ul>
             <div class="tags" style="margin-top:1rem"><span class="tag">Mounting Tabs</span><span class="tag">FEA Iteration</span><span class="tag">Factor of Safety</span><span class="tag">Test Mule</span></div>
+          </div>
+        </article>
+        <article class="timeline-item">
+          <div class="dot"></div>
+          <div class="timeline-media">
+            <figure class="media">
+              <img src="assets/'27 Test Mule 3D Printing Mounts.jpeg" alt="A 2027 test mule differential mount being manufactured on a 3D printer" width="2866" height="3821" loading="lazy" decoding="async">
+              <div class="placeholder"><div><strong>2027 Test Mule Mount Prototype</strong><span>Prototype media unavailable</span></div></div>
+            </figure>
+          </div>
+          <div class="timeline-copy">
+            <span class="timeline-date">Stage 09 · Physical Prototyping</span>
+            <h3>3D printing the '27 test mule mounts</h3>
+            <p>3D printing the differential mounts for physical fit checks, packaging review, assembly practice, and hands-on prototype validation before final manufacturing decisions.</p>
+            <div class="tags" style="margin-top:1rem"><span class="tag">3D Printing</span><span class="tag">Physical Prototype</span><span class="tag">Fit Checks</span><span class="tag">Packaging Review</span></div>
           </div>
         </article>
       </div>
