@@ -35,26 +35,40 @@ if (openingTitle) {
   if (motionReduced()) {
     document.body.classList.add('opening-accents-ready');
   } else {
-    const titleCharacters = [...titleText].map((character) => {
-      const characterSpan = document.createElement('span');
-      characterSpan.className = 'typed-title-character';
-      characterSpan.setAttribute('aria-hidden', 'true');
-      characterSpan.textContent = character;
-      return characterSpan;
+    const titleCharacters = [];
+    const titleTokens = [];
+    const titleWords = titleText.split(/\s+/);
+
+    titleWords.forEach((word, wordIndex) => {
+      if (wordIndex > 0) titleTokens.push(document.createTextNode(' '));
+
+      const wordSpan = document.createElement('span');
+      wordSpan.className = 'typed-title-word';
+
+      [...word].forEach((character) => {
+        const characterSpan = document.createElement('span');
+        characterSpan.className = 'typed-title-character';
+        characterSpan.setAttribute('aria-hidden', 'true');
+        characterSpan.textContent = character;
+        titleCharacters.push(characterSpan);
+        wordSpan.append(characterSpan);
+      });
+
+      titleTokens.push(wordSpan);
     });
     let characterIndex = 0;
     let currentCharacter;
 
     openingTitle.classList.add('type-title-active');
-    openingTitle.replaceChildren(...titleCharacters);
+    openingTitle.replaceChildren(...titleTokens);
 
     const typeNextCharacter = () => {
       currentCharacter?.classList.remove('is-current');
       currentCharacter = titleCharacters[characterIndex];
       currentCharacter.classList.add('is-visible', 'is-current');
       characterIndex += 1;
-      if (characterIndex < titleText.length) {
-        const character = titleText[characterIndex - 1];
+      if (characterIndex < titleCharacters.length) {
+        const character = currentCharacter.textContent;
         const pause = /[.,:]/.test(character) ? 82 : 23;
         setTimeout(typeNextCharacter, pause);
       } else {
