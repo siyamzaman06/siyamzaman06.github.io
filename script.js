@@ -35,38 +35,31 @@ if (openingTitle) {
   if (motionReduced()) {
     document.body.classList.add('opening-accents-ready');
   } else {
-    const titleHeight = openingTitle.getBoundingClientRect().height;
-    const typedText = document.createElement('span');
-    const cursor = document.createElement('span');
+    const titleCharacters = [...titleText].map((character) => {
+      const characterSpan = document.createElement('span');
+      characterSpan.className = 'typed-title-character';
+      characterSpan.setAttribute('aria-hidden', 'true');
+      characterSpan.textContent = character;
+      return characterSpan;
+    });
     let characterIndex = 0;
+    let currentCharacter;
 
-    openingTitle.style.minHeight = `${titleHeight}px`;
     openingTitle.classList.add('type-title-active');
-    typedText.setAttribute('aria-hidden', 'true');
-    typedText.className = 'typed-title-text';
-    cursor.setAttribute('aria-hidden', 'true');
-    cursor.className = 'type-title-cursor';
-    openingTitle.replaceChildren(typedText, cursor);
+    openingTitle.replaceChildren(...titleCharacters);
 
     const typeNextCharacter = () => {
+      currentCharacter?.classList.remove('is-current');
+      currentCharacter = titleCharacters[characterIndex];
+      currentCharacter.classList.add('is-visible', 'is-current');
       characterIndex += 1;
-      typedText.textContent = titleText.slice(0, characterIndex);
       if (characterIndex < titleText.length) {
         const character = titleText[characterIndex - 1];
         const pause = /[.,:]/.test(character) ? 82 : 23;
         setTimeout(typeNextCharacter, pause);
       } else {
-        const finalWordStart = titleText.lastIndexOf(' ') + 1;
-        const titleEnding = document.createElement('span');
-        typedText.textContent = titleText.slice(0, finalWordStart);
-        titleEnding.className = 'type-title-ending';
-        titleEnding.setAttribute('aria-hidden', 'true');
-        titleEnding.textContent = titleText.slice(finalWordStart);
-        titleEnding.append(cursor);
-        openingTitle.append(titleEnding);
         openingTitle.classList.add('typing-complete');
         document.body.classList.add('opening-accents-ready');
-        openingTitle.style.minHeight = '';
       }
     };
 
@@ -326,6 +319,16 @@ document.querySelectorAll('[data-drawing-switcher]').forEach((switcher) => {
   if (initiallySelectedTab) activateDrawing(initiallySelectedTab);
 });
 
+const heroMotifSurface = document.body.dataset.page === 'home'
+  ? document.querySelector('.home-hero')
+  : document.body.dataset.page === 'fsae'
+    ? null
+    : document.body.dataset.page === 'certifications'
+      ? document.querySelector('.certificate-hero-visual')
+      : document.querySelector('.page-hero > .container');
+const heroMotifRegion = heroMotifSurface?.closest('.home-hero, .page-hero');
+heroMotifSurface?.classList.add('hero-motif-tilt');
+
 let resetInteractiveTilts = () => {};
 
 if (finePointer.matches) {
@@ -333,6 +336,7 @@ if (finePointer.matches) {
   let pointerX = innerWidth / 2;
   let pointerY = innerHeight / 3;
   const tiltStates = new Map();
+  const heroMotifState = { frame: 0, x: 0, y: 0 };
 
   const resetTilt = (surface, state = tiltStates.get(surface)) => {
     if (state?.frame) cancelAnimationFrame(state.frame);
@@ -347,8 +351,18 @@ if (finePointer.matches) {
     surface.style.setProperty('--card-shadow-y', '32px');
   };
 
+  const resetHeroMotifTilt = () => {
+    if (!heroMotifSurface) return;
+    if (heroMotifState.frame) cancelAnimationFrame(heroMotifState.frame);
+    heroMotifState.frame = 0;
+    heroMotifSurface.classList.remove('is-motif-tilting');
+    heroMotifSurface.style.setProperty('--motif-tilt-x', '0deg');
+    heroMotifSurface.style.setProperty('--motif-tilt-y', '0deg');
+  };
+
   const resetAllTilts = () => {
     spotlightSurfaces.forEach((surface) => resetTilt(surface));
+    resetHeroMotifTilt();
   };
   resetInteractiveTilts = resetAllTilts;
 
@@ -420,6 +434,34 @@ if (finePointer.matches) {
     surface.addEventListener('pointerleave', () => resetTilt(surface, state));
     surface.addEventListener('pointercancel', () => resetTilt(surface, state));
   });
+
+  if (heroMotifSurface && heroMotifRegion) {
+    heroMotifRegion.addEventListener('pointermove', (event) => {
+      if (event.pointerType === 'touch' || motionReduced()) {
+        resetHeroMotifTilt();
+        return;
+      }
+      heroMotifState.x = event.clientX;
+      heroMotifState.y = event.clientY;
+      if (heroMotifState.frame) return;
+      heroMotifState.frame = requestAnimationFrame(() => {
+        heroMotifState.frame = 0;
+        if (motionReduced()) {
+          resetHeroMotifTilt();
+          return;
+        }
+        const rect = heroMotifRegion.getBoundingClientRect();
+        if (rect.width < 1 || rect.height < 1) return;
+        const normalizedX = Math.max(-.86, Math.min(.86, ((heroMotifState.x - rect.left) / rect.width - .5) * 2));
+        const normalizedY = Math.max(-.86, Math.min(.86, ((heroMotifState.y - rect.top) / rect.height - .5) * 2));
+        heroMotifSurface.classList.add('is-motif-tilting');
+        heroMotifSurface.style.setProperty('--motif-tilt-x', `${(-normalizedY * 7).toFixed(2)}deg`);
+        heroMotifSurface.style.setProperty('--motif-tilt-y', `${(normalizedX * 10).toFixed(2)}deg`);
+      });
+    }, { passive: true });
+    heroMotifRegion.addEventListener('pointerleave', resetHeroMotifTilt);
+    heroMotifRegion.addEventListener('pointercancel', resetHeroMotifTilt);
+  }
 
   addEventListener('blur', resetAllTilts);
   document.documentElement.addEventListener('pointerleave', resetAllTilts);
