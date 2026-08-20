@@ -1,0 +1,5 @@
+# Keep private Word documents out of the website repository.
+*.[dD][oO][cC][xX]
+
+# Keep local review renders and working files out of GitHub.
+tmp/
