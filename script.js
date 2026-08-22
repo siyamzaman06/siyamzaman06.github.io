@@ -658,6 +658,7 @@ if (imageLightbox) {
   let panelY = innerHeight / 2;
   let previewTrigger;
   const previewTriggers = [...document.querySelectorAll('[data-preview-src]')];
+  const zoomEnabled = !imageLightbox.hasAttribute('data-disable-zoom');
 
   ambientImage.className = 'image-lightbox-ambient';
   ambientImage.setAttribute('aria-hidden', 'true');
@@ -687,7 +688,8 @@ if (imageLightbox) {
   zoomButton.title = 'Zoom image';
   zoomButton.setAttribute('aria-label', 'Zoom image');
   zoomButton.setAttribute('aria-pressed', 'false');
-  headerActions.append(previousButton, nextButton, zoomButton);
+  headerActions.append(previousButton, nextButton);
+  if (zoomEnabled) headerActions.append(zoomButton);
   if (closeButton) {
     closeButton.autofocus = true;
     headerActions.append(closeButton);
@@ -695,12 +697,15 @@ if (imageLightbox) {
   lightboxHeader.append(headerActions);
 
   const setZoom = (zoomed) => {
-    imageLightbox.classList.toggle('is-zoomed', zoomed);
-    zoomButton.textContent = zoomed ? '\u2296' : '\u2295';
-    zoomButton.title = zoomed ? 'Reset image zoom' : 'Zoom image';
-    zoomButton.setAttribute('aria-label', zoomed ? 'Reset image zoom' : 'Zoom image');
-    zoomButton.setAttribute('aria-pressed', String(zoomed));
-    if (!zoomed) lightboxStage.scrollTo({ top: 0, left: 0 });
+    const nextZoomed = zoomEnabled && zoomed;
+    imageLightbox.classList.toggle('is-zoomed', nextZoomed);
+    if (zoomEnabled) {
+      zoomButton.textContent = nextZoomed ? '\u2296' : '\u2295';
+      zoomButton.title = nextZoomed ? 'Reset image zoom' : 'Zoom image';
+      zoomButton.setAttribute('aria-label', nextZoomed ? 'Reset image zoom' : 'Zoom image');
+      zoomButton.setAttribute('aria-pressed', String(nextZoomed));
+    }
+    if (!nextZoomed) lightboxStage.scrollTo({ top: 0, left: 0 });
   };
 
   const finishPreviewLoading = () => imageLightbox.classList.remove('preview-loading');
@@ -774,7 +779,7 @@ if (imageLightbox) {
       imageLightbox.classList.add('preview-loading');
       imageLightbox.classList.toggle('is-document', isDocument);
       setZoom(false);
-      zoomButton.hidden = isDocument;
+      zoomButton.hidden = !zoomEnabled || isDocument;
       ambientImage.style.backgroundImage = isDocument ? 'none' : `url("${safeAmbientSource}")`;
       lightboxTitle.textContent = trigger.dataset.previewTitle;
       previousButton.setAttribute('aria-label', `View previous: ${previousTrigger?.dataset.previewTitle || 'item'}`);
@@ -782,7 +787,7 @@ if (imageLightbox) {
       if (lightboxLabel && trigger.dataset.previewLabel) lightboxLabel.textContent = trigger.dataset.previewLabel;
       if (lightboxHint) {
         const browseHint = previewTriggers.length > 1 ? ' Use the arrow keys or header controls to browse.' : '';
-        lightboxHint.textContent = isDocument
+        lightboxHint.textContent = isDocument || !zoomEnabled
           ? `Press Escape or click outside the viewer to close.${browseHint}`
           : `Double-click the image to zoom. Press Escape or click outside to close.${browseHint}`;
       }
@@ -819,14 +824,16 @@ if (imageLightbox) {
 
   previousButton.addEventListener('click', () => navigatePreview(-1));
   nextButton.addEventListener('click', () => navigatePreview(1));
-  zoomButton.addEventListener('click', () => setZoom(!imageLightbox.classList.contains('is-zoomed')));
-  lightboxImage.addEventListener('dblclick', () => setZoom(!imageLightbox.classList.contains('is-zoomed')));
+  if (zoomEnabled) {
+    zoomButton.addEventListener('click', () => setZoom(!imageLightbox.classList.contains('is-zoomed')));
+    lightboxImage.addEventListener('dblclick', () => setZoom(!imageLightbox.classList.contains('is-zoomed')));
+  }
   imageLightbox.addEventListener('keydown', (event) => {
     if (!imageLightbox.classList.contains('is-zoomed') && ['ArrowLeft', 'ArrowRight'].includes(event.key)) {
       event.preventDefault();
       navigatePreview(event.key === 'ArrowLeft' ? -1 : 1);
     }
-    if (imageLightbox.classList.contains('is-document')) return;
+    if (!zoomEnabled || imageLightbox.classList.contains('is-document')) return;
     if (event.key === '+' || event.key === '=') setZoom(true);
     if (event.key === '-' || event.key === '0') setZoom(false);
   });

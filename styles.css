@@ -54,6 +54,7 @@
 .image-lightbox-stage:before{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;background:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px),radial-gradient(circle at center,transparent 42%,rgba(2,6,12,.5) 100%);background-size:32px 32px,32px 32px,auto}
 .image-lightbox-ambient{position:absolute;inset:4.5rem 0 2rem;z-index:0;pointer-events:none;opacity:.11;background-position:center;background-size:cover;filter:blur(52px) saturate(1.4) brightness(.5);transform:scale(1.04);animation:preview-ambient-drift 12s ease-in-out infinite alternate}
 .image-lightbox-stage img{width:auto;height:auto;position:relative;z-index:1;max-width:100%;max-height:calc(100vh - 12rem);border:1px solid rgba(255,255,255,.14);border-radius:12px;background:#fff;box-shadow:0 24px 70px rgba(0,0,0,.5),0 0 0 1px rgba(255,255,255,.04);cursor:zoom-in;transform-origin:top center;transition:transform .48s cubic-bezier(.16,1,.3,1),box-shadow .35s;animation:preview-image-in .5s .12s cubic-bezier(.16,1,.3,1) both}
+.image-lightbox[data-disable-zoom] .image-lightbox-stage img{cursor:default}
 .image-lightbox.is-zoomed .image-lightbox-stage{place-items:start center;overflow:auto}
 .image-lightbox.is-zoomed .image-lightbox-stage img{animation:none;cursor:zoom-out;transform:scale(1.65);box-shadow:0 35px 90px rgba(0,0,0,.62)}
 .image-lightbox-document{width:min(100%,1000px);height:calc(100vh - 12rem);min-height:430px;position:relative;z-index:1;border:1px solid rgba(255,255,255,.14);border-radius:12px;background:#fff;box-shadow:0 24px 70px rgba(0,0,0,.5);animation:preview-image-in .5s .12s cubic-bezier(.16,1,.3,1) both}
@@ -87,6 +88,8 @@ body.preview-open{overflow:hidden}
 .cad-collage-media:hover img{transform:scale(1.025)}
 .cad-collage-media:after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(180deg,rgba(7,17,31,.2),transparent 27%,transparent 70%,rgba(7,17,31,.45))}
 .cad-collage-media figcaption{position:absolute;top:1rem;left:1rem;z-index:2;padding:.45rem .65rem;border:1px solid rgba(255,255,255,.18);border-radius:999px;color:#fff;background:rgba(6,14,25,.72);backdrop-filter:blur(10px);font-size:.76rem;font-weight:850}
+.cad-collage-note{position:absolute;top:1rem;right:1rem;z-index:2;width:max-content;max-width:calc(100% - 2rem);padding:.42rem .65rem;border:1px solid rgba(255,255,255,.16);border-radius:10px;color:#fff;background:rgba(6,14,25,.76);box-shadow:0 8px 24px rgba(0,0,0,.2);backdrop-filter:blur(10px);font-size:clamp(.64rem,1.1vw,.74rem);font-weight:780;line-height:1.35;text-align:right;white-space:nowrap}
+@media(max-width:560px){.cad-collage-media figcaption{top:3.65rem}}
 .arduino-learning-media{display:grid;place-items:center;padding:clamp(1.4rem,4vw,3rem);background:radial-gradient(circle at 25% 20%,rgb(var(--accent-rgb)/.2),transparent 28%),linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px),var(--solid);background-size:auto,28px 28px,28px 28px,auto}
 .electronics-board{width:min(100%,430px);aspect-ratio:1.55;position:relative;z-index:1;display:flex;flex-direction:column;justify-content:center;gap:.45rem;padding:clamp(1.4rem,4vw,2.5rem);overflow:hidden;border:1px solid rgba(164,244,229,.35);border-radius:30px;color:#effffb;background:radial-gradient(circle at 82% 22%,rgba(172,255,238,.22),transparent 20%),linear-gradient(145deg,#118d84,#075c5f);box-shadow:0 30px 65px rgba(0,0,0,.35),inset 0 0 0 7px rgba(255,255,255,.035);transform:rotate(-2deg);transition:transform .35s cubic-bezier(.16,1,.3,1),box-shadow .35s}
 .electronics-board:before{content:"";position:absolute;inset:13px 12px;pointer-events:none;border-top:6px dotted rgba(205,255,244,.48);border-bottom:6px dotted rgba(205,255,244,.48)}
@@ -881,8 +884,33 @@ a,button { touch-action: manipulation; }
   transform-style: preserve-3d;
   transform-origin: center;
   filter: drop-shadow(0 1.5rem 1.8rem rgba(0,0,0,.18));
-  will-change: transform,filter;
+  will-change: transform,filter,opacity,clip-path;
   transition: transform .5s cubic-bezier(.16,1,.3,1),filter .3s ease;
+  animation: home-motif-reveal 1.15s .32s cubic-bezier(.16,1,.3,1) both;
+}
+
+@keyframes home-motif-reveal {
+  0% {
+    opacity: 0;
+    clip-path: inset(0 0 0 100% round 2.25rem);
+    translate: 4rem 1rem;
+    scale: .9;
+    filter: blur(10px) drop-shadow(0 .5rem .8rem rgba(0,0,0,.08));
+  }
+  62% {
+    opacity: .52;
+    clip-path: inset(0 round 2.25rem);
+    translate: -.45rem 0;
+    scale: 1.018;
+    filter: blur(0) drop-shadow(0 2rem 2.4rem rgba(0,0,0,.28));
+  }
+  100% {
+    opacity: .46;
+    clip-path: inset(0 round 2.25rem);
+    translate: 0 0;
+    scale: 1;
+    filter: drop-shadow(0 1.5rem 1.8rem rgba(0,0,0,.18));
+  }
 }
 
 .hero-motif-tilt.is-motif-tilting { --motif-depth: 24px; }
@@ -1177,7 +1205,7 @@ main>.section+.section:before {
 }
 
 @media(prefers-reduced-motion:reduce) {
-  .home-hero:before { transform: none; }
+  .home-hero:before { animation: none!important; transform: none; }
 }
 
 /* Per-page engineering hero motifs */
@@ -1200,16 +1228,38 @@ main>.section+.section:before {
   transform-style: preserve-3d;
   transform-origin: center;
   filter: drop-shadow(0 1.5rem 1.8rem rgba(0,0,0,.22));
-  will-change: transform,filter;
+  --motif-final-opacity: 1;
+  --motif-rest-filter: drop-shadow(0 1.5rem 1.8rem rgba(0,0,0,.22));
+  --motif-peak-filter: drop-shadow(0 2rem 2.4rem rgba(0,0,0,.3));
+  will-change: transform,filter,opacity,clip-path;
   transition: transform .5s cubic-bezier(.16,1,.3,1),filter .3s ease;
-  animation: page-motif-reveal .9s .18s cubic-bezier(.16,1,.3,1) both;
+  animation: page-motif-reveal 1.15s .32s cubic-bezier(.16,1,.3,1) both;
 }
 
 .page-hero > .container.is-motif-tilting::after { filter: drop-shadow(0 2.25rem 2.4rem rgba(0,0,0,.36)) brightness(1.07) saturate(1.09); transition-duration: .07s; transition-timing-function: linear; }
 
 @keyframes page-motif-reveal {
-  from { clip-path: inset(0 0 0 100% round 2rem); translate: 2rem 0; }
-  to { clip-path: inset(0 round 2rem); translate: 0 0; }
+  0% {
+    opacity: 0;
+    clip-path: inset(0 0 0 100% round 2rem);
+    translate: 4rem 1rem;
+    scale: .9;
+    filter: blur(10px) drop-shadow(0 .5rem .8rem rgba(0,0,0,.08));
+  }
+  62% {
+    opacity: var(--motif-final-opacity,1);
+    clip-path: inset(0 round 2rem);
+    translate: -.45rem 0;
+    scale: 1.018;
+    filter: blur(0) var(--motif-peak-filter);
+  }
+  100% {
+    opacity: var(--motif-final-opacity,1);
+    clip-path: inset(0 round 2rem);
+    translate: 0 0;
+    scale: 1;
+    filter: var(--motif-rest-filter);
+  }
 }
 
 body[data-page="school"] .page-hero > .container::after {
@@ -1270,9 +1320,11 @@ body[data-page="personal"] .page-hero:not(.gearbox-hero) > .container::after {
   transform-style: preserve-3d;
   transform-origin: center;
   filter: drop-shadow(0 1.2rem 1.5rem rgba(0,0,0,.16));
-  will-change: transform,filter;
+  --motif-rest-filter: drop-shadow(0 1.2rem 1.5rem rgba(0,0,0,.16));
+  --motif-peak-filter: drop-shadow(0 1.8rem 2rem rgba(0,0,0,.26));
+  will-change: transform,filter,opacity,clip-path;
   transition: transform .5s cubic-bezier(.16,1,.3,1),filter .3s ease;
-  animation: page-motif-reveal .9s .18s cubic-bezier(.16,1,.3,1) both;
+  animation: page-motif-reveal 1.15s .32s cubic-bezier(.16,1,.3,1) both;
 }
 
 .certificate-hero-visual.is-motif-tilting { --motif-depth: 14px; filter: drop-shadow(0 1.8rem 2rem rgba(0,0,0,.26)) brightness(1.02) saturate(1.025); transition-duration: .07s; transition-timing-function: linear; }
@@ -1400,17 +1452,19 @@ body.light .certificate-sheet {
   --motif-base-rotate: 5deg;
 }
 
-body.light .page-hero > .container::after { opacity: .7; }
+body.light .page-hero > .container::after { --motif-final-opacity: .7; opacity: .7; }
 
 @media(max-width:980px) {
   body[data-page="school"] .page-hero > .container::after,
   body[data-page="personal"] .page-hero:not(.gearbox-hero) > .container::after {
     right: -16rem;
+    --motif-final-opacity: .52;
     opacity: .52;
   }
 
   .gearbox-hero > .container::after {
     right: -6rem;
+    --motif-final-opacity: .42;
     opacity: .42;
   }
 }
@@ -1422,7 +1476,7 @@ body.light .page-hero > .container::after { opacity: .7; }
 
 @media(prefers-reduced-motion:reduce) {
   .page-hero > .container::after,
-  .certificate-hero-visual { animation: none; }
+  .certificate-hero-visual { animation: none!important; }
 }
 
 /* Mobile refinement pass: safe areas, stable wrapping, and touch-first layouts. */
