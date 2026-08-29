@@ -12,7 +12,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..900&amp;family=Manrope:wght@400..800&amp;display=swap">
   <link rel="stylesheet" href="styles.css">
-<link rel="canonical" href="https://siyamzaman06.github.io/planetary-gearbox.html"><meta name="author" content="Siyam Zaman"><meta property="og:type" content="website"><meta property="og:site_name" content="Siyam Zaman Engineering Portfolio"><meta property="og:title" content="Instrumented Planetary Gearbox | Siyam Zaman"><meta property="og:description" content="Development of Siyam Zaman&#39;s instrumented 3D-printed planetary gearbox, including preliminary calculations, parametric CAD, planned FEA, manufacturing, and physical testing."><meta property="og:url" content="https://siyamzaman06.github.io/planetary-gearbox.html"><meta name="twitter:card" content="summary"><meta name="twitter:title" content="Instrumented Planetary Gearbox | Siyam Zaman"><meta name="twitter:description" content="Development of Siyam Zaman&#39;s instrumented 3D-printed planetary gearbox, including preliminary calculations, parametric CAD, planned FEA, manufacturing, and physical testing."></head>
+  <link rel="stylesheet" href="sitewide.css?v=20260829">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="canonical" href="https://siyamzaman06.github.io/planetary-gearbox.html"><meta name="author" content="Siyam Zaman"><meta property="og:type" content="website"><meta property="og:site_name" content="Siyam Zaman Engineering Portfolio"><meta property="og:title" content="Instrumented Planetary Gearbox | Siyam Zaman"><meta property="og:description" content="Development of Siyam Zaman&#39;s instrumented 3D-printed planetary gearbox, including preliminary calculations, parametric CAD, planned FEA, manufacturing, and physical testing."><meta property="og:url" content="https://siyamzaman06.github.io/planetary-gearbox.html"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Instrumented Planetary Gearbox | Siyam Zaman"><meta name="twitter:description" content="Development of Siyam Zaman&#39;s instrumented 3D-printed planetary gearbox, including preliminary calculations, parametric CAD, planned FEA, manufacturing, and physical testing."><meta property="og:image" content="https://siyamzaman06.github.io/assets/og-portfolio.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="Siyam Zaman mechanical engineering portfolio"><meta name="twitter:image" content="https://siyamzaman06.github.io/assets/og-portfolio.png"><meta name="twitter:image:alt" content="Siyam Zaman mechanical engineering portfolio"></head>
 <body data-page="personal">
   <a class="skip" href="#main">Skip to main content</a>
   <header class="site-header">
@@ -38,9 +40,9 @@
         <div class="reveal">
           <span class="eyebrow">Personal Project · In Progress</span>
           <h1>Instrumented 3D-Printed Planetary Gearbox</h1>
-          <p>I am designing a printed planetary gearbox with a target reduction near 5:1. The final assembly will measure speed, torque, backlash, temperature, and efficiency.</p>
+          <p>I am defining a printed planetary gearbox with a target reduction near 5:1. The next milestone is a calculation-backed CAD assembly; manufacturing and testing have not started.</p>
           <div class="hero-actions">
-            <span class="status progress">Concept Development and Preliminary Design</span>
+            <span class="status progress">Preliminary design</span>
             <a class="button secondary small" href="personal-projects.html">← Back to Personal Projects</a>
           </div>
         </div>
@@ -67,7 +69,6 @@
         </div>
         <div class="detail-grid">
           <article class="detail-panel reveal">
-            <span class="status progress">In Development</span>
             <h3>Design goals</h3>
             <ul class="detail-list">
               <li>Create a compact, motor-driven planetary gearbox with replaceable 3D-printed gears.</li>
@@ -77,7 +78,6 @@
             </ul>
           </article>
           <article class="detail-panel reveal">
-            <span class="status progress">Current Progress</span>
             <h3>Current work</h3>
             <ul class="detail-list">
               <li>Defining the operating requirements and gearbox architecture.</li>
@@ -129,82 +129,24 @@
       <div class="container">
         <div class="section-head reveal">
           <div>
-            <span class="eyebrow">Development Roadmap</span>
-            <h2>Planned work</h2>
+            <span class="eyebrow">Current Milestone</span>
+            <h2>Finish the calculations before CAD</h2>
           </div>
-          <p>The concept and preliminary design are in progress; manufacturing, FEA, and physical testing have not started.</p>
+          <p>This project is still at the preliminary-design stage. No FEA, manufacturing, or test results are claimed yet.</p>
         </div>
         <div class="roadmap-grid">
           <article class="roadmap-card reveal">
-            <span class="status progress">In Development</span>
-            <h3>Calculate the loads</h3>
-            <p>Calculate the ratio, pitch diameters, center distances, tooth forces, planet-pin loads, shaft stress, bearing reactions, and expected output.</p>
+            <h3>Resolve the gearset</h3>
+            <p>Check the ratio, pitch diameters, center distances, tooth forces, and planet-pin loads before fixing the tooth counts.</p>
           </article>
           <article class="roadmap-card reveal">
-            <span class="status progress">CAD Model in Progress</span>
-            <h3>Build the CAD assembly</h3>
-            <p>Model the gears, carrier, shafts, housing, bearings, and fasteners, then define fits, backlash, tolerances, drawings, and the bill of materials.</p>
+            <h3>Build the first assembly</h3>
+            <p>Model the gears, carrier, shafts, housing, bearings, and fasteners with the fits and backlash needed for a printable prototype.</p>
           </article>
           <article class="roadmap-card reveal">
-            <span class="status progress">Analysis Pending</span>
-            <h3>Check a critical component</h3>
-            <p>Analyze the selected critical component in ANSYS Mechanical, run a mesh-convergence check, and compare the result with hand calculations.</p>
+            <h3>Define the test fixture</h3>
+            <p>Choose the motor, torque measurement method, and sensors before manufacturing begins.</p>
           </article>
-          <article class="roadmap-card reveal">
-            <span class="status progress">Manufacturing Planned</span>
-            <h3>Manufacture and assemble</h3>
-            <p>Print the housing and replaceable gears, then install the metal shafts, planet pins, bearings or bushings, and fasteners.</p>
-          </article>
-          <article class="roadmap-card reveal">
-            <span class="status progress">Testing Planned</span>
-            <h3>Measure gearbox performance</h3>
-            <p>Use a motor-driven fixture to measure input and output RPM, reduction ratio, torque, backlash, temperature rise, efficiency, and sustainable load.</p>
-            <div class="equation">Torque = Force × Moment Arm Length</div>
-          </article>
-          <article class="roadmap-card reveal">
-            <span class="status progress">Results After Validation</span>
-            <h3>Compare results and revise</h3>
-            <p>Compare the measurements with the calculations, identify the largest mismatch or failure mode, and revise the affected component.</p>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <section class="section project-detail-section">
-      <div class="container">
-        <div class="section-head reveal">
-          <div>
-            <span class="eyebrow">Iteration Plan</span>
-            <h2>Prototype sequence</h2>
-          </div>
-        </div>
-        <div class="iteration-grid">
-          <article class="iteration-card reveal"><span>Prototype 0</span><h3>Motion and clearance model</h3><p>Hand-operated gearset for checking planetary motion, tooth engagement, and basic clearances.</p></article>
-          <article class="iteration-card reveal"><span>Version 1</span><h3>Motorized test assembly</h3><p>Complete gearbox and fixture for the first speed, torque, backlash, temperature, and efficiency measurements.</p></article>
-          <article class="iteration-card reveal"><span>Version 2</span><h3>Targeted revision</h3><p>Revise the component responsible for the largest measured loss, deflection, temperature rise, or failure.</p></article>
-        </div>
-      </div>
-    </section>
-
-    <section class="section project-detail-section">
-      <div class="container">
-        <div class="section-head reveal">
-          <div>
-            <span class="eyebrow">Final Documentation</span>
-            <h2>Planned documentation</h2>
-          </div>
-          <p>Each item will be added when that stage is complete.</p>
-        </div>
-        <div class="artifact-grid">
-          <article class="future-artifact reveal"><span>01</span><h3>Planetary gearbox diagram</h3><p>In development</p></article>
-          <article class="future-artifact reveal"><span>02</span><h3>Preliminary CAD model</h3><p>CAD model in progress</p></article>
-          <article class="future-artifact reveal"><span>03</span><h3>Calculation spreadsheet</h3><p>Calculations in development</p></article>
-          <article class="future-artifact reveal"><span>04</span><h3>ANSYS stress plot</h3><p>Analysis pending</p></article>
-          <article class="future-artifact reveal"><span>05</span><h3>Prototype and test fixture</h3><p>Manufacturing and testing planned</p></article>
-          <article class="future-artifact reveal"><span>06</span><h3>Performance and iteration comparison</h3><p>Results pending prototype validation</p></article>
-        </div>
-        <div class="skills project-skill-list reveal">
-          <span>PTC Creo Parametric</span><span>SolidWorks</span><span>ANSYS Mechanical</span><span>Finite Element Analysis</span><span>Gear Design</span><span>Assembly Design</span><span>3D Printing</span><span>Tolerance Analysis</span><span>Fits and Clearances</span><span>Test Validation</span><span>Root-Cause Analysis</span><span>Microsoft Excel</span><span>MATLAB</span><span>Bill of Materials</span><span>Design Iteration</span>
         </div>
       </div>
     </section>
@@ -213,6 +155,6 @@
   <footer class="footer">
     <div class="container footer-row"><span>© <span data-year></span> Siyam Zaman</span><span>Mechanical engineering portfolio</span></div>
   </footer>
-  <script src="script.js"></script>
+  <script src="script.js?v=20260829"></script>
 </body>
 </html>

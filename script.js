@@ -32,54 +32,7 @@ const openingTitle = document.querySelector('main h1');
 if (openingTitle) {
   const titleText = openingTitle.textContent.trim();
   openingTitle.setAttribute('aria-label', titleText);
-
-  if (motionReduced()) {
-    document.body.classList.add('opening-accents-ready');
-  } else {
-    const titleCharacters = [];
-    const titleTokens = [];
-    const titleWords = titleText.split(/\s+/);
-
-    titleWords.forEach((word, wordIndex) => {
-      if (wordIndex > 0) titleTokens.push(document.createTextNode(' '));
-
-      const wordSpan = document.createElement('span');
-      wordSpan.className = 'typed-title-word';
-
-      [...word].forEach((character) => {
-        const characterSpan = document.createElement('span');
-        characterSpan.className = 'typed-title-character';
-        characterSpan.setAttribute('aria-hidden', 'true');
-        characterSpan.textContent = character;
-        titleCharacters.push(characterSpan);
-        wordSpan.append(characterSpan);
-      });
-
-      titleTokens.push(wordSpan);
-    });
-    let characterIndex = 0;
-    let currentCharacter;
-
-    openingTitle.classList.add('type-title-active');
-    openingTitle.replaceChildren(...titleTokens);
-
-    const typeNextCharacter = () => {
-      currentCharacter?.classList.remove('is-current');
-      currentCharacter = titleCharacters[characterIndex];
-      currentCharacter.classList.add('is-visible', 'is-current');
-      characterIndex += 1;
-      if (characterIndex < titleCharacters.length) {
-        const character = currentCharacter.textContent;
-        const pause = /[.,:]/.test(character) ? 82 : 23;
-        setTimeout(typeNextCharacter, pause);
-      } else {
-        openingTitle.classList.add('typing-complete');
-        document.body.classList.add('opening-accents-ready');
-      }
-    };
-
-    setTimeout(typeNextCharacter, 210);
-  }
+  document.body.classList.add('opening-accents-ready');
 }
 
 document.querySelectorAll('[data-year]').forEach((element) => {
@@ -292,10 +245,6 @@ const spotlightSelector = [
 const spotlightSurfaces = document.querySelectorAll(spotlightSelector);
 spotlightSurfaces.forEach((surface) => {
   surface.classList.add('spotlight-surface', 'interactive-tilt');
-  const borderBeam = document.createElement('span');
-  borderBeam.className = 'card-border-beam';
-  borderBeam.setAttribute('aria-hidden', 'true');
-  surface.append(borderBeam);
 });
 
 document.querySelectorAll('[data-drawing-switcher]').forEach((switcher) => {
@@ -669,11 +618,13 @@ try {
 const projectOverviewTrigger = document.querySelector('[data-project-overview-open]');
 const projectOverviewDialog = document.getElementById('projectOverviewDialog');
 if (projectOverviewTrigger && projectOverviewDialog) {
+  projectOverviewTrigger.setAttribute('aria-expanded', 'false');
   const supportsModal = typeof projectOverviewDialog.showModal === 'function' && typeof projectOverviewDialog.close === 'function';
   const closeButton = projectOverviewDialog.querySelector('.project-overview-close');
   const filterButtons = [...projectOverviewDialog.querySelectorAll('[data-project-filter]')];
   const projectCards = [...projectOverviewDialog.querySelectorAll('[data-project-category]')];
   const projectCount = projectOverviewDialog.querySelector('[data-project-count]');
+  const projectGrid = projectOverviewDialog.querySelector('.project-overview-grid');
   const closeDuration = () => motionReduced() ? 0 : 300;
   let closeTimer;
   const isOverviewOpen = () => supportsModal ? projectOverviewDialog.open : projectOverviewDialog.hasAttribute('open');
@@ -703,6 +654,7 @@ if (projectOverviewTrigger && projectOverviewDialog) {
       projectOverviewDialog.classList.remove('is-closing');
       projectOverviewDialog.classList.remove('project-overview-fallback-open');
       document.body.classList.remove('project-overview-open');
+      projectOverviewTrigger.setAttribute('aria-expanded', 'false');
       projectOverviewTrigger.focus({ preventScroll: true });
     }, closeDuration());
   };
@@ -712,6 +664,7 @@ if (projectOverviewTrigger && projectOverviewDialog) {
     clearTimeout(closeTimer);
     projectOverviewDialog.classList.remove('is-closing');
     applyProjectFilter('all');
+    if (projectGrid) projectGrid.scrollTop = 0;
     if (!isOverviewOpen()) {
       if (supportsModal) projectOverviewDialog.showModal();
       else {
@@ -720,6 +673,7 @@ if (projectOverviewTrigger && projectOverviewDialog) {
       }
     }
     document.body.classList.add('project-overview-open');
+    projectOverviewTrigger.setAttribute('aria-expanded', 'true');
   });
 
   closeButton?.addEventListener('click', closeProjectOverview);

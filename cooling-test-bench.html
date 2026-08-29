@@ -12,6 +12,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..900&amp;family=Manrope:wght@400..800&amp;display=swap">
   <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="sitewide.css?v=20260829">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="canonical" href="https://siyamzaman06.github.io/cooling-test-bench.html">
   <meta name="author" content="Siyam Zaman">
   <meta property="og:type" content="website">
@@ -19,9 +21,15 @@
   <meta property="og:title" content="Electronics Cooling Test Bench | Siyam Zaman">
   <meta property="og:description" content="A completed ANSYS Fluent duct study comparing four cooling geometries through system-resistance curves, fan operating points, and hardware-focused design decisions.">
   <meta property="og:url" content="https://siyamzaman06.github.io/cooling-test-bench.html">
-  <meta name="twitter:card" content="summary">
+  <meta property="og:image" content="https://siyamzaman06.github.io/assets/og-portfolio.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Siyam Zaman mechanical engineering portfolio">
+  <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Electronics Cooling Test Bench | Siyam Zaman">
   <meta name="twitter:description" content="A completed ANSYS Fluent duct study comparing four cooling geometries through system-resistance curves, fan operating points, and hardware-focused design decisions.">
+  <meta name="twitter:image" content="https://siyamzaman06.github.io/assets/og-portfolio.png">
+  <meta name="twitter:image:alt" content="Siyam Zaman mechanical engineering portfolio">
 </head>
 <body data-page="personal">
   <a class="skip" href="#main">Skip to main content</a>
@@ -46,25 +54,18 @@
     <section class="page-hero cooling-hero">
       <div class="container page-grid">
         <div class="reveal">
-          <span class="eyebrow">Personal Project · Computational Study Complete</span>
+          <span class="eyebrow">Personal Project · CFD Study</span>
           <h1>Benchtop Electronics Cooling Test System</h1>
-          <p>I compared four duct outlets in ANSYS Fluent, calculated each duct's pressure–flow relationship, and used the fan P–Q curve to predict the airflow the fan can deliver through each design.</p>
+          <p>I used ANSYS Fluent and the fan P–Q curve to compare four duct outlets. The rounded 70 × 40 mm outlet produced the highest predicted operating velocity and closely matches the heat-sink footprint.</p>
           <div class="hero-actions">
             <span class="status done">Duct CFD Complete · Hardware Validation Next</span>
             <a class="button secondary small" href="personal-projects.html">← Back to Personal Projects</a>
           </div>
         </div>
-        <aside class="badge-card cooling-decision-panel reveal" aria-label="Cooling-system computational analysis outcome">
-          <div class="decision-panel-head"><span>Analysis outcome</span></div>
-          <h3>70 × 40 mm rounded outlet selected for testing</h3>
-          <p>The 70 × 40 mm outlet matches the 67 × 36 mm heat-sink footprint and had the highest predicted operating velocity. It will now be compared with the straight and 70 × 70 mm ducts in physical testing.</p>
-          <div class="decision-signals">
-            <div><span>Screened</span><strong>4 geometries</strong></div>
-            <div><span>Predicted</span><strong>≈7.0 m/s</strong></div>
-            <div><span>Next</span><strong>Thermal testing</strong></div>
-          </div>
-          <div class="working-direction"><span>Decision basis</span><strong>CFD pressure sweeps, quadratic system curves, fan P–Q intersections, outlet coverage, and manufacturability.</strong></div>
-        </aside>
+        <figure class="cooling-hero-evidence reveal">
+          <img src="assets/D115 to 70x40, 6mm fillet ... SOLIDWORKS Model.png" alt="SOLIDWORKS assembly of the selected rounded 70 by 40 millimeter cooling duct, fan, heater-block fixture, and heat sink" width="947" height="634" decoding="async">
+          <figcaption>Selected 70 × 40 mm duct and test fixture</figcaption>
+        </figure>
       </div>
     </section>
 
@@ -83,19 +84,16 @@
               <img src="assets/ANSYS Discovery, Full Model.png" alt="Initial ANSYS Discovery model containing the fan, full-length duct, aluminum block, and heat sink" width="788" height="614" loading="lazy" decoding="async">
               <figcaption>Initial coupled-system geometry</figcaption>
             </figure>
-            <span class="status course">Scope Definition</span>
             <h3>Start with the duct geometry</h3>
             <p>I first modeled the fan, duct, aluminum block, heat sink, airflow, and heating together. That setup was too slow for comparing several outlets, so I removed the thermal components and evaluated duct resistance first.</p>
             <div class="method-output"><span>Decision</span><strong>Select the ducts before running the complete thermal model.</strong></div>
           </article>
           <article class="cooling-method-card reveal">
-            <span class="status done">CFD Sweep Complete</span>
             <h3>Calculate each duct's resistance</h3>
             <p>I prescribed several inlet velocities and recorded the required static pressure. The D90 and rounded 70 × 40 sweeps followed the expected ΔP = KQ² relationship; matched-flow results supplied the comparison coefficients for D115 and 70 × 70.</p>
             <div class="method-output"><span>Result</span><strong>One pressure–flow curve for each outlet.</strong></div>
           </article>
           <article class="cooling-method-card reveal">
-            <span class="status done">Operating Points Solved</span>
             <h3>Match each duct to the fan</h3>
             <p>The imposed-flow simulations show duct resistance, not the airflow the fan will deliver. I intersected each duct curve with the fan P–Q curve to calculate its operating airflow and outlet velocity.</p>
             <div class="method-output"><span>Decision</span><strong>Print the rounded 70 × 40 outlet for thermal testing.</strong></div>
@@ -126,7 +124,7 @@
               <div><span>Outlet velocity</span><strong>3.60 <small>m/s</small></strong><b>≈79.2 CFM</b><em>Through 115 mm outlet · A = 0.01039 m²</em></div>
               <div><span>Inlet static pressure</span><strong>0.74 <small>Pa</small></strong><b>≈0.075 mmH₂O</b><em>Area-weighted average</em></div>
             </div>
-            <p><strong>Comparison:</strong> this is the baseline. The contracted outlets are compared against its velocity and pressure requirement.</p>
+            <p>This baseline shows how the fan behaves with almost no contraction.</p>
             <div class="fan-correction">
               <div class="fan-correction-head"><span>P-Q curve correction</span><em>Predicted, not measured</em></div>
               <div class="fan-correction-grid">
@@ -134,7 +132,7 @@
                 <div><span>Operating pressure</span><strong>0.69 <small>Pa</small></strong><em>≈0.070 mmH₂O</em></div>
                 <div><span>Velocity reduction</span><strong>3.6 <small>%</small></strong></div>
               </div>
-              <p><strong>Limit:</strong> resistance is low, so the fan operates near its free-flow condition and the corrected velocity remains close to the CFD input.</p>
+              <p>Low resistance keeps the operating point close to the imposed CFD condition.</p>
               <small class="physical-result">Measured outlet velocity: pending physical testing</small>
             </div>
           </article>
@@ -150,7 +148,7 @@
               <div><span>Outlet velocity</span><strong>5.81 <small>m/s</small></strong><b>≈78.3 CFM</b><em>Through 90 mm outlet · A = 0.006362 m²</em></div>
               <div><span>Inlet static pressure</span><strong>15.96 <small>Pa</small></strong><b>≈1.63 mmH₂O</b><em>Area-weighted average</em></div>
             </div>
-            <p><strong>Comparison:</strong> D90 raises the fixed-flow outlet velocity by about 61% over D115, but requires more pressure.</p>
+            <p>The smaller outlet increases local speed, but the added resistance lowers the flow the fan can sustain.</p>
             <div class="fan-correction">
               <div class="fan-correction-head"><span>P-Q curve correction</span><em>Predicted, not measured</em></div>
               <div class="fan-correction-grid">
@@ -158,7 +156,7 @@
                 <div><span>Operating pressure</span><strong>11.83 <small>Pa</small></strong><em>≈1.21 mmH₂O</em></div>
                 <div><span>Velocity reduction</span><strong>13.9 <small>%</small></strong></div>
               </div>
-              <p><strong>Limit:</strong> the contraction moves the fan to a lower-flow operating point, reducing the predicted outlet velocity from 5.81 to 5.00 m/s.</p>
+              <p>The fan-corrected outlet velocity is 5.00 m/s rather than the imposed 5.81 m/s.</p>
               <small class="physical-result">Measured outlet velocity: pending physical testing</small>
             </div>
           </article>
@@ -174,7 +172,7 @@
               <div><span>Outlet velocity</span><strong>7.48 <small>m/s</small></strong><b>≈77.7 CFM</b><em>Through 70 × 70 mm outlet · A = 0.004900 m²</em></div>
               <div><span>Inlet static pressure</span><strong>32.59 <small>Pa</small></strong><b>≈3.32 mmH₂O</b><em>Area-weighted average</em></div>
             </div>
-            <p><strong>Comparison:</strong> S70 raises the fixed-flow outlet velocity by about 29% over D90, but requires roughly twice the inlet pressure.</p>
+            <p>This contraction is faster than D90 at the imposed flow, with roughly twice the pressure requirement.</p>
             <div class="fan-correction">
               <div class="fan-correction-head"><span>P-Q curve correction</span><em>Predicted, not measured</em></div>
               <div class="fan-correction-grid">
@@ -182,7 +180,7 @@
                 <div><span>Operating pressure</span><strong>20.06 <small>Pa</small></strong><em>≈2.05 mmH₂O</em></div>
                 <div><span>Velocity reduction</span><strong>21.5 <small>%</small></strong></div>
               </div>
-              <p><strong>Limit:</strong> available fan pressure reduces the predicted velocity from 7.48 to 5.87 m/s. It still remains faster than D90.</p>
+              <p>At the predicted operating point, outlet velocity falls to 5.87 m/s but remains above the D90 case.</p>
               <small class="physical-result">Measured outlet velocity: pending physical testing</small>
             </div>
           </article>
@@ -198,7 +196,7 @@
               <div><span>Outlet velocity</span><strong>12.97 <small>m/s</small></strong><b>≈76.9 CFM</b><em>Area-weighted average · nominal A = 0.002800 m²</em></div>
               <div><span>Required inlet pressure</span><strong>121.46 <small>Pa</small></strong><b>≈12.39 mmH₂O</b><em>Area-weighted static pressure</em></div>
             </div>
-            <p><strong>Comparison:</strong> the imposed condition reaches 12.97 m/s but requires 121.46 Pa, which the fan cannot supply at that flow. This point defines the resistance curve; it is not the expected hardware velocity.</p>
+            <p>The 12.97 m/s CFD condition defines the resistance curve; the fan cannot supply the required 121.46 Pa at that flow.</p>
             <div class="fan-correction">
               <div class="fan-correction-head"><span>P-Q curve correction</span><em>Predicted, not measured</em></div>
               <div class="fan-correction-grid">
@@ -206,7 +204,7 @@
                 <div><span>Operating pressure</span><strong>≈35 <small>Pa</small></strong><em>≈3.6 mmH₂O</em></div>
                 <div><span>Velocity reduction</span><strong>≈46 <small>%</small></strong></div>
               </div>
-              <p><strong>Limit:</strong> fan pressure reduces the predicted velocity to about 7.0 m/s. This is still the highest of the four cases and the outlet matches the heat-sink footprint.</p>
+              <p>The predicted hardware velocity is about 7.0 m/s—the highest of the four cases—and the outlet matches the heat-sink footprint.</p>
               <small class="physical-result">Selected for fabrication · measured thermal response pending</small>
             </div>
           </article>
@@ -228,7 +226,6 @@
             <figcaption>CFD-derived system curves and predicted fan operating points</figcaption>
           </figure>
           <div class="fan-curve-copy">
-            <span class="status done">Operating-Point Analysis Complete</span>
             <h3>Resistance determines delivered airflow</h3>
             <p>Each CFD sweep produced a duct system curve. Its intersection with the ARCTIC P12 Pro P–Q curve gives the predicted operating airflow.</p>
             <div class="fan-curve-specs">
@@ -252,25 +249,10 @@
             </aside>
           </div>
         </div>
-        <div class="detail-grid">
-          <article class="detail-panel reveal">
-            <span class="status done">System Curves</span>
-            <h3>Resistance quantified from CFD</h3>
-            <p>The D90 and 70 × 40 sweeps followed the quadratic pressure–flow trend. Matched-flow results were used for the D115 and 70 × 70 comparison curves.</p>
-            <div class="equation">Duct resistance: ΔP = KQ²</div>
-          </article>
-          <article class="detail-panel reveal">
-            <span class="status done">Fan Matching</span>
-            <h3>Calculate the delivered flow</h3>
-            <p>The predicted operating point occurs where fan pressure equals duct pressure. This separates the imposed CFD condition from the flow the fan can sustain.</p>
-            <div class="equation">Operating point: ΔP<sub>fan</sub>(Q) = ΔP<sub>system</sub>(Q)</div>
-          </article>
-        </div>
         <div class="engineering-decision reveal">
-          <span>Computational conclusion</span>
+          <span>Conclusion</span>
           <h3>Selected for testing: rounded 70 × 40 mm outlet</h3>
           <p>It had the highest fan-corrected outlet velocity and matches the 67 × 36 mm heat-sink footprint. Physical testing will compare its temperature response with the straight and 70 × 70 mm ducts.</p>
-          <div class="selection-criteria"><span>Four geometries compared</span><span>Quadratic model checked</span><span>Fan operating points solved</span><span>Physical result pending</span></div>
         </div>
       </div>
     </section>
@@ -292,7 +274,6 @@
               <button class="preview-button" type="button" aria-label="View the mount CAD model" aria-haspopup="dialog" aria-controls="imageLightbox" data-preview-src="assets/Mount CAD.png" data-preview-title="Heater-Block Support Mount" data-preview-label="CAD Model" data-preview-alt="CAD model of the four-post heater-block support mount">View</button>
             </figure>
             <div class="fixture-evidence-copy">
-              <span class="status course">CAD Complete</span>
               <h3>Keep the block supported and the center open</h3>
               <p>Four raised posts carry the M3 fasteners while the open frame keeps the hot block off the PLA and limits print material.</p>
             </div>
@@ -304,19 +285,17 @@
               <button class="preview-button" type="button" aria-label="View the mount Von Mises stress result" aria-haspopup="dialog" aria-controls="imageLightbox" data-preview-src="assets/Von Mises Mount CAD.png" data-preview-title="Heater-Block Mount Stress Result" data-preview-label="Static FEA" data-preview-alt="Von Mises stress result for the heater-block support mount under static loading">View</button>
             </figure>
             <div class="fixture-evidence-copy">
-              <span class="status done">Static FEA</span>
               <h3>Check the load path under gravity</h3>
               <p>The static study checks the combined gravity load through the four posts. Low-stress material was removed while the load paths and interfaces stayed intact.</p>
             </div>
           </article>
           <article class="fixture-evidence-card reveal">
             <figure class="fixture-evidence-media fixture-evidence-media--prototype">
-              <img src="assets/Printed Mount.jpeg" alt="Printed mount supporting the aluminum block and heat sink" width="4032" height="3024" loading="lazy" decoding="async">
+              <img src="assets/Printed Mount.webp" alt="Printed mount supporting the aluminum block and heat sink" width="2000" height="1500" loading="lazy" decoding="async">
               <figcaption>Printed mount</figcaption>
-              <button class="preview-button" type="button" aria-label="View the printed mount" aria-haspopup="dialog" aria-controls="imageLightbox" data-preview-src="assets/Printed Mount.jpeg" data-preview-title="Printed Heater-Block Support Mount" data-preview-label="Physical Prototype" data-preview-alt="Printed mount supporting the aluminum block and heat sink">View</button>
+              <button class="preview-button" type="button" aria-label="View the printed mount" aria-haspopup="dialog" aria-controls="imageLightbox" data-preview-src="assets/Printed Mount.webp" data-preview-title="Printed Heater-Block Support Mount" data-preview-label="Physical Prototype" data-preview-alt="Printed mount supporting the aluminum block and heat sink">View</button>
             </figure>
             <div class="fixture-evidence-copy">
-              <span class="status done">Physical Prototype</span>
               <h3>Validate the fabricated fixture</h3>
               <p>The printed mount carries the aluminum block and heat sink in the test setup. M3 fasteners keep the fixture serviceable between duct tests.</p>
             </div>
@@ -341,7 +320,6 @@
               <figcaption>SolidWorks assembly</figcaption>
             </figure>
             <div class="fabrication-candidate-body">
-              <span class="status done">CAD Complete · Selected Design</span>
               <h3>D115 → 70 × 40 mm rounded</h3>
               <p>Selected for its predicted 7.0 m/s operating velocity and close match to the 67 × 36 mm heat sink. The transition uses 6 mm fillets.</p>
             </div>
@@ -352,7 +330,6 @@
               <strong>D115 → D115</strong>
             </div>
             <div class="fabrication-candidate-body">
-              <span class="status progress">Model Image Pending</span>
               <h3>Straight reference duct</h3>
               <p>Control duct for separating the effect of a guided flow path from the effect of contraction.</p>
             </div>
@@ -363,17 +340,15 @@
               <strong>D115 → 70 × 70</strong>
             </div>
             <div class="fabrication-candidate-body">
-              <span class="status progress">Model Image Pending</span>
               <h3>Coverage-focused comparison</h3>
               <p>Comparison duct for testing whether broader heat-sink coverage offsets its lower predicted velocity.</p>
             </div>
           </article>
         </div>
         <div class="roadmap-grid">
-          <article class="roadmap-card reveal"><span class="status done">Analysis Complete</span><h3>Operating points calculated</h3><p>Compared the D115, D90, 70 × 70, and rounded 70 × 40 mm ducts using CFD and the fan P–Q curve.</p></article>
-          <article class="roadmap-card reveal"><span class="status progress">Fabrication Next</span><h3>Print three test ducts</h3><p>Print the straight, 70 × 70, and rounded 70 × 40 mm ducts. A removable flow straightener may be tested separately.</p></article>
-          <article class="roadmap-card reveal"><span class="status progress">Awaiting Shop Access</span><h3>Machine the heater block</h3><p>Machine the aluminum block that transfers heat from the power resistor to the heat sink.</p></article>
-          <article class="roadmap-card reveal"><span class="status progress">Validation Planned</span><h3>Run the thermal tests</h3><p>Solder the 18 AWG leads, hold input power and fan speed constant, and compare temperature response across the three ducts.</p></article>
+          <article class="roadmap-card reveal"><h3>Print three test ducts</h3><p>Print the straight, 70 × 70, and rounded 70 × 40 mm ducts. A removable flow straightener may be tested separately.</p></article>
+          <article class="roadmap-card reveal"><h3>Machine the heater block</h3><p>Machine the aluminum block that transfers heat from the power resistor to the heat sink.</p></article>
+          <article class="roadmap-card reveal"><h3>Run the thermal tests</h3><p>Solder the 18 AWG leads, hold input power and fan speed constant, and compare temperature response across the three ducts.</p></article>
         </div>
       </div>
     </section>
@@ -393,6 +368,6 @@
   <footer class="footer">
     <div class="container footer-row"><span>© <span data-year></span> Siyam Zaman</span><span>Mechanical engineering portfolio</span></div>
   </footer>
-  <script src="script.js"></script>
+  <script src="script.js?v=20260829"></script>
 </body>
 </html>

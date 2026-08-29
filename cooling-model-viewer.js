@@ -20,6 +20,9 @@
   var modelRadius = 1;
   var frameId;
   var dataScriptPromise;
+  var runtimePromise;
+  var threeRuntimeUrl = 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js';
+  var orbitControlsUrl = 'https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js';
 
   var partColors = {
     duct: { color: 0x3f4652, roughness: 0.52, metalness: 0.18 },
@@ -51,13 +54,18 @@
 
   function resetView() {
     if (!camera || !controls) return;
-    camera.position.set(modelRadius * 2.1, modelRadius * 1.25, modelRadius * 0.6);
+    var verticalFov = camera.fov * Math.PI / 180;
+    var horizontalFov = 2 * Math.atan(Math.tan(verticalFov / 2) * Math.max(camera.aspect, 0.1));
+    var limitingFov = Math.min(verticalFov, horizontalFov);
+    var fitDistance = modelRadius * 1.12 / Math.sin(Math.max(limitingFov / 2, 0.08));
+    var viewDirection = new THREE.Vector3(2.1, 1.25, 0.6).normalize();
+    camera.position.copy(viewDirection.multiplyScalar(fitDistance));
     camera.near = Math.max(modelRadius / 500, 0.01);
     camera.far = modelRadius * 20;
     camera.updateProjectionMatrix();
     controls.target.set(0, 0, 0);
-    controls.minDistance = modelRadius * 0.72;
-    controls.maxDistance = modelRadius * 8;
+    controls.minDistance = modelRadius * 0.9;
+    controls.maxDistance = Math.max(modelRadius * 8, fitDistance * 2);
     controls.update();
   }
 
@@ -81,13 +89,49 @@
     frameId = undefined;
   }
 
+  function loadExternalScript(src, ready) {
+    if (ready()) return Promise.resolve();
+    return new Promise(function (resolve, reject) {
+      var existing = document.querySelector('script[data-viewer-runtime="' + src + '"]');
+      if (existing) {
+        existing.addEventListener('load', function () { ready() ? resolve() : reject(new Error('Viewer runtime did not initialize.')); }, { once: true });
+        existing.addEventListener('error', function () { reject(new Error('Viewer runtime could not be loaded.')); }, { once: true });
+        return;
+      }
+      var script = document.createElement('script');
+      script.src = src;
+      script.async = true;
+      script.dataset.viewerRuntime = src;
+      script.onload = function () { ready() ? resolve() : reject(new Error('Viewer runtime did not initialize.')); };
+      script.onerror = function () { reject(new Error('Viewer runtime could not be loaded.')); };
+      document.head.appendChild(script);
+    });
+  }
+
+  function loadViewerRuntime() {
+    if (window.THREE && THREE.WebGLRenderer && THREE.OrbitControls) return Promise.resolve();
+    if (runtimePromise) return runtimePromise;
+    setStatus('Loading 3D viewer…');
+    runtimePromise = loadExternalScript(threeRuntimeUrl, function () {
+      return Boolean(window.THREE && THREE.WebGLRenderer);
+    }).then(function () {
+      return loadExternalScript(orbitControlsUrl, function () {
+        return Boolean(window.THREE && THREE.OrbitControls);
+      });
+    }).catch(function (error) {
+      runtimePromise = null;
+      throw error;
+    });
+    return runtimePromise;
+  }
+
   function loadDataScript() {
     if (window.coolingAssemblyData) return Promise.resolve(window.coolingAssemblyData);
     if (dataScriptPromise) return dataScriptPromise;
     setStatus('Loading assembly data…');
     dataScriptPromise = new Promise(function (resolve, reject) {
       var script = document.createElement('script');
-      script.src = 'cooling-assembly-data.js';
+      script.src = 'cooling-assembly-data.js?v=20260829';
       script.onload = function () {
         if (window.coolingAssemblyData) resolve(window.coolingAssemblyData);
         else reject(new Error('The assembly data was empty.'));
@@ -147,11 +191,33 @@
     assembly.add(mesh);
   }
 
+  function buildParts(parts) {
+    return new Promise(function (resolve, reject) {
+      var index = 0;
+      function buildBatch() {
+        try {
+          var batchEnd = Math.min(index + 2, parts.length);
+          while (index < batchEnd) {
+            createPart(parts[index]);
+            index += 1;
+          }
+          setStatus('Loading assembly… ' + index + ' / ' + parts.length);
+          if (index < parts.length) window.requestAnimationFrame(buildBatch);
+          else resolve();
+        } catch (error) {
+          reject(error);
+        }
+      }
+      buildBatch();
+    });
+  }
+
   function initializeViewer() {
     if (initialized) return Promise.resolve();
     if (loadingPromise) return loadingPromise;
-    loadingPromise = loadDataScript().then(function (parts) {
-      setStatus('Preparing 23-part assembly…');
+    loadingPromise = Promise.all([loadViewerRuntime(), loadDataScript()]).then(function (results) {
+      var parts = results[1];
+      setStatus('Preparing assembly…');
       if (!window.THREE || !THREE.WebGLRenderer || !THREE.OrbitControls) {
         throw new Error('WebGL viewer libraries are unavailable.');
       }
@@ -181,26 +247,23 @@
 
       assembly = new THREE.Group();
       scene.add(assembly);
-      for (var index = 0; index < parts.length; index += 1) {
-        createPart(parts[index]);
-        setStatus('Loading assembly… ' + (index + 1) + ' / ' + parts.length);
-      }
-
-      var bounds = new THREE.Box3().setFromObject(assembly);
-      var center = bounds.getCenter(new THREE.Vector3());
-      var size = bounds.getSize(new THREE.Vector3());
-      assembly.position.set(-center.x, -center.y, -center.z);
-      modelRadius = Math.max(size.length() * 0.52, 1);
-      resetView();
-      resizeViewer();
-      setStatus('Drag to rotate · Scroll or pinch to zoom', 'is-ready');
-      initialized = true;
+      return buildParts(parts).then(function () {
+        var bounds = new THREE.Box3().setFromObject(assembly);
+        var center = bounds.getCenter(new THREE.Vector3());
+        var size = bounds.getSize(new THREE.Vector3());
+        assembly.position.set(-center.x, -center.y, -center.z);
+        modelRadius = Math.max(size.length() * 0.52, 1);
+        resizeViewer();
+        resetView();
+        setStatus('Drag to rotate · Scroll or pinch to zoom', 'is-ready');
+        initialized = true;
+      });
     });
-	    loadingPromise.catch(function (error) {
-	      loadingPromise = null;
-	      dataScriptPromise = null;
-	      console.error('Unable to load cooling assembly model.', error);
-	      setStatus('The 3D model could not be loaded. Please try again.', 'has-error');
+    loadingPromise.catch(function (error) {
+      loadingPromise = null;
+      dataScriptPromise = null;
+      console.error('Unable to load cooling assembly model.', error);
+      setStatus('The 3D model could not be loaded. Please try again.', 'has-error');
     });
     return loadingPromise;
   }
@@ -213,7 +276,7 @@
       if (!dialog.open && dialog.showModal) dialog.showModal();
       else if (!dialog.open) dialog.setAttribute('open', '');
       document.body.classList.add('model-viewer-open');
-      if (!initialized) setStatus('Loading assembly…');
+      if (!initialized) setStatus('Loading 3D viewer…');
       initializeViewer().then(function () {
         resizeViewer();
         startRendering();
@@ -227,20 +290,28 @@
     }
   });
 
-  closeButton.addEventListener('click', function () {
-    if (dialog.close) dialog.close();
-    else dialog.removeAttribute('open');
-  });
-  resetButton.addEventListener('click', resetView);
-  dialog.addEventListener('click', function (event) {
-    if (event.target === dialog) {
-      if (dialog.close) dialog.close();
-      else dialog.removeAttribute('open');
-    }
-  });
-  dialog.addEventListener('close', function () {
+  function finishClose() {
     stopRendering();
     document.body.classList.remove('model-viewer-open');
     trigger.focus({ preventScroll: true });
+  }
+
+  function closeViewer() {
+    if (dialog.close) dialog.close();
+    else {
+      dialog.removeAttribute('open');
+      finishClose();
+    }
+  }
+
+  closeButton.addEventListener('click', closeViewer);
+  resetButton.addEventListener('click', resetView);
+  dialog.addEventListener('click', function (event) {
+    if (event.target === dialog) closeViewer();
   });
+  dialog.addEventListener('cancel', function (event) {
+    event.preventDefault();
+    closeViewer();
+  });
+  dialog.addEventListener('close', finishClose);
 }());

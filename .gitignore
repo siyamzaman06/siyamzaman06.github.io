@@ -3,3 +3,6 @@
 
 # Keep local review renders and working files out of GitHub.
 tmp/
+
+# Ignore local browser profiles created during responsive QA.
+.chrome-test-profile*/

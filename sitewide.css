@@ -1,0 +1,532 @@
+/*
+ * Shared stability layer
+ * Keeps the existing TokyoNight visual direction while giving every page the
+ * same spacing, media, interaction, and responsive rules.
+ */
+
+:root {
+  --content-gutter: clamp(.75rem, 2.4vw, 1.25rem);
+  --card-radius: clamp(20px, 2vw, 28px);
+  --control-radius: 13px;
+  --touch-target: 46px;
+  --copy-width: 68ch;
+}
+
+/* Decorative border-beam masks can fall back to a filled shape in some browsers.
+   Keep the card interaction clean without allowing that layer to cover media. */
+.card-border-beam {
+  display: none !important;
+  opacity: 0 !important;
+}
+
+/* The collage only needs the image and its two controls; remove decorative
+   pseudo-layers so no browser can paint a stray overlay over the artwork. */
+.cad-collage-media::before,
+.cad-collage-media::after,
+.cad-collage-media > .card-border-beam {
+  content: none !important;
+  display: none !important;
+}
+
+html {
+  min-width: 320px;
+  scroll-padding-top: 94px;
+  text-size-adjust: 100%;
+}
+
+body {
+  width: 100%;
+  min-width: 320px;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+:where(main, section, article, figure, div, header, footer, nav) {
+  min-width: 0;
+}
+
+:where(img, video, canvas, iframe) {
+  max-width: 100%;
+}
+
+:where(button, .button, .icon-btn, .menu-btn, .preview-button) {
+  min-height: var(--touch-target);
+}
+
+:where(.icon-btn, .menu-btn, .quick-access-trigger) {
+  width: var(--touch-target);
+  min-width: var(--touch-target);
+}
+
+.brand {
+  min-height: var(--touch-target);
+}
+
+.back-to-top {
+  width: var(--touch-target);
+  height: var(--touch-target);
+  min-width: var(--touch-target);
+  min-height: var(--touch-target);
+}
+
+.drawing-autoplay-toggle {
+  width: var(--touch-target);
+  height: var(--touch-target);
+  min-width: var(--touch-target);
+  min-height: var(--touch-target);
+}
+
+.contact-list a {
+  min-height: var(--touch-target);
+  align-items: center;
+}
+
+:where(a, button, input):focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.home-copy p a.load-underline {
+  color: var(--accent2);
+  font-weight: 650;
+  background-image: none;
+  animation: none !important;
+  text-decoration-line: underline;
+  text-decoration-thickness: 2px;
+  text-decoration-color: var(--accent);
+  text-underline-offset: .18em;
+  transition: color .2s ease, text-decoration-color .2s ease;
+}
+
+.home-copy p a.load-underline:hover,
+.home-copy p a.load-underline:focus-visible {
+  color: var(--text);
+  text-decoration-color: var(--accent2);
+}
+
+body.light .home-copy p a.load-underline {
+  color: #465da2;
+  text-decoration-color: #465da2;
+}
+
+.container {
+  width: min(calc(100% - (var(--content-gutter) * 2)), var(--max));
+}
+
+.section,
+.page-hero,
+.home-hero {
+  overflow: clip;
+}
+
+.section-head > *,
+.home-copy,
+.page-grid > *,
+.project-body,
+.cert-body,
+.timeline-copy,
+.timeline-media {
+  min-width: 0;
+}
+
+:where(.home-copy p, .page-hero p, .project-body > p, .cert-body > p, .timeline-copy > p) {
+  max-width: var(--copy-width);
+}
+
+.page-card,
+.project-card,
+.cert-card,
+.panel,
+.badge-card,
+.detail-panel,
+.roadmap-card,
+.iteration-card,
+.future-artifact,
+.fixture-evidence-card {
+  max-width: 100%;
+  border-radius: var(--card-radius);
+}
+
+.page-card,
+.project-card,
+.cert-card,
+.fixture-evidence-card {
+  overflow: clip;
+}
+
+.project-body,
+.cert-body,
+.fixture-evidence-copy {
+  min-width: 0;
+}
+
+.project-body {
+  height: 100%;
+}
+
+.project-body .hero-actions,
+.cert-body .hero-actions {
+  margin-top: auto;
+}
+
+.project-body h2,
+.project-body h3,
+.cert-body h3,
+.page-card h3,
+.section-head h2 {
+  max-width: 100%;
+  text-wrap: balance;
+}
+
+:where(.project-body p, .cert-body p, .timeline-copy p, .detail-panel p, .roadmap-card p, .iteration-card p) {
+  overflow-wrap: break-word;
+}
+
+.meta,
+.tags,
+.skills,
+.hero-actions {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.button,
+.preview-button,
+.icon-btn,
+.menu-btn {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.media,
+.cert-media,
+.fixture-evidence-media,
+.project-gallery .media,
+.timeline-media .media {
+  isolation: isolate;
+  overflow: clip;
+}
+
+.media > img,
+.cert-media > img,
+.fixture-evidence-media > img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.media > video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background: #050b13;
+}
+
+.media .preview-button,
+.fixture-evidence-media .preview-button,
+.cert-media .preview-button {
+  right: clamp(.65rem, 1.6vw, 1rem);
+  bottom: clamp(.65rem, 1.6vw, 1rem);
+  max-width: calc(100% - 1.3rem);
+  white-space: nowrap;
+}
+
+.media figcaption,
+.fixture-evidence-media figcaption {
+  left: clamp(.65rem, 1.6vw, 1rem);
+  max-width: min(72%, 26rem);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Top-aligned collage captions must keep their intrinsic height. Setting both
+   top and bottom stretches a pill-shaped label across the entire image. */
+.cad-collage-media figcaption {
+  right: auto;
+  bottom: auto !important;
+  width: max-content;
+  height: auto;
+}
+
+/* Recruiter-facing editorial pass: keep evidence prominent and remove
+   template-like chip repetition where the surrounding copy is already clear. */
+.project-overview-card .project-skill-chips,
+body[data-page="fsae"] .timeline-copy .tags {
+  display: none;
+}
+
+.cooling-hero-evidence {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  background: #eef1f6;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, .22);
+}
+
+.cooling-hero-evidence img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 947 / 634;
+  object-fit: cover;
+  object-position: center;
+}
+
+.cooling-hero-evidence figcaption {
+  position: absolute;
+  left: .8rem;
+  bottom: .8rem;
+  max-width: calc(100% - 1.6rem);
+  padding: .42rem .62rem;
+  border: 1px solid rgba(255, 255, 255, .18);
+  border-radius: 8px;
+  color: #fff;
+  background: rgba(7, 15, 28, .8);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, .22);
+  font-size: .68rem;
+  font-weight: 850;
+}
+
+.project-card .tags .tag:nth-child(n+5) {
+  display: none;
+}
+
+.media:has(figcaption):has(.preview-button) figcaption,
+.fixture-evidence-media:has(figcaption):has(.preview-button) figcaption {
+  max-width: calc(100% - 8.5rem);
+}
+
+.cad-collage-note {
+  max-width: min(64%, 28rem);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.site-header .nav-links a {
+  transform-origin: center;
+  will-change: transform;
+}
+
+body:is(.contact-open, .project-overview-open, .preview-open, .quick-access-open, .model-viewer-open) {
+  overflow: hidden;
+}
+
+:where(.contact-dialog, .project-overview-dialog, .image-lightbox, .quick-access-dialog, .model-viewer-dialog)[open] {
+  overscroll-behavior: contain;
+}
+
+@media (max-width: 1020px) {
+  .nav-links {
+    left: auto;
+    right: max(var(--content-gutter), env(safe-area-inset-right, 0px));
+    width: min(17rem, calc(100% - (var(--content-gutter) * 2)));
+    max-height: calc(100dvh - 92px - env(safe-area-inset-top, 0px));
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  .nav-links a {
+    min-height: 48px;
+    display: flex;
+    align-items: center;
+    border-radius: 12px;
+  }
+}
+
+@media (max-width: 980px) {
+  .page-grid,
+  .about-grid,
+  .timeline-intro,
+  .project-card.featured,
+  .project-card.featured.reverse,
+  .cert-card,
+  .fan-curve-panel {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .project-card.featured > .media,
+  .project-card.featured.reverse > .media,
+  .cert-card > .cert-media {
+    grid-column: 1;
+    grid-row: auto;
+    width: 100%;
+    min-width: 0;
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .project-card.featured > .project-body,
+  .project-card.featured.reverse > .project-body,
+  .cert-card > .cert-body {
+    grid-column: 1;
+    grid-row: auto;
+    width: 100%;
+  }
+}
+
+@media (max-width: 780px) {
+  :root {
+    --content-gutter: max(.75rem, env(safe-area-inset-left, 0px), env(safe-area-inset-right, 0px));
+    --card-radius: 20px;
+  }
+
+  html,
+  body {
+    max-width: 100%;
+    overflow-x: clip;
+  }
+
+  .site-header {
+    padding-top: env(safe-area-inset-top, 0px);
+  }
+
+  .nav {
+    padding-inline: max(.7rem, env(safe-area-inset-left, 0px));
+  }
+
+  .project-grid,
+  .page-cards,
+  .cert-grid,
+  .fixture-evidence-grid,
+  .artifact-grid,
+  .fabrication-candidate-grid {
+    width: 100%;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  :where(.project-grid, .page-cards, .cert-grid) > * {
+    grid-column: 1 / -1;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .section {
+    padding-block: clamp(3.5rem, 10vw, 4.5rem);
+  }
+
+  .home-hero,
+  .page-hero {
+    padding-block: clamp(3.5rem, 11vw, 4.5rem);
+  }
+
+  .home-copy h1 {
+    font-size: clamp(2.9rem, 14vw, 4.45rem);
+    line-height: 1.01;
+  }
+
+  .page-hero h1 {
+    font-size: clamp(2.7rem, 12vw, 4rem);
+    line-height: 1.04;
+  }
+
+  .project-body h2,
+  .cert-body h3 {
+    font-size: clamp(1.85rem, 8vw, 2.6rem);
+    line-height: 1.06;
+  }
+
+  .featured .project-body,
+  .project-body,
+  .cert-body,
+  .fixture-evidence-copy {
+    padding: clamp(1.1rem, 4vw, 1.4rem);
+  }
+
+  .media,
+  .featured .media {
+    min-height: clamp(230px, 67vw, 340px);
+  }
+
+  .media figcaption,
+  .fixture-evidence-media figcaption {
+    max-width: calc(100% - 7.75rem);
+  }
+
+  .cad-collage-note {
+    top: .65rem;
+    right: .65rem;
+    max-width: calc(100% - 1.3rem);
+    white-space: normal;
+  }
+
+  .hero-actions > .button {
+    max-width: 100%;
+    white-space: normal;
+    text-align: center;
+  }
+
+  .fact {
+    flex-wrap: wrap;
+  }
+
+  .fact span:last-child {
+    max-width: 100%;
+    text-align: left;
+  }
+
+  .footer {
+    padding-bottom: calc(2.5rem + env(safe-area-inset-bottom, 0px));
+  }
+}
+
+@media (max-width: 560px) {
+  .home-copy .hero-actions {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    width: 100%;
+  }
+
+  .home-copy .hero-actions > .button {
+    width: 100%;
+  }
+
+  .media figcaption,
+  .fixture-evidence-media figcaption {
+    max-width: calc(100% - 7rem);
+    font-size: .62rem;
+  }
+
+  .project-overview-panel,
+  .image-lightbox-panel {
+    width: 100%;
+    height: 100dvh;
+    max-height: 100dvh;
+    border-inline: 0;
+    border-radius: 0;
+  }
+
+  .project-overview-grid {
+    padding-bottom: calc(1.2rem + env(safe-area-inset-bottom, 0px));
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .site-header .nav-links a:hover {
+    transform: translateY(-2px) scale(1.06);
+  }
+}
+
+@media (pointer: coarse) {
+  .interactive-tilt,
+  .interactive-tilt:hover {
+    transform: none;
+    filter: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: .001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .001ms !important;
+  }
+}
