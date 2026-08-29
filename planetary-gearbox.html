@@ -38,7 +38,7 @@
         <div class="reveal">
           <span class="eyebrow">Personal Project · In Progress</span>
           <h1>Instrumented 3D-Printed Planetary Gearbox</h1>
-          <p>Developing a compact planetary gearbox that reduces rotational speed, increases output torque, and can eventually compare calculated performance with physical test data.</p>
+          <p>I am designing a printed planetary gearbox with a target reduction near 5:1. The final assembly will measure speed, torque, backlash, temperature, and efficiency.</p>
           <div class="hero-actions">
             <span class="status progress">Concept Development and Preliminary Design</span>
             <a class="button secondary small" href="personal-projects.html">← Back to Personal Projects</a>
@@ -61,9 +61,9 @@
         <div class="section-head reveal">
           <div>
             <span class="eyebrow">Project Overview</span>
-            <h2>Engineering the full system.</h2>
+            <h2>Project requirements</h2>
           </div>
-          <p>The goal is to move from requirements and calculations through CAD, analysis, manufacturing, instrumentation, testing, and an evidence-based redesign.</p>
+          <p>The design will be checked with calculations, CAD, FEA, and instrumented testing.</p>
         </div>
         <div class="detail-grid">
           <article class="detail-panel reveal">
@@ -78,13 +78,13 @@
           </article>
           <article class="detail-panel reveal">
             <span class="status progress">Current Progress</span>
-            <h3>Work underway now</h3>
+            <h3>Current work</h3>
             <ul class="detail-list">
-              <li>Learning planetary gearbox operation and defining project requirements.</li>
+              <li>Defining the operating requirements and gearbox architecture.</li>
               <li>Selecting the input, output, and fixed gearbox components.</li>
               <li>Developing the gear-ratio and force-calculation spreadsheet.</li>
               <li>Comparing tooth-count combinations and overall gearbox dimensions.</li>
-              <li>Planning the CAD structure, hardware selection, and testing method.</li>
+              <li>Planning the CAD structure, hardware, and measurement setup.</li>
             </ul>
           </article>
         </div>
@@ -96,9 +96,9 @@
         <div class="section-head reveal">
           <div>
             <span class="eyebrow">Preliminary Gear Configuration</span>
-            <h2>A starting point—not a frozen design.</h2>
+            <h2>Preliminary gearset</h2>
           </div>
-          <p>These values are under consideration and may change as packaging, force calculations, hardware selection, and printability are evaluated.</p>
+          <p>These values will be revised if the load calculations, packaging, or print constraints require it.</p>
         </div>
         <div class="detail-grid">
           <article class="detail-panel reveal">
@@ -130,41 +130,41 @@
         <div class="section-head reveal">
           <div>
             <span class="eyebrow">Development Roadmap</span>
-            <h2>Planned engineering work.</h2>
+            <h2>Planned work</h2>
           </div>
-          <p>Items below describe intended work. No manufacturing, FEA validation, or physical performance results are being claimed yet.</p>
+          <p>The concept and preliminary design are in progress; manufacturing, FEA, and physical testing have not started.</p>
         </div>
         <div class="roadmap-grid">
           <article class="roadmap-card reveal">
             <span class="status progress">In Development</span>
-            <h3>Engineering Calculations</h3>
-            <p>Gear ratio, pitch diameters, center distances, tooth forces, load sharing, planet-pin loading, shaft stress, bearing reactions, and expected output performance.</p>
+            <h3>Calculate the loads</h3>
+            <p>Calculate the ratio, pitch diameters, center distances, tooth forces, planet-pin loads, shaft stress, bearing reactions, and expected output.</p>
           </article>
           <article class="roadmap-card reveal">
             <span class="status progress">CAD Model in Progress</span>
-            <h3>CAD Development</h3>
-            <p>A parametric Creo or SolidWorks assembly covering gears, carrier, shafts, housing, bearings, fasteners, fits, backlash, tolerances, drawings, and the bill of materials.</p>
+            <h3>Build the CAD assembly</h3>
+            <p>Model the gears, carrier, shafts, housing, bearings, and fasteners, then define fits, backlash, tolerances, drawings, and the bill of materials.</p>
           </article>
           <article class="roadmap-card reveal">
             <span class="status progress">Analysis Pending</span>
-            <h3>FEA and Validation</h3>
-            <p>ANSYS Mechanical analysis of a critical component such as the planet carrier, followed by a mesh-convergence study and comparison with hand calculations.</p>
+            <h3>Check a critical component</h3>
+            <p>Analyze the selected critical component in ANSYS Mechanical, run a mesh-convergence check, and compare the result with hand calculations.</p>
           </article>
           <article class="roadmap-card reveal">
             <span class="status progress">Manufacturing Planned</span>
-            <h3>Manufacturing</h3>
-            <p>Additive manufacturing of the housing and replaceable gears, followed by installation of metal shafts, planet pins, bearings or bushings, and fasteners.</p>
+            <h3>Manufacture and assemble</h3>
+            <p>Print the housing and replaceable gears, then install the metal shafts, planet pins, bearings or bushings, and fasteners.</p>
           </article>
           <article class="roadmap-card reveal">
             <span class="status progress">Testing Planned</span>
-            <h3>Test Fixture and Instrumentation</h3>
-            <p>A motor-driven fixture intended to measure input and output RPM, actual reduction ratio, output torque, backlash, temperature rise, efficiency, and sustainable load.</p>
+            <h3>Measure gearbox performance</h3>
+            <p>Use a motor-driven fixture to measure input and output RPM, reduction ratio, torque, backlash, temperature rise, efficiency, and sustainable load.</p>
             <div class="equation">Torque = Force × Moment Arm Length</div>
           </article>
           <article class="roadmap-card reveal">
             <span class="status progress">Results After Validation</span>
-            <h3>Results and Design Iterations</h3>
-            <p>Measured data will be compared with predictions to identify weaknesses, determine root causes, and guide an evidence-based redesign without assuming that an initial design has failed.</p>
+            <h3>Compare results and revise</h3>
+            <p>Compare the measurements with the calculations, identify the largest mismatch or failure mode, and revise the affected component.</p>
           </article>
         </div>
       </div>
@@ -175,13 +175,13 @@
         <div class="section-head reveal">
           <div>
             <span class="eyebrow">Iteration Plan</span>
-            <h2>Build understanding, then improve with evidence.</h2>
+            <h2>Prototype sequence</h2>
           </div>
         </div>
         <div class="iteration-grid">
-          <article class="iteration-card reveal"><span>Prototype 0</span><h3>Motion and clearance model</h3><p>A simple hand-operated gearset planned to build intuition for planetary motion and verify basic gear clearances.</p></article>
-          <article class="iteration-card reveal"><span>Version 1</span><h3>First motorized assembly</h3><p>The first fully assembled gearbox and instrumented test fixture planned for physical performance measurements.</p></article>
-          <article class="iteration-card reveal"><span>Version 2</span><h3>Evidence-based redesign</h3><p>A redesign guided by measured backlash, deflection, temperature, torque capacity, efficiency, or failure observations. Improvements may also target mass, bearing retention, or manufacturability.</p></article>
+          <article class="iteration-card reveal"><span>Prototype 0</span><h3>Motion and clearance model</h3><p>Hand-operated gearset for checking planetary motion, tooth engagement, and basic clearances.</p></article>
+          <article class="iteration-card reveal"><span>Version 1</span><h3>Motorized test assembly</h3><p>Complete gearbox and fixture for the first speed, torque, backlash, temperature, and efficiency measurements.</p></article>
+          <article class="iteration-card reveal"><span>Version 2</span><h3>Targeted revision</h3><p>Revise the component responsible for the largest measured loss, deflection, temperature rise, or failure.</p></article>
         </div>
       </div>
     </section>
@@ -191,9 +191,9 @@
         <div class="section-head reveal">
           <div>
             <span class="eyebrow">Final Documentation</span>
-            <h2>Documentation roadmap.</h2>
+            <h2>Planned documentation</h2>
           </div>
-          <p>Planned documentation for each engineering stage is tracked below.</p>
+          <p>Each item will be added when that stage is complete.</p>
         </div>
         <div class="artifact-grid">
           <article class="future-artifact reveal"><span>01</span><h3>Planetary gearbox diagram</h3><p>In development</p></article>

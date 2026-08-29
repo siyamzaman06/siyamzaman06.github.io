@@ -6,13 +6,13 @@
   <meta name="theme-color" content="#16161e">
   <style>html{background:#16161e;color-scheme:dark}html.theme-preload-light{background:#e1e2e7;color-scheme:light}</style>
   <script>try{if(localStorage.getItem('portfolio-theme')==='light'){document.documentElement.classList.add('theme-preload-light');document.querySelector('meta[name="theme-color"]').content='#e1e2e7'}}catch{}</script>
-  <meta name="description" content="A timeline of Siyam Zaman's Dallas Formula Racing drivetrain work, including eccentric differential mounts, 2027 test-mule mounting tabs, FEA, and prototyping.">
+  <meta name="description" content="A timeline of Siyam Zaman's Dallas Formula Racing drivetrain work, including differential mounts, tab FEA, fatigue research, prototyping, and CNC machining preparation.">
   <title>Formula SAE | Siyam Zaman</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..900&amp;family=Manrope:wght@400..800&amp;display=swap">
   <link rel="stylesheet" href="styles.css">
-<link rel="canonical" href="https://siyamzaman06.github.io/fsae.html"><meta name="author" content="Siyam Zaman"><meta property="og:type" content="website"><meta property="og:site_name" content="Siyam Zaman Engineering Portfolio"><meta property="og:title" content="Formula SAE | Siyam Zaman"><meta property="og:description" content="A timeline of Siyam Zaman&#39;s Dallas Formula Racing drivetrain work, including eccentric differential mounts, 2027 test-mule mounting tabs, FEA, and prototyping."><meta property="og:url" content="https://siyamzaman06.github.io/fsae.html"><meta name="twitter:card" content="summary"><meta name="twitter:title" content="Formula SAE | Siyam Zaman"><meta name="twitter:description" content="A timeline of Siyam Zaman&#39;s Dallas Formula Racing drivetrain work, including eccentric differential mounts, 2027 test-mule mounting tabs, FEA, and prototyping."></head>
+<link rel="canonical" href="https://siyamzaman06.github.io/fsae.html"><meta name="author" content="Siyam Zaman"><meta property="og:type" content="website"><meta property="og:site_name" content="Siyam Zaman Engineering Portfolio"><meta property="og:title" content="Formula SAE | Siyam Zaman"><meta property="og:description" content="A timeline of Siyam Zaman&#39;s Dallas Formula Racing drivetrain work, including differential mounts, tab FEA, fatigue research, prototyping, and CNC machining preparation."><meta property="og:url" content="https://siyamzaman06.github.io/fsae.html"><meta name="twitter:card" content="summary"><meta name="twitter:title" content="Formula SAE | Siyam Zaman"><meta name="twitter:description" content="A timeline of Siyam Zaman&#39;s Dallas Formula Racing drivetrain work, including differential mounts, tab FEA, fatigue research, prototyping, and CNC machining preparation."></head>
 <body data-page="fsae">
   <a class="skip" href="#main">Skip to main content</a>
   <header class="site-header">
@@ -37,7 +37,7 @@
         <div class="reveal">
           <span class="eyebrow">Dallas Formula Racing</span>
           <h1>Formula SAE drivetrain development.</h1>
-          <p>A timeline of my drivetrain work, including CAD development, packaging revisions, engineering analysis, test-mule mounting tabs, team testing exposure, and prototype preparation.</p>
+          <p>My drivetrain work covers differential-mount CAD, packaging, load analysis, FEA, fatigue research, prototyping, and machining preparation.</p>
           <div class="hero-actions">
             <a class="button primary" href="#timeline">View Timeline ↓</a>
           </div>
@@ -48,7 +48,7 @@
             <div class="fact"><span>System</span><span>Eccentric differential mount</span></div>
             <div class="fact"><span>Function</span><span>Support + chain tensioning</span></div>
             <div class="fact"><span>Team</span><span>Drivetrain / Powertrain</span></div>
-            <div class="fact"><span>Work</span><span>CAD, statics, FEA, prototyping</span></div>
+            <div class="fact"><span>Work</span><span>CAD, statics, FEA, fatigue, manufacturing</span></div>
           </div>
         </aside>
       </div>
@@ -56,13 +56,13 @@
     <section class="section">
       <div class="container timeline-intro">
         <article class="panel reveal">
-          <span class="eyebrow">Design Role</span>
-          <h3>Drivetrain and differential mount development</h3>
-          <p style="margin-top:.8rem">Focused on CAD development, packaging, load-path understanding, validation, and prototype preparation for the differential mounting system.</p>
+          <span class="eyebrow">Current Work</span>
+          <h3>Finalize the tab analysis before machining</h3>
+          <p style="margin-top:.8rem">The current work is to finalize the tab load cases, factor of safety, and fatigue assumptions while preparing to use the Tormach CNC mill.</p>
         </article>
         <article class="panel reveal">
           <span class="eyebrow">Main Constraints</span>
-          <h3>What the design works around</h3>
+          <h3>Packaging and manufacturing constraints</h3>
           <p style="margin-top:.8rem">Chassis tubes, chain and sprocket clearance, halfshaft position, CV-joint movement, bearing locations, bolt access, assembly sequence, manufacturability, and durability over multiple seasons.</p>
         </article>
       </div>
@@ -73,8 +73,8 @@
           <div class="dot"></div>
           <div class="timeline-copy">
             <span class="timeline-date">Stage 01 · System Learning</span>
-            <h3>Built drivetrain and mount system understanding</h3>
-            <p>Studied how the differential, sprockets, chain, bearings, halfshafts, eccentric cams, and chassis interact so the mount could be developed around the full drivetrain system.</p>
+            <h3>Mapped the drivetrain interfaces</h3>
+            <p>I first traced how the differential, sprockets, chain, bearings, halfshafts, eccentric cams, and chassis connect. This established the mount interfaces and load paths before I changed the geometry.</p>
             <div class="tags" style="margin-top:1rem"><span class="tag">System Interfaces</span><span class="tag">Chain Tensioning</span><span class="tag">Load Paths</span></div>
           </div>
         </article>
@@ -88,8 +88,8 @@
           </div>
           <div class="timeline-copy">
             <span class="timeline-date">Stage 02 · 2028 Test Mule V1</span>
-            <h3>Created my first standalone eccentric cam diff mount</h3>
-            <p>Modeled an eccentric cam differential mount for the test mule using the 2024 chassis as the packaging reference. This was my first standalone FSAE mount project.</p>
+            <h3>Modeled the first test-mule mount</h3>
+            <p>I modeled an eccentric-cam differential mount using the 2024 chassis as the packaging reference.</p>
             <div class="tags" style="margin-top:1rem"><span class="tag">CAD</span><span class="tag">Test Mule</span><span class="tag">2024 Chassis Reference</span></div>
           </div>
         </article>
@@ -97,8 +97,8 @@
           <div class="dot"></div>
           <div class="timeline-copy">
             <span class="timeline-date">Stage 03 · Clearance Revision</span>
-            <h3>Repositioned the differential and changed the mount</h3>
-            <p>Adjusted the differential location to improve minimum clearance around nearby chassis tubes and the halfshaft region, while preserving the required sprocket and chain relationship. The mount geometry was revised with the new differential position instead of only moving the assembly.</p>
+            <h3>Revised the differential position for clearance</h3>
+            <p>The first position left limited clearance near the chassis tubes and halfshaft. I moved the differential while preserving the sprocket and chain relationship, then rebuilt the mount geometry around the new position.</p>
             <div class="tags" style="margin-top:1rem"><span class="tag">Packaging</span><span class="tag">Chassis Clearance</span><span class="tag">Halfshaft Clearance</span><span class="tag">Mount Geometry</span></div>
           </div>
         </article>
@@ -112,8 +112,8 @@
           </div>
           <div class="timeline-copy">
             <span class="timeline-date">Stage 04 · Joint and Fastener Revision</span>
-            <h3>Changed bolt size and mounting geometry</h3>
-            <p>Revised bolt sizing, hole geometry, and mount features to improve the joint design and make the eccentric mount more practical to clamp, assemble, and validate. The design uses M8x1.5 class 8.8 hardware, where the bolt class helps determine the allowable tightening torque and clamping force.</p>
+            <h3>Revised the joint and fasteners</h3>
+            <p>I changed the bolt size, hole geometry, and surrounding mount features to improve clamping and assembly access. The current design uses M8×1.5 class 8.8 hardware; the bolt class sets the allowable preload and tightening torque.</p>
             <div class="tags" style="margin-top:1rem"><span class="tag">Joint Design</span><span class="tag">Mount Geometry</span><span class="tag">Clamping Force</span></div>
           </div>
         </article>
@@ -121,8 +121,8 @@
           <div class="dot"></div>
           <div class="timeline-copy">
             <span class="timeline-date">Stage 05 · Statics and Load Path</span>
-            <h3>Worked through the mount loading</h3>
-            <p>Mapped how chain force, differential reactions, bearing loads, cam loading, and mount reactions transfer through the system and into the chassis. The loading setup was translated into appropriate boundary conditions for the left and right cam interfaces.</p>
+            <h3>Calculated the mount reactions</h3>
+            <p>I used the chain force, differential reactions, bearing loads, and cam geometry to calculate the loads transferred into the chassis. Those reactions became the boundary conditions for the left and right mount analyses.</p>
             <div class="tags" style="margin-top:1rem"><span class="tag">Statics</span><span class="tag">Free-Body Diagrams</span><span class="tag">Bearing Reactions</span><span class="tag">Boundary Conditions</span></div>
           </div>
         </article>
@@ -136,8 +136,8 @@
           </div>
           <div class="timeline-copy">
             <span class="timeline-date">Stage 06 · FEA Validation</span>
-            <h3>Reviewed FEA results and lightweighting opportunities</h3>
-            <p>Built the FEA setup from the statics work and reviewed stress, displacement, and factor of safety. The analysis showed a high factor of safety, so the next design pass will look at reducing unnecessary weight through thickness changes or material cutouts while keeping the mount durable.</p>
+            <h3>Checked stress, displacement, and safety factor</h3>
+            <p>I applied the calculated reactions to the mount model and reviewed stress, displacement, and factor of safety. The first result left excess margin, so the next revision will reduce thickness or remove low-stress material before the analysis is repeated.</p>
             <div class="tags" style="margin-top:1rem"><span class="tag">FEA</span><span class="tag">Boundary Conditions</span><span class="tag">Factor of Safety</span></div>
           </div>
         </article>
@@ -157,8 +157,8 @@
           </div>
           <div class="timeline-copy">
             <span class="timeline-date">Stage 07 · Dyno Session and Drivetrain Observation</span>
-            <h3>Observed live testing and asked system-level questions</h3>
-            <p>Observed a recent dyno session used to evaluate engine output and drivetrain behavior. I asked experienced Formula SAE members questions, watched the drivetrain run in real time, compared a turnbuckle-style tensioning setup with another differential mount approach, and learned more about how the volumetric efficiency map relates to engine tuning and horsepower testing.</p>
+            <h3>Observed the drivetrain under dyno load</h3>
+            <p>During a dyno session, I watched the drivetrain run under load and compared the existing turnbuckle tensioner with an eccentric-mount approach. I also reviewed how the volumetric-efficiency map is used during engine tuning and power measurement.</p>
             <div class="tags" style="margin-top:1rem"><span class="tag">Dyno Observation</span><span class="tag">Volumetric Efficiency</span><span class="tag">Engine Tuning</span><span class="tag">Drivetrain Behavior</span></div>
           </div>
         </article>
@@ -179,20 +179,21 @@
             </div>
           </div>
           <div class="timeline-copy">
-            <span class="timeline-date">Stage 08 · Differential-Mount Tab CAD &amp; FEA</span>
-            <h3>Designed and analyzed the differential-mount tabs</h3>
-            <p>Created the left and right differential-mount tab geometry in CAD, then ran multiple FEA-driven design iterations. I adjusted each profile for its own reaction load until both designs achieved the target factor of safety of 3. These parts are planned for installation on the test mule in the coming months.</p>
+            <span class="timeline-date">Stage 08 · Tab CAD, FEA &amp; Fatigue Research</span>
+            <h3>Applying side-specific loads to the mounting tabs</h3>
+            <p>I modeled separate left and right tabs because the calculated reactions differ by side. The current FEA uses those loads while the constraints and factor-of-safety calculation are being finalized. Next, I will use material-specific S-N curves for 7075-T6 aluminum and AISI 4130 steel annealed at 865 °C to estimate fatigue life. The tab dimensions use available nominal stock sizes to avoid custom material cutting and reduce cost.</p>
             <div class="fea-load-grid" aria-label="Differential mount tab loads">
               <div class="fea-load-card"><span>Left tab load</span><strong>1,047.9 lbf</strong><small>per tab · 2,095.8 lbf tab-pair load</small></div>
               <div class="fea-load-card"><span>Right tab load</span><strong>496.65 lbf</strong><small>per tab · 993.3 lbf tab-pair load</small></div>
             </div>
             <ul class="fea-assumptions">
-              <li><strong>Material:</strong> AISI 4130 steel, annealed at 865°C</li>
+              <li><strong>Materials under evaluation:</strong> 7075-T6 aluminum and AISI 4130 steel, annealed at 865 °C</li>
+              <li><strong>Fatigue method:</strong> material-specific S-N curve evaluation</li>
               <li><strong>Boundary condition:</strong> welded mounting edge fixed</li>
               <li><strong>Load application:</strong> 50% of each tab-pair load applied to the inner semicylindrical bolt-hole surface</li>
               <li><strong>Chain-force direction:</strong> 60° estimate used in the FEA model</li>
             </ul>
-            <div class="tags" style="margin-top:1rem"><span class="tag">Mounting Tabs</span><span class="tag">FEA Iteration</span><span class="tag">Factor of Safety</span><span class="tag">Test Mule</span></div>
+            <div class="tags" style="margin-top:1rem"><span class="tag">Mounting Tabs</span><span class="tag">FEA Iteration</span><span class="tag">Factor of Safety</span><span class="tag">S-N Curves</span><span class="tag">Fatigue Analysis</span></div>
           </div>
         </article>
         <article class="timeline-item">
@@ -205,9 +206,18 @@
           </div>
           <div class="timeline-copy">
             <span class="timeline-date">Stage 09 · Physical Prototyping</span>
-            <h3>3D printing the '27 test mule mounts</h3>
-            <p>3D printing the differential mounts for physical fit checks, packaging review, assembly practice, and hands-on prototype validation before final manufacturing decisions.</p>
+            <h3>Printing mounts for fit checks</h3>
+            <p>The printed mounts will be used to check chassis fit, tool access, assembly order, and nearby clearances before the final parts are machined.</p>
             <div class="tags" style="margin-top:1rem"><span class="tag">3D Printing</span><span class="tag">Physical Prototype</span><span class="tag">Fit Checks</span><span class="tag">Packaging Review</span></div>
+          </div>
+        </article>
+        <article class="timeline-item text-only left">
+          <div class="dot"></div>
+          <div class="timeline-copy">
+            <span class="timeline-date">Stage 10 · Manufacturing Preparation</span>
+            <h3>Preparing to machine the final parts</h3>
+            <p>While the factor-of-safety and fatigue work continues, I am training on the Tormach CNC mill. Machining will begin after the load cases are finalized and the tab designs are released.</p>
+            <div class="tags" style="margin-top:1rem"><span class="tag">Tormach CNC</span><span class="tag">Machining Preparation</span><span class="tag">Manufacturing</span><span class="tag">Design Release</span></div>
           </div>
         </article>
       </div>

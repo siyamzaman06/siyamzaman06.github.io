@@ -25,6 +25,7 @@ document.body.classList.toggle('user-reduce-motion', savedPreferences.motion);
 root.classList.toggle('user-reduce-motion', savedPreferences.motion);
 root.dataset.textScale = savedPreferences.textScale;
 const motionReduced = () => reducedMotion.matches || document.body.classList.contains('user-reduce-motion');
+const autoplaySyncers = new Set();
 
 
 const openingTitle = document.querySelector('main h1');
@@ -300,8 +301,65 @@ spotlightSurfaces.forEach((surface) => {
 document.querySelectorAll('[data-drawing-switcher]').forEach((switcher) => {
   const tabs = [...switcher.querySelectorAll('[data-drawing-tab]')];
   const panels = [...switcher.querySelectorAll('[data-drawing-panel]')];
+  const autoplay = switcher.hasAttribute('data-drawing-autoplay') && tabs.length > 1;
+  const progress = switcher.querySelector('[data-drawing-progress]');
+  const autoplayToggle = switcher.querySelector('[data-drawing-autoplay-toggle]');
+  const autoplayInterval = 5000;
+  const pauseReasons = { user: false };
+  let autoplayTimer = 0;
+  let progressFrame = 0;
+  let progressStartedAt = 0;
+  let progressElapsed = 0;
+  let restartAutoplay = () => {};
 
-  const activateDrawing = (tab, moveFocus = false) => {
+  const shouldPauseAutoplay = () => motionReduced() || pauseReasons.user;
+  const renderProgress = () => {
+    if (!progress) return;
+    const amount = Math.max(0, Math.min(1, progressElapsed / autoplayInterval));
+    progress.querySelector('span')?.style.setProperty('transform', `scaleX(${amount})`);
+  };
+  const stopProgressClock = () => {
+    clearTimeout(autoplayTimer);
+    autoplayTimer = 0;
+    cancelAnimationFrame(progressFrame);
+    progressFrame = 0;
+    if (progressStartedAt) {
+      progressElapsed = Math.max(0, Math.min(autoplayInterval, performance.now() - progressStartedAt));
+      progressStartedAt = 0;
+      renderProgress();
+    }
+  };
+  const runProgressClock = () => {
+    if (!autoplay || shouldPauseAutoplay() || progressStartedAt || progressElapsed >= autoplayInterval) return;
+    progressStartedAt = performance.now() - progressElapsed;
+    autoplayTimer = window.setTimeout(() => {
+      autoplayTimer = 0;
+      progressElapsed = autoplayInterval;
+      progressStartedAt = 0;
+      renderProgress();
+      const activeTab = tabs.find((tab) => tab.getAttribute('aria-selected') === 'true') || tabs[0];
+      const activeIndex = Math.max(0, tabs.indexOf(activeTab));
+      const nextTab = tabs[(activeIndex + 1) % tabs.length];
+      if (nextTab) {
+        activateDrawing(nextTab, false, false);
+        restartAutoplay();
+      }
+    }, Math.max(0, autoplayInterval - progressElapsed));
+    const tick = () => {
+      if (!progressStartedAt) return;
+      progressElapsed = Math.max(0, Math.min(autoplayInterval, performance.now() - progressStartedAt));
+      renderProgress();
+      if (progressElapsed < autoplayInterval) progressFrame = requestAnimationFrame(tick);
+    };
+    progressFrame = requestAnimationFrame(tick);
+  };
+	  const syncAutoplay = () => {
+	    if (!autoplay) return;
+	    if (shouldPauseAutoplay()) stopProgressClock();
+    else runProgressClock();
+  };
+
+  const activateDrawing = (tab, moveFocus = false, resetAutoplay = true) => {
     tabs.forEach((candidate) => {
       const selected = candidate === tab;
       candidate.setAttribute('aria-selected', String(selected));
@@ -313,6 +371,7 @@ document.querySelectorAll('[data-drawing-switcher]').forEach((switcher) => {
       panel.setAttribute('aria-hidden', String(!selected));
     });
     if (moveFocus) tab.focus();
+    if (resetAutoplay) restartAutoplay();
   };
 
   tabs.forEach((tab, index) => {
@@ -331,6 +390,33 @@ document.querySelectorAll('[data-drawing-switcher]').forEach((switcher) => {
 
   const initiallySelectedTab = tabs.find((tab) => tab.getAttribute('aria-selected') === 'true') || tabs[0];
   if (initiallySelectedTab) activateDrawing(initiallySelectedTab);
+
+  if (autoplay && progress && autoplayToggle) {
+    restartAutoplay = () => {
+      clearTimeout(autoplayTimer);
+      autoplayTimer = 0;
+      cancelAnimationFrame(progressFrame);
+      progressFrame = 0;
+      progressElapsed = 0;
+      progressStartedAt = 0;
+      renderProgress();
+      syncAutoplay();
+    };
+    autoplayToggle.addEventListener('click', () => {
+      pauseReasons.user = !pauseReasons.user;
+      const paused = pauseReasons.user;
+      autoplayToggle.setAttribute('aria-pressed', String(paused));
+      autoplayToggle.setAttribute('aria-label', `${paused ? 'Resume' : 'Pause'} slideshow`);
+      autoplayToggle.title = `${paused ? 'Resume' : 'Pause'} slideshow`;
+      autoplayToggle.textContent = paused ? '▶' : '⏸';
+      syncAutoplay();
+	    });
+	    restartAutoplay();
+	    autoplaySyncers.add(syncAutoplay);
+	  } else {
+    progress?.setAttribute('hidden', '');
+    autoplayToggle?.setAttribute('hidden', '');
+  }
 });
 
 const heroMotifSurface = document.body.dataset.page === 'home'
@@ -483,7 +569,11 @@ if (finePointer.matches) {
     if (!event.relatedTarget) resetAllTilts();
   });
 }
-reducedMotion.addEventListener?.('change', resetInteractiveTilts);
+const syncMotionSettings = () => {
+  resetInteractiveTilts();
+  autoplaySyncers.forEach((sync) => sync());
+};
+reducedMotion.addEventListener?.('change', syncMotionSettings);
 
 const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
 const prefetched = new Set();
@@ -648,11 +738,10 @@ if (imageLightbox) {
   const nextButton = document.createElement('button');
   const zoomButton = document.createElement('button');
   const closeButton = imageLightbox.querySelector('.image-lightbox-close');
-  const closeDuration = () => motionReduced() ? 0 : 360;
-  const launchDelay = () => motionReduced() ? 0 : 70;
-  let closeTimer;
-  let openTimer;
-  let launchTimer;
+	  const closeDuration = () => motionReduced() ? 0 : 360;
+	  const launchDelay = () => motionReduced() ? 0 : 70;
+	  let closeTimer;
+	  let openTimer;
   let panelFrame;
   let panelX = innerWidth / 2;
   let panelY = innerHeight / 2;
@@ -747,13 +836,11 @@ if (imageLightbox) {
 
   previewTriggers.forEach((trigger) => {
     trigger.setAttribute('aria-controls', 'imageLightbox');
-    trigger.addEventListener('click', (event) => {
-      event.preventDefault();
-      clearTimeout(closeTimer);
-      clearTimeout(openTimer);
-      clearTimeout(launchTimer);
-      previewTrigger?.classList.remove('is-launching');
-      previewTrigger = trigger;
+	    trigger.addEventListener('click', (event) => {
+	      event.preventDefault();
+	      clearTimeout(closeTimer);
+	      clearTimeout(openTimer);
+	      previewTrigger = trigger;
       imageLightbox.classList.remove('is-closing');
       const triggerRect = trigger.getBoundingClientRect();
       const launchX = triggerRect.left + triggerRect.width / 2 - innerWidth / 2;
@@ -805,9 +892,7 @@ if (imageLightbox) {
         lightboxImage.alt = trigger.dataset.previewAlt;
       }
 
-      trigger.classList.add('is-launching');
-      launchTimer = setTimeout(() => trigger.classList.remove('is-launching'), 560);
-      openTimer = setTimeout(() => {
+	    openTimer = setTimeout(() => {
         lightboxStage.scrollTo({ top: 0, left: 0 });
         if (!imageLightbox.open) imageLightbox.showModal();
         document.body.classList.add('preview-open');
@@ -940,9 +1025,9 @@ const quickAccessItems = () => [
   { group: 'Projects', label: 'Reverse-Engineered Table Vise', description: 'Schoolwork · Creo, assembly modeling, GD&T, BOM', href: 'school-projects.html#table-vise', keywords: 'reverse engineering technical drawing exploded cad' },
   { group: 'Projects', label: 'Laser-Cut Acrylic Bridge', description: 'Schoolwork · AutoCAD, statics, fabrication, load testing', href: 'school-projects.html#acrylic-bridge', keywords: 'structural test laser cutting bridge' },
   { group: 'Projects', label: 'Machine Shop Training', description: 'Schoolwork · Cutting, drilling, tapping, fasteners', href: 'school-projects.html#machine-shop', keywords: 'manufacturing aluminum machining' },
-  { group: 'Projects', label: 'Electronics Cooling Test System', description: 'Personal · Heat transfer, CFD, instrumentation, Arduino', href: 'personal-projects.html#cooling-test-bench', keywords: 'ansys fluent thermal forced convection fan' },
+  { group: 'Projects', label: 'Electronics Cooling Test System', description: 'Personal · Duct CFD, fan operating points, fixture FEA, physical testing', href: 'cooling-test-bench.html', keywords: 'ansys fluent thermal forced convection fan duct pq curve pressure flow heatsink' },
   { group: 'Projects', label: '365 CAD Practice Problems', description: 'Personal · SOLIDWORKS, Creo, parametric modeling', href: 'personal-projects.html#cad-practice', keywords: 'sketching practice collage' },
-  { group: 'Projects', label: 'Instrumented Planetary Gearbox', description: 'Personal · Gearing, ANSYS, 3D printing, validation', href: 'planetary-gearbox.html', keywords: 'mechanical systems torque test fixture' },
+  { group: 'Projects', label: 'Instrumented Planetary Gearbox', description: 'Personal · Gear calculations, CAD, 3D printing, instrumented testing', href: 'planetary-gearbox.html', keywords: 'mechanical systems torque test fixture' },
   { group: 'Projects', label: 'Arduino Electronics Learning Projects', description: 'Personal · Circuits, breadboarding, programming, I/O', href: 'personal-projects.html#arduino-projects', keywords: 'embedded electronics troubleshooting uno r3' },
   { group: 'Projects', label: 'Competitive Programming & Algorithms', description: 'Personal · Approximately 200 Codeforces problems, C/C++, algorithms', href: 'personal-projects.html#competitive-programming', keywords: 'codeforces usaco competitive programming data structures dynamic programming graph algorithms complexity' },
   { group: 'Quick Actions', label: 'Open contact card', description: 'Email, phone, LinkedIn, and GitHub', action: 'contact', keywords: 'reach call message social' },
@@ -995,20 +1080,20 @@ const runQuickAction = async (action) => {
     root.dataset.textScale = nextScale;
     try { localStorage.setItem('portfolio-text-scale', nextScale); } catch {}
     showToast(`Text size: ${nextScale}.`);
-  }
-  if (action === 'motion') {
-    document.body.classList.toggle('user-reduce-motion');
-    const active = document.body.classList.contains('user-reduce-motion');
-    root.classList.toggle('user-reduce-motion', active);
-    resetInteractiveTilts();
+	  }
+	  if (action === 'motion') {
+	    document.body.classList.toggle('user-reduce-motion');
+	    const active = document.body.classList.contains('user-reduce-motion');
+	    root.classList.toggle('user-reduce-motion', active);
+	    syncMotionSettings();
     try { localStorage.setItem('portfolio-reduce-motion', String(active)); } catch {}
     showToast(active ? 'Reduced motion enabled.' : 'Site motion restored.');
-  }
-  if (action === 'reset') {
-    document.body.classList.remove('user-high-contrast', 'user-reduce-motion');
-    root.classList.remove('user-reduce-motion');
-    root.dataset.textScale = 'normal';
-    resetInteractiveTilts();
+	  }
+	  if (action === 'reset') {
+	    document.body.classList.remove('user-high-contrast', 'user-reduce-motion');
+	    root.classList.remove('user-reduce-motion');
+	    root.dataset.textScale = 'normal';
+	    syncMotionSettings();
     try {
       localStorage.removeItem('portfolio-high-contrast');
       localStorage.removeItem('portfolio-reduce-motion');

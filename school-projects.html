@@ -6,13 +6,13 @@
   <meta name="theme-color" content="#16161e">
   <style>html{background:#16161e;color-scheme:dark}html.theme-preload-light{background:#e1e2e7;color-scheme:light}</style>
   <script>try{if(localStorage.getItem('portfolio-theme')==='light'){document.documentElement.classList.add('theme-preload-light');document.querySelector('meta[name="theme-color"]').content='#e1e2e7'}}catch{}</script>
-  <meta name="description" content="Schoolwork completed by Siyam Zaman, including a reverse engineered table vise assembly, acrylic bridge project, and machine shop training.">
+  <meta name="description" content="Schoolwork completed by Siyam Zaman, including a reverse engineered table vise assembly and acrylic bridge project.">
   <title>Schoolwork | Siyam Zaman</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..900&amp;family=Manrope:wght@400..800&amp;display=swap">
   <link rel="stylesheet" href="styles.css">
-<link rel="canonical" href="https://siyamzaman06.github.io/school-projects.html"><meta name="author" content="Siyam Zaman"><meta property="og:type" content="website"><meta property="og:site_name" content="Siyam Zaman Engineering Portfolio"><meta property="og:title" content="Schoolwork | Siyam Zaman"><meta property="og:description" content="Schoolwork completed by Siyam Zaman, including a reverse engineered table vise assembly, acrylic bridge project, and machine shop training."><meta property="og:url" content="https://siyamzaman06.github.io/school-projects.html"><meta name="twitter:card" content="summary"><meta name="twitter:title" content="Schoolwork | Siyam Zaman"><meta name="twitter:description" content="Schoolwork completed by Siyam Zaman, including a reverse engineered table vise assembly, acrylic bridge project, and machine shop training."></head>
+	<link rel="canonical" href="https://siyamzaman06.github.io/school-projects.html"><meta name="author" content="Siyam Zaman"><meta property="og:type" content="website"><meta property="og:site_name" content="Siyam Zaman Engineering Portfolio"><meta property="og:title" content="Schoolwork | Siyam Zaman"><meta property="og:description" content="Schoolwork completed by Siyam Zaman, including a reverse engineered table vise assembly and acrylic bridge project."><meta property="og:url" content="https://siyamzaman06.github.io/school-projects.html"><meta name="twitter:card" content="summary"><meta name="twitter:title" content="Schoolwork | Siyam Zaman"><meta name="twitter:description" content="Schoolwork completed by Siyam Zaman, including a reverse engineered table vise assembly and acrylic bridge project."></head>
 <body data-page="school">
   <a class="skip" href="#main">Skip to main content</a>
   <header class="site-header">
@@ -44,11 +44,15 @@
       <div class="container">
         <div class="project-grid">
           <article class="project-card featured table-vise-card reveal" id="table-vise">
-            <div class="project-gallery drawing-switcher" data-drawing-switcher>
-              <div class="drawing-tabs" role="tablist" aria-label="Table vise engineering drawings">
-                <button id="explodedDrawingTab" type="button" role="tab" aria-selected="false" aria-controls="explodedDrawingPanel" data-drawing-tab>Exploded CAD</button>
-                <button id="gdtDrawingTab" type="button" role="tab" aria-selected="true" aria-controls="gdtDrawingPanel" data-drawing-tab>GD&amp;T Drawing</button>
+            <div class="project-gallery drawing-switcher" data-drawing-switcher data-drawing-autoplay>
+              <div class="drawing-controls">
+                <div class="drawing-tabs" role="tablist" aria-label="Table vise engineering drawings">
+                  <button id="explodedDrawingTab" type="button" role="tab" aria-selected="false" aria-controls="explodedDrawingPanel" data-drawing-tab>Exploded CAD</button>
+                  <button id="gdtDrawingTab" type="button" role="tab" aria-selected="true" aria-controls="gdtDrawingPanel" data-drawing-tab>GD&amp;T Drawing</button>
+                </div>
+                <button class="drawing-autoplay-toggle" type="button" data-drawing-autoplay-toggle aria-pressed="false" aria-label="Pause slideshow" title="Pause slideshow">⏸</button>
               </div>
+              <div class="drawing-progress" data-drawing-progress aria-hidden="true"><span></span></div>
               <div class="drawing-stage">
               <figure class="media drawing-slide" id="explodedDrawingPanel" role="tabpanel" aria-labelledby="explodedDrawingTab" aria-hidden="true" data-drawing-panel>
                 <img src="assets/Reverse Engineering Table Vise Assembly - Exploded View.png" alt="Exploded CAD drawing of the reverse engineered table vise assembly with numbered component callouts" width="1006" height="777" loading="lazy" decoding="async">
@@ -65,7 +69,7 @@
             <div class="project-body">
               <span class="status done">Featured CAD Project</span>
               <h2 style="font-size:clamp(2rem,4vw,3.2rem)">Reverse Engineering Table Vise Assembly</h2>
-              <p>Reverse engineered a mechanical table vise in Creo by modeling individual components, building the final assembly, and preparing engineering documentation for the complete design project.</p>
+              <p>Measured and modeled the vise components in Creo, rebuilt the assembly, then produced an exploded view, GD&amp;T drawings, and a bill of materials.</p>
               <div class="meta">
                 <span>Course: MECH 3305 Computer Aided Design</span>
                 <span>Focus: Exploded assembly, GD&amp;T drawings, and BOM</span>
@@ -89,7 +93,7 @@
             <div class="project-body">
               <span class="status done">Completed</span>
               <h2 style="font-size:clamp(2rem,4vw,3.2rem)">Laser-Cut Acrylic Bridge</h2>
-              <p>Designed an acrylic bridge in AutoCAD, performed structural calculations, laser-cut the parts, then tested the bridge under a downward load and analyzed the forces acting through the structure.</p>
+              <p>Designed the bridge in AutoCAD, calculated the expected structural loads, laser-cut the components, and compared the calculations with a physical load test.</p>
               <div class="meta"><span>Work completed: AutoCAD design, calculations, fabrication, testing, and analysis</span></div>
               <div class="tags">
                 <span class="tag">Laser Cutting</span>
@@ -97,26 +101,6 @@
                 <span class="tag">Statics</span>
                 <span class="tag">Structural Testing</span>
                 <span class="tag">Force Analysis</span>
-              </div>
-            </div>
-          </article>
-          <article class="project-card featured reveal" id="machine-shop">
-            <figure class="media">
-              <img src="assets/machine-shop-training.jpeg" alt="Aluminum workpiece from machine shop training" width="4032" height="3024" loading="lazy" decoding="async">
-              <div class="placeholder">
-                <div><strong>Machine Shop Training</strong><span>Project media unavailable</span></div>
-              </div>
-            </figure>
-            <div class="project-body">
-              <span class="status done">Completed</span>
-              <h2 style="font-size:clamp(2rem,4vw,3.2rem)">Machine Shop Training</h2>
-              <p>Completed hands-on machine shop training that included cutting aluminum stock, drilling a through-hole, tapping internal threads, and assembling a threaded fastener.</p>
-              <div class="meta"><span>Material: Aluminum</span><span>Focus: Basic shop operations</span></div>
-              <div class="tags">
-                <span class="tag">Cutting</span>
-                <span class="tag">Drilling</span>
-                <span class="tag">Tapping</span>
-                <span class="tag">Fastener Assembly</span>
               </div>
             </div>
           </article>
