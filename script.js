@@ -721,8 +721,9 @@ if (imageLightbox) {
   const nextButton = document.createElement('button');
   const zoomButton = document.createElement('button');
   const closeButton = imageLightbox.querySelector('.image-lightbox-close');
-	  const closeDuration = () => motionReduced() ? 0 : 360;
-	  const launchDelay = () => motionReduced() ? 0 : 70;
+	  const compactLightbox = window.matchMedia('(max-width: 680px)');
+	  const closeDuration = () => motionReduced() || compactLightbox.matches ? 0 : 360;
+	  const launchDelay = () => motionReduced() || compactLightbox.matches ? 0 : 70;
 	  let closeTimer;
 	  let openTimer;
   let panelFrame;
