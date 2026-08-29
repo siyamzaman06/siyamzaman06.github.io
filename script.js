@@ -149,6 +149,7 @@ backToTop.addEventListener('click', () => scrollTo({ top: 0, behavior: motionRed
 const header = document.querySelector('.site-header');
 const timeline = document.querySelector('.timeline');
 const timelineProgress = timeline?.querySelector('.timeline-progress');
+const timelineItems = timeline ? [...timeline.querySelectorAll('.timeline-item')] : [];
 let scrollFrame = 0;
 
 const updateScrollUi = () => {
@@ -164,6 +165,14 @@ const updateScrollUi = () => {
     const middle = innerHeight * 0.55;
     const travel = Math.min(Math.max(middle - rect.top, 0), rect.height);
     timelineProgress.style.height = `${travel}px`;
+
+    timelineItems.forEach((item) => {
+      const dot = item.querySelector('.dot');
+      if (!dot) return;
+      const dotRect = dot.getBoundingClientRect();
+      const dotCenter = dotRect.top + (dotRect.height / 2) - rect.top;
+      item.classList.toggle('active', travel >= dotCenter);
+    });
   }
 };
 
@@ -221,18 +230,17 @@ if (motionReduced()) {
 }
 
 if (timeline) {
-  const timelineItems = [...timeline.querySelectorAll('.timeline-item')];
   if (motionReduced()) {
-    timelineItems.forEach((item) => item.classList.add('visible', 'active'));
+    timelineItems.forEach((item) => item.classList.add('visible'));
   } else if ('IntersectionObserver' in window) {
     const timelineObserver = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
-        if (entry.isIntersecting) entry.target.classList.add('visible', 'active');
+        if (entry.isIntersecting) entry.target.classList.add('visible');
       });
     }, { threshold: 0.2, rootMargin: '0px 0px -12% 0px' });
     timelineItems.forEach((item) => timelineObserver.observe(item));
   } else {
-    timelineItems.forEach((item) => item.classList.add('visible', 'active'));
+    timelineItems.forEach((item) => item.classList.add('visible'));
   }
 }
 
