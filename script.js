@@ -614,8 +614,9 @@ if (contactTrigger && contactSource && typeof HTMLDialogElement !== 'undefined')
   contactCard.classList.remove('reveal', 'visible', 'spotlight-surface', 'interactive-tilt');
   contactCard.querySelector('.card-border-beam')?.remove();
   contactCard.classList.add('contact-modal-panel');
-  contactTitle.id = 'contactDialogTitle';
-  contactDescription.id = 'contactDialogDescription';
+  if (contactTitle) contactTitle.id = 'contactDialogTitle';
+  if (contactDescription) contactDescription.id = 'contactDialogDescription';
+  else contactDialog.removeAttribute('aria-describedby');
 
   closeButton.type = 'button';
   closeButton.className = 'contact-dialog-close';
@@ -667,21 +668,40 @@ try {
 
 const projectOverviewTrigger = document.querySelector('[data-project-overview-open]');
 const projectOverviewDialog = document.getElementById('projectOverviewDialog');
-if (projectOverviewTrigger && projectOverviewDialog && typeof HTMLDialogElement !== 'undefined') {
+if (projectOverviewTrigger && projectOverviewDialog) {
+  const supportsModal = typeof projectOverviewDialog.showModal === 'function' && typeof projectOverviewDialog.close === 'function';
   const closeButton = projectOverviewDialog.querySelector('.project-overview-close');
   const filterButtons = [...projectOverviewDialog.querySelectorAll('[data-project-filter]')];
   const projectCards = [...projectOverviewDialog.querySelectorAll('[data-project-category]')];
   const projectCount = projectOverviewDialog.querySelector('[data-project-count]');
   const closeDuration = () => motionReduced() ? 0 : 300;
   let closeTimer;
+  const isOverviewOpen = () => supportsModal ? projectOverviewDialog.open : projectOverviewDialog.hasAttribute('open');
+
+  const applyProjectFilter = (selectedCategory) => {
+    const selectedButton = filterButtons.find((button) => button.dataset.projectFilter === selectedCategory);
+    filterButtons.forEach((filterButton) => {
+      filterButton.setAttribute('aria-pressed', String(filterButton === selectedButton));
+    });
+
+    let visibleProjects = 0;
+    projectCards.forEach((card) => {
+      const matches = selectedCategory === 'all' || card.dataset.projectCategory === selectedCategory;
+      card.hidden = !matches;
+      if (matches) visibleProjects += 1;
+    });
+    if (projectCount) projectCount.textContent = String(visibleProjects);
+  };
 
   const closeProjectOverview = () => {
-    if (!projectOverviewDialog.open || projectOverviewDialog.classList.contains('is-closing')) return;
+    if (!isOverviewOpen() || projectOverviewDialog.classList.contains('is-closing')) return;
     projectOverviewDialog.classList.add('is-closing');
     clearTimeout(closeTimer);
     closeTimer = setTimeout(() => {
-      projectOverviewDialog.close();
+      if (supportsModal) projectOverviewDialog.close();
+      else projectOverviewDialog.removeAttribute('open');
       projectOverviewDialog.classList.remove('is-closing');
+      projectOverviewDialog.classList.remove('project-overview-fallback-open');
       document.body.classList.remove('project-overview-open');
       projectOverviewTrigger.focus({ preventScroll: true });
     }, closeDuration());
@@ -691,7 +711,14 @@ if (projectOverviewTrigger && projectOverviewDialog && typeof HTMLDialogElement 
     event.preventDefault();
     clearTimeout(closeTimer);
     projectOverviewDialog.classList.remove('is-closing');
-    if (!projectOverviewDialog.open) projectOverviewDialog.showModal();
+    applyProjectFilter('all');
+    if (!isOverviewOpen()) {
+      if (supportsModal) projectOverviewDialog.showModal();
+      else {
+        projectOverviewDialog.classList.add('project-overview-fallback-open');
+        projectOverviewDialog.setAttribute('open', '');
+      }
+    }
     document.body.classList.add('project-overview-open');
   });
 
@@ -703,23 +730,17 @@ if (projectOverviewTrigger && projectOverviewDialog && typeof HTMLDialogElement 
   projectOverviewDialog.addEventListener('click', (event) => {
     if (event.target === projectOverviewDialog) closeProjectOverview();
   });
+  document.addEventListener('keydown', (event) => {
+    if (!supportsModal && event.key === 'Escape' && isOverviewOpen()) closeProjectOverview();
+  });
 
   filterButtons.forEach((button) => {
     button.addEventListener('click', () => {
-      const selectedCategory = button.dataset.projectFilter;
-      filterButtons.forEach((filterButton) => {
-        filterButton.setAttribute('aria-pressed', String(filterButton === button));
-      });
-
-      let visibleProjects = 0;
-      projectCards.forEach((card) => {
-        const matches = selectedCategory === 'all' || card.dataset.projectCategory === selectedCategory;
-        card.hidden = !matches;
-        if (matches) visibleProjects += 1;
-      });
-      if (projectCount) projectCount.textContent = String(visibleProjects);
+      applyProjectFilter(button.dataset.projectFilter);
     });
   });
+
+  applyProjectFilter('all');
 }
 
 const imageLightbox = document.getElementById('imageLightbox');
@@ -1024,7 +1045,7 @@ const quickAccessItems = () => [
   { group: 'Projects', label: 'Differential-Mount Tab CAD & FEA', description: 'Formula SAE · Load cases, iteration, FOS, 4130 steel', href: 'fsae.html#tab-fea', keywords: 'structural analysis left right mount tabs factor safety' },
   { group: 'Projects', label: 'Reverse-Engineered Table Vise', description: 'Schoolwork · Creo, assembly modeling, GD&T, BOM', href: 'school-projects.html#table-vise', keywords: 'reverse engineering technical drawing exploded cad' },
   { group: 'Projects', label: 'Laser-Cut Acrylic Bridge', description: 'Schoolwork · AutoCAD, statics, fabrication, load testing', href: 'school-projects.html#acrylic-bridge', keywords: 'structural test laser cutting bridge' },
-  { group: 'Projects', label: 'Machine Shop Training', description: 'Schoolwork · Cutting, drilling, tapping, fasteners', href: 'school-projects.html#machine-shop', keywords: 'manufacturing aluminum machining' },
+  { group: 'Projects', label: 'Machine Shop Training', description: 'Certifications · Cutting, drilling, tapping, fasteners', href: 'certifications.html#machine-shop', keywords: 'manufacturing aluminum machining' },
   { group: 'Projects', label: 'Electronics Cooling Test System', description: 'Personal · Duct CFD, fan operating points, fixture FEA, physical testing', href: 'cooling-test-bench.html', keywords: 'ansys fluent thermal forced convection fan duct pq curve pressure flow heatsink' },
   { group: 'Projects', label: '365 CAD Practice Problems', description: 'Personal · SOLIDWORKS, Creo, parametric modeling', href: 'personal-projects.html#cad-practice', keywords: 'sketching practice collage' },
   { group: 'Projects', label: 'Instrumented Planetary Gearbox', description: 'Personal · Gear calculations, CAD, 3D printing, instrumented testing', href: 'planetary-gearbox.html', keywords: 'mechanical systems torque test fixture' },
