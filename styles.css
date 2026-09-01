@@ -550,8 +550,51 @@ body.user-reduce-motion .reveal,body.user-reduce-motion .timeline-copy,body.user
   .image-lightbox-panel,.image-lightbox-panel:before,.image-lightbox-stage img,.image-lightbox-document,.image-lightbox-ambient,.image-lightbox.preview-loading .image-lightbox-stage:after,.image-lightbox::backdrop{animation:none!important}
 	.contact-modal-panel,.contact-dialog::backdrop,.project-overview-panel,.project-overview-dialog::backdrop,.quick-access-panel,.model-viewer-panel{animation:none!important}
 }
-.fsae-page-grid{grid-template-columns:minmax(0,1.45fr) minmax(320px,.55fr);gap:clamp(3rem,5vw,5rem)}
-@media(max-width:980px){.fsae-page-grid{grid-template-columns:1fr;gap:3rem}}
+.fsae-page-grid{position:relative;grid-template-columns:minmax(0,.6fr) minmax(420px,1.4fr);align-items:start;gap:clamp(2rem,4vw,4rem)}
+.fsae-hero-model-reset{position:absolute;top:0;right:0;z-index:4;min-height:38px;padding:.5rem .75rem;border:1px solid color-mix(in srgb,var(--accent) 24%,var(--line));border-radius:9px;color:var(--muted);background:rgba(11,14,23,.42);box-shadow:0 8px 24px rgba(0,0,0,.1);font-size:.7rem;font-weight:850;opacity:.86;transition:transform .2s,color .2s,background .2s,opacity .2s}.fsae-hero-model-reset:hover{transform:translateY(-2px);color:var(--text);background:rgb(var(--accent2-rgb)/.08);opacity:1}.fsae-hero-model-reset:focus-visible{outline:3px solid var(--accent2);outline-offset:3px}
+.fsae-hero-evidence{position:relative;isolation:isolate;width:calc(100% + 120px);max-width:none;aspect-ratio:12 / 11;justify-self:stretch;overflow:visible;margin:0;border:0;border-radius:0;background:none;box-shadow:none}
+figure.fsae-hero-evidence.reveal{transform:translate(-100px,22px)}
+figure.fsae-hero-evidence.reveal.visible{transform:translate(-100px,0)}
+.fsae-inline-model-stage{position:absolute;inset:0;z-index:1;overflow:hidden;background:transparent}
+.fsae-inline-model-stage canvas{position:absolute;inset:0;display:block;width:100%;height:100%;touch-action:none;cursor:grab}
+.fsae-inline-model-stage canvas:active{cursor:grabbing}
+.fsae-inline-model-stage .model-viewer-status{top:50%;bottom:auto;max-width:calc(100% - 2rem);padding:0;border:0;border-radius:0;white-space:normal;text-align:center;background:transparent;backdrop-filter:none;transform:translate(-50%,-50%)}
+.fsae-inline-model-stage .model-viewer-status.is-ready{opacity:0;pointer-events:none}
+.fsae-model-instructions{position:absolute;left:50%;bottom:-3.6rem;z-index:4;margin:0;padding:.68rem 1rem;border:1px solid var(--line);border-radius:999px;color:var(--muted);background:rgba(11,14,23,.78);box-shadow:0 12px 30px rgba(0,0,0,.16);backdrop-filter:blur(12px);font-size:.76rem;font-weight:750;white-space:nowrap;transform:translateX(-50%)}
+.timeline-item.guided-active .timeline-copy,.timeline-item.guided-active .timeline-media .media{border-color:color-mix(in srgb,var(--accent) 72%,var(--line));box-shadow:0 0 0 1px rgb(var(--accent-rgb)/.16),0 0 42px rgb(var(--accent-rgb)/.22),0 24px 60px rgba(0,0,0,.22);animation:timeline-guide-glow 1.5s ease-in-out infinite}.timeline-item.guided-active .dot{background:var(--accent2);box-shadow:0 0 0 6px rgb(var(--accent-rgb)/.12),0 0 28px rgb(var(--accent2-rgb)/.72)}.timeline-item.guided-active .tag{border-color:color-mix(in srgb,var(--accent2) 55%,var(--line));background:rgb(var(--accent-rgb)/.1)}.timeline-item.guided-read .timeline-copy{border-color:color-mix(in srgb,var(--accent) 36%,var(--line))}@keyframes timeline-guide-glow{50%{box-shadow:0 0 0 3px rgb(var(--accent-rgb)/.14),0 0 58px rgb(var(--accent2-rgb)/.32),0 24px 60px rgba(0,0,0,.22)}}
+
+/* Inline phrases keep wrapping naturally; each underline draws during its card's reading time. */
+.timeline-copy .guide-keyword {
+  padding-bottom: .12em;
+  background-image: linear-gradient(90deg, var(--accent), var(--accent2));
+  background-repeat: no-repeat;
+  background-position: left bottom;
+  background-size: 0% 2px;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+.timeline-item.guided-active.guided-reading .guide-keyword {
+  animation: timeline-keyword-underline .7s cubic-bezier(.22,.61,.36,1) var(--guide-keyword-delay, 0ms) both;
+}
+@keyframes timeline-keyword-underline {
+  from { background-size: 0% 2px; }
+  to { background-size: 100% 2px; }
+}
+body.user-reduce-motion .timeline-item.guided-reading .guide-keyword {
+  animation: none !important;
+  background-size: 100% 2px;
+}
+@media(prefers-reduced-motion:reduce) {
+  .timeline-item.guided-reading .guide-keyword {
+    animation: none !important;
+    background-size: 100% 2px;
+  }
+}
+.cooling-hero-model{position:relative;width:100%;min-height:440px;aspect-ratio:1.2;overflow:visible;margin:0;background:transparent}
+.cooling-inline-model-stage.model-viewer-stage{width:100%;height:100%;background:transparent}
+.cooling-inline-model-stage.model-viewer-stage:before{display:none}
+.cooling-model-controls{position:absolute;top:1rem;right:1rem;z-index:4;max-width:calc(100% - 2rem);flex-wrap:wrap;justify-content:flex-end}
+@media(max-width:980px){.fsae-page-grid{grid-template-columns:1fr;gap:3rem}.fsae-hero-evidence{width:100%;aspect-ratio:1;justify-self:stretch}figure.fsae-hero-evidence.reveal{transform:translateY(22px)}figure.fsae-hero-evidence.reveal.visible{transform:translateY(0)}}
 
 /* Match the saved theme before the main script runs to prevent a bright first-paint flash. */
 :root{background:#16161e;color-scheme:dark}
@@ -575,6 +618,9 @@ h1,h2,h3{text-wrap:balance;letter-spacing:-.04em}
 @media(max-width:980px){.project-card.featured.table-vise-card{grid-template-columns:minmax(0,1fr)}.table-vise-card>.project-gallery,.table-vise-card>.project-body{grid-column:1}.table-vise-card>.project-gallery{grid-row:1;border-right:0;border-bottom:1px solid var(--line)}.table-vise-card>.project-body{grid-row:2}}
 
 .home-grid{grid-template-columns:minmax(0,850px)}
+
+.about-copy{margin-top:1.1rem}
+.about-copy p+p{margin-top:.9rem}
 
 /* Large homepage actions with a clear primary project-discovery cue. */
 .home-copy .hero-actions{gap:1rem;margin-top:2rem}

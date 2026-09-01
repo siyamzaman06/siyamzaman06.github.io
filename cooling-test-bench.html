@@ -6,12 +6,12 @@
   <meta name="theme-color" content="#16161e">
   <style>html{background:#16161e;color-scheme:dark}html.theme-preload-light{background:#e1e2e7;color-scheme:light}</style>
   <script>try{if(localStorage.getItem('portfolio-theme')==='light'){document.documentElement.classList.add('theme-preload-light');document.querySelector('meta[name="theme-color"]').content='#e1e2e7'}}catch{}</script>
-  <meta name="description" content="A completed ANSYS Fluent duct study for Siyam Zaman's electronics cooling test bench, including four system-resistance curves, fan operating-point analysis, fixture FEA, and hardware validation planning.">
+  <meta name="description" content="An ANSYS Fluent duct study for Siyam Zaman's electronics cooling test bench, documenting representative system-resistance curves from a broader CFD iteration set, fan operating-point analysis, fixture FEA, and hardware validation planning.">
   <title>Electronics Cooling Test Bench | Siyam Zaman</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..900&amp;family=Manrope:wght@400..800&amp;display=swap">
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css?v=20260901-cooling-controls">
   <link rel="stylesheet" href="sitewide.css?v=20260829-mobile-viewer">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="canonical" href="https://siyamzaman06.github.io/cooling-test-bench.html">
@@ -19,7 +19,7 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Siyam Zaman Engineering Portfolio">
   <meta property="og:title" content="Electronics Cooling Test Bench | Siyam Zaman">
-  <meta property="og:description" content="A completed ANSYS Fluent duct study comparing four cooling geometries through system-resistance curves, fan operating points, and hardware-focused design decisions.">
+  <meta property="og:description" content="An ANSYS Fluent cooling study documenting representative duct geometries from a broader CFD iteration set through system-resistance curves, fan operating points, and hardware-focused design decisions.">
   <meta property="og:url" content="https://siyamzaman06.github.io/cooling-test-bench.html">
   <meta property="og:image" content="https://siyamzaman06.github.io/assets/og-portfolio.png">
   <meta property="og:image:width" content="1200">
@@ -27,7 +27,7 @@
   <meta property="og:image:alt" content="Siyam Zaman mechanical engineering portfolio">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Electronics Cooling Test Bench | Siyam Zaman">
-  <meta name="twitter:description" content="A completed ANSYS Fluent duct study comparing four cooling geometries through system-resistance curves, fan operating points, and hardware-focused design decisions.">
+  <meta name="twitter:description" content="An ANSYS Fluent cooling study documenting representative duct geometries from a broader CFD iteration set through system-resistance curves, fan operating points, and hardware-focused design decisions.">
   <meta name="twitter:image" content="https://siyamzaman06.github.io/assets/og-portfolio.png">
   <meta name="twitter:image:alt" content="Siyam Zaman mechanical engineering portfolio">
 </head>
@@ -52,19 +52,24 @@
 
   <main id="main">
     <section class="page-hero cooling-hero">
-      <div class="container page-grid">
+      <div class="container page-grid fsae-page-grid">
         <div class="reveal">
           <span class="eyebrow">Personal Project · CFD Study</span>
           <h1>Benchtop Electronics Cooling Test System</h1>
-          <p>I used ANSYS Fluent and the fan P–Q curve to compare four duct outlets. The rounded 70 × 40 mm outlet produced the highest predicted operating velocity and closely matches the heat-sink footprint.</p>
+          <p>I used ANSYS Fluent and the fan P–Q curve to screen a broader range of duct geometries. This page documents four representative outlets; among those cases, the rounded 70 × 40 mm outlet produced the highest predicted operating velocity and closely matches the heat-sink footprint.</p>
           <div class="hero-actions">
             <span class="status done">Duct CFD Complete · Hardware Validation Next</span>
             <a class="button secondary small" href="personal-projects.html">← Back to Personal Projects</a>
           </div>
         </div>
-        <figure class="cooling-hero-evidence reveal">
-          <img src="assets/D115 to 70x40, 6mm fillet ... SOLIDWORKS Model.png" alt="SOLIDWORKS assembly of the selected rounded 70 by 40 millimeter cooling duct, fan, heater-block fixture, and heat sink" width="947" height="634" decoding="async">
-          <figcaption>Selected 70 × 40 mm duct and test fixture</figcaption>
+        <figure class="cooling-hero-model reveal" id="cooling-assembly-model">
+          <div class="model-viewer-stage cooling-inline-model-stage" data-cooling-model-inline role="img" aria-label="Interactive 3D model of the cooling test bench duct assembly with fan, heater block, and heat sink">
+            <p class="model-viewer-status" role="status">Loading cooling assembly…</p>
+          </div>
+          <div class="model-viewer-actions cooling-model-controls" role="group" aria-label="Cooling model controls">
+            <button type="button" aria-haspopup="dialog" aria-controls="coolingModelDialog" data-cooling-model>View 3D</button>
+            <button type="button" data-cooling-model-inline-reset>Reset view</button>
+          </div>
         </figure>
       </div>
     </section>
@@ -76,7 +81,7 @@
             <span class="eyebrow">Simulation Strategy</span>
             <h2>Analysis sequence</h2>
           </div>
-          <p>I separated duct selection from the later thermal test so the four geometries could be compared directly.</p>
+          <p>I separated duct selection from the later thermal test so the outlet candidates could be compared directly.</p>
         </div>
         <div class="cooling-method-grid">
           <article class="cooling-method-card with-media reveal">
@@ -109,7 +114,7 @@
             <span class="eyebrow">Completed CFD Study</span>
             <h2>Duct screening results</h2>
           </div>
-          <p class="placeholder-disclaimer">Each card shows the imposed CFD condition first, then the lower operating point predicted from the fan curve.</p>
+          <p class="placeholder-disclaimer">These four documented cases are a representative subset of a larger set of duct geometries and CFD iterations I evaluated behind the scenes. Each card shows the imposed CFD condition first, then the lower operating point predicted from the fan curve.</p>
         </div>
         <div class="iteration-grid cooling-iteration-grid">
           <article class="iteration-card duct-result-card reveal">
@@ -204,7 +209,7 @@
                 <div><span>Operating pressure</span><strong>≈35 <small>Pa</small></strong><em>≈3.6 mmH₂O</em></div>
                 <div><span>Velocity reduction</span><strong>≈46 <small>%</small></strong></div>
               </div>
-              <p>The predicted hardware velocity is about 7.0 m/s—the highest of the four cases—and the outlet matches the heat-sink footprint.</p>
+              <p>The predicted hardware velocity is about 7.0 m/s—the highest of the four documented cases—and the outlet matches the heat-sink footprint.</p>
               <small class="physical-result">Selected for fabrication · measured thermal response pending</small>
             </div>
           </article>
@@ -222,14 +227,14 @@
         </div>
         <div class="fan-curve-panel reveal">
           <figure>
-            <img src="assets/Duct System Curves and Fan PQ Curve.png" alt="Graph comparing the ARCTIC P12 Pro fan pressure-flow curve with CFD-derived system curves and operating points for four duct geometries" width="1667" height="919" loading="lazy" decoding="async">
+            <img src="assets/Duct System Curves and Fan PQ Curve.png" alt="Graph comparing the ARCTIC P12 Pro fan pressure-flow curve with CFD-derived system curves and operating points for four representative duct geometries" width="1667" height="919" loading="lazy" decoding="async">
             <figcaption>CFD-derived system curves and predicted fan operating points</figcaption>
           </figure>
           <div class="fan-curve-copy">
             <h3>Resistance determines delivered airflow</h3>
-            <p>Each CFD sweep produced a duct system curve. Its intersection with the ARCTIC P12 Pro P–Q curve gives the predicted operating airflow.</p>
+            <p>Each documented CFD sweep produced a duct system curve. Its intersection with the ARCTIC P12 Pro P–Q curve gives the predicted operating airflow.</p>
             <div class="fan-curve-specs">
-              <div><span>Compared</span><strong>4 system curves</strong></div>
+              <div><span>Shown here</span><strong>4 system curves</strong></div>
               <div><span>Selected flow</span><strong>≈42 CFM</strong><small>70 × 40 case</small></div>
               <div><span>Selected speed</span><strong>≈7.0 m/s</strong><small>Predicted outlet average</small></div>
             </div>
@@ -291,9 +296,9 @@
           </article>
           <article class="fixture-evidence-card reveal">
             <figure class="fixture-evidence-media fixture-evidence-media--prototype">
-              <img src="assets/printed-mount-upright.jpg" alt="Printed mount supporting the aluminum block and heat sink" width="1500" height="2000" loading="lazy" decoding="async">
+              <img src="assets/Printed Mount.jpeg" alt="Printed mount supporting the aluminum block and heat sink" width="3024" height="4032" loading="lazy" decoding="async">
               <figcaption>Printed mount</figcaption>
-              <button class="preview-button" type="button" aria-label="View the printed mount" aria-haspopup="dialog" aria-controls="imageLightbox" data-preview-src="assets/printed-mount-upright.jpg" data-preview-title="Printed Heater-Block Support Mount" data-preview-label="Physical Prototype" data-preview-alt="Printed mount supporting the aluminum block and heat sink">View</button>
+              <button class="preview-button" type="button" aria-label="View the printed mount" aria-haspopup="dialog" aria-controls="imageLightbox" data-preview-src="assets/Printed Mount.jpeg" data-preview-title="Printed Heater-Block Support Mount" data-preview-label="Physical Prototype" data-preview-alt="Printed mount supporting the aluminum block and heat sink">View</button>
             </figure>
             <div class="fixture-evidence-copy">
               <h3>Validate the fabricated fixture</h3>
@@ -354,6 +359,20 @@
     </section>
   </main>
 
+  <dialog class="model-viewer-dialog" id="coolingModelDialog" aria-labelledby="coolingModelTitle" aria-describedby="coolingModelHint">
+    <div class="model-viewer-panel">
+      <header class="model-viewer-header">
+        <div><span>Interactive assembly</span><h2 id="coolingModelTitle">Cooling Test System</h2></div>
+        <div class="model-viewer-actions">
+          <button type="button" data-model-reset>Reset view</button>
+          <button class="model-viewer-close" type="button" data-model-close aria-label="Close 3D model viewer">&times;</button>
+        </div>
+      </header>
+      <div class="model-viewer-stage"><p class="model-viewer-status" role="status">Loading assembly…</p></div>
+      <footer class="model-viewer-footer" id="coolingModelHint"><span>Drag to rotate · Scroll or pinch to zoom</span></footer>
+    </div>
+  </dialog>
+
   <dialog class="image-lightbox" id="imageLightbox" aria-labelledby="imageLightboxTitle" aria-describedby="imageLightboxHint">
     <div class="image-lightbox-panel">
       <div class="image-lightbox-header">
@@ -369,5 +388,7 @@
     <div class="container footer-row"><span>© <span data-year></span> Siyam Zaman</span><span>Mechanical engineering portfolio</span></div>
   </footer>
   <script src="script.js?v=20260829-mobile-viewer"></script>
+  <script defer src="cooling-assembly-data.js?v=20260829"></script>
+  <script defer src="cooling-model-viewer.js?v=20260901-cooling-controls"></script>
 </body>
 </html>

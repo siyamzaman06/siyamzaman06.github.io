@@ -244,6 +244,78 @@ if (timeline) {
   }
 }
 
+const timelineGuideButton = document.querySelector('[data-timeline-guide]');
+let timelineGuideController;
+
+const waitForGuide = (milliseconds, signal) => new Promise((resolve) => {
+  if (signal?.aborted) {
+    resolve();
+    return;
+  }
+  const finish = () => {
+    window.clearTimeout(timeout);
+    signal?.removeEventListener('abort', finish);
+    resolve();
+  };
+  const timeout = window.setTimeout(finish, milliseconds);
+  signal?.addEventListener('abort', finish, { once: true });
+});
+
+if (timelineGuideButton && timelineItems.length) {
+  timelineItems.forEach((item) => {
+    item.querySelectorAll('.guide-keyword').forEach((keyword, index) => {
+      keyword.style.setProperty('--guide-keyword-delay', `${index * 450}ms`);
+    });
+  });
+
+  timelineGuideButton.addEventListener('click', async (event) => {
+    event.preventDefault();
+    timelineGuideController?.abort();
+    const controller = new AbortController();
+    timelineGuideController = controller;
+    const { signal } = controller;
+    timelineGuideButton.setAttribute('aria-pressed', 'true');
+    timelineItems.forEach((item) => item.classList.remove('guided-active', 'guided-reading', 'guided-read'));
+    const clearShowcase = () => {
+      timelineItems.forEach((item) => item.classList.remove('guided-active', 'guided-reading'));
+    };
+    const cancelGuide = () => controller.abort();
+    const cancelWithKey = (keyEvent) => {
+      if (['ArrowDown', 'ArrowUp', 'PageDown', 'PageUp', 'Home', 'End', 'Escape', ' '].includes(keyEvent.key)) cancelGuide();
+    };
+    const manualEvents = ['wheel', 'touchstart', 'pointerdown'];
+    manualEvents.forEach((eventName) => addEventListener(eventName, cancelGuide, { passive: true }));
+    addEventListener('keydown', cancelWithKey);
+    signal.addEventListener('abort', clearShowcase, { once: true });
+
+    try {
+      for (const item of timelineItems) {
+        if (signal.aborted) break;
+        item.classList.add('visible', 'guided-active');
+        item.scrollIntoView({ behavior: motionReduced() ? 'auto' : 'smooth', block: 'center' });
+        await waitForGuide(motionReduced() ? 0 : 850, signal);
+        if (signal.aborted) break;
+        item.classList.add('guided-reading');
+        const wordCount = item.textContent.trim().split(/\s+/).length;
+        const readingTime = Math.min(11000, Math.max(5000, 3000 + wordCount * 55));
+        await waitForGuide(readingTime, signal);
+        if (signal.aborted) break;
+        item.classList.remove('guided-active', 'guided-reading');
+        item.classList.add('guided-read');
+      }
+    } finally {
+      manualEvents.forEach((eventName) => removeEventListener(eventName, cancelGuide));
+      removeEventListener('keydown', cancelWithKey);
+      signal.removeEventListener('abort', clearShowcase);
+      if (timelineGuideController === controller) {
+        clearShowcase();
+        timelineGuideController = undefined;
+        timelineGuideButton.removeAttribute('aria-pressed');
+      }
+    }
+  });
+}
+
 const spotlightSelector = [
   '.page-card', '.panel', '.badge-card', '.project-card', '.cert-card',
   '.detail-panel', '.roadmap-card', '.iteration-card', '.future-artifact', '.timeline-copy',
