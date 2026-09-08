@@ -1317,3 +1317,51 @@ if (location.hash === '#contact' && contactTrigger) {
 if (location.hash === '#work' && projectOverviewTrigger) {
   setTimeout(() => projectOverviewTrigger.click(), motionReduced() ? 0 : 260);
 }
+
+// Pan cropped project photos without moving the surrounding card.
+document.querySelectorAll('[data-pan-photo]').forEach((frame) => {
+  const photo = frame.querySelector('img');
+  let x = 50, y = 50, drag = null;
+  const clamp = (value) => Math.max(0, Math.min(100, value));
+  const render = () => {
+    frame.style.setProperty('--pan-x', x + '%');
+    frame.style.setProperty('--pan-y', y + '%');
+  };
+  frame.addEventListener('pointerdown', (event) => {
+    if (event.button !== 0 || event.target.closest('button') || !photo.naturalWidth) return;
+    // Preserve normal vertical page scrolling on touch screens; keyboard and View remain available.
+    if (event.pointerType === 'touch') return;
+    const scale = Math.max(frame.clientWidth / photo.naturalWidth, frame.clientHeight / photo.naturalHeight);
+    drag = { id: event.pointerId, startX: event.clientX, startY: event.clientY, x, y,
+      overflowX: photo.naturalWidth * scale - frame.clientWidth,
+      overflowY: photo.naturalHeight * scale - frame.clientHeight };
+    event.preventDefault();
+    frame.focus({ preventScroll: true });
+    frame.setPointerCapture(event.pointerId);
+    frame.classList.add('is-panning');
+  });
+  frame.addEventListener('pointermove', (event) => {
+    if (!drag || drag.id !== event.pointerId) return;
+    x = drag.overflowX > 1 ? clamp(drag.x - (event.clientX - drag.startX) / drag.overflowX * 100) : 50;
+    y = drag.overflowY > 1 ? clamp(drag.y - (event.clientY - drag.startY) / drag.overflowY * 100) : 50;
+    render();
+  });
+  const endDrag = (event) => {
+    if (!drag || drag.id !== event.pointerId) return;
+    drag = null;
+    frame.classList.remove('is-panning');
+    if (frame.hasPointerCapture(event.pointerId)) frame.releasePointerCapture(event.pointerId);
+  };
+  ['pointerup', 'pointercancel', 'lostpointercapture'].forEach((type) => frame.addEventListener(type, endDrag));
+  frame.addEventListener('keydown', (event) => {
+    if (event.target !== frame) return;
+    if (!['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Home'].includes(event.key)) return;
+    event.preventDefault();
+    if (event.key === 'ArrowLeft') x = clamp(x - 10);
+    if (event.key === 'ArrowRight') x = clamp(x + 10);
+    if (event.key === 'ArrowUp') y = clamp(y - 10);
+    if (event.key === 'ArrowDown') y = clamp(y + 10);
+    if (event.key === 'Home') x = y = 50;
+    render();
+  });
+});

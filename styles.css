@@ -2476,3 +2476,12 @@ body.light .page-hero > .container::after { --motif-final-opacity: .7; opacity: 
 #clampPhotoPanel::after { background: none; }
 
 .laptop-stand-media img { width: 100%; height: 100%; object-fit: cover; object-position: center; }
+
+/* Previous differential mount: photo and design motivation. */
+.previous-mount-card { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: clamp(1.5rem, 3vw, 2.5rem); align-items: stretch; }
+.previous-mount-card .previous-mount-photo { position: relative; min-height: 0; aspect-ratio: auto; border-radius: 18px; overflow: hidden; cursor: grab; touch-action: pan-y; user-select: none; }
+.previous-mount-card .previous-mount-photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: var(--pan-x, 50%) var(--pan-y, 50%); transform: none; transition: none; pointer-events: none; }
+.previous-mount-photo.is-panning { cursor: grabbing; }
+.previous-mount-photo:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+.previous-mount-copy { min-width: 0; }
+@media (max-width: 780px) { .previous-mount-card { grid-template-columns: minmax(0, 1fr); } .previous-mount-card .previous-mount-photo { height: clamp(260px, 70vw, 380px); } }
