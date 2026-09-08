@@ -48,7 +48,8 @@
           <article class="project-card featured table-vise-card reveal" id="table-vise">
             <div class="project-gallery drawing-switcher" data-drawing-switcher data-drawing-autoplay>
               <div class="drawing-controls">
-                <div class="drawing-tabs" role="tablist" aria-label="Table vise engineering drawings">
+                <div class="drawing-tabs" role="tablist" aria-label="Table vise photo and engineering drawings">
+                  <button id="clampPhotoTab" type="button" role="tab" aria-selected="false" aria-controls="clampPhotoPanel" data-drawing-tab>Real Photo</button>
                   <button id="explodedDrawingTab" type="button" role="tab" aria-selected="false" aria-controls="explodedDrawingPanel" data-drawing-tab>Exploded CAD</button>
                   <button id="gdtDrawingTab" type="button" role="tab" aria-selected="true" aria-controls="gdtDrawingPanel" data-drawing-tab>GD&amp;T Drawing</button>
                 </div>
@@ -56,6 +57,11 @@
               </div>
               <div class="drawing-progress" data-drawing-progress aria-hidden="true"><span></span></div>
               <div class="drawing-stage">
+<figure class="media drawing-slide" id="clampPhotoPanel" role="tabpanel" aria-labelledby="clampPhotoTab" aria-hidden="true" data-drawing-panel>
+<img src="assets/Adjustable Table Clamp - Real World Picture.png" alt="Real adjustable table clamp mounted to a workshop bench, showing the vise jaws, swivel base, and clamping screw" width="473" height="700" loading="lazy" decoding="async">
+<figcaption>Adjustable Table Clamp · Real Hardware</figcaption>
+<button class="preview-button" type="button" aria-haspopup="dialog" data-preview-src="assets/Adjustable Table Clamp - Real World Picture.png" data-preview-title="Adjustable Table Clamp · Real Hardware" data-preview-alt="Real adjustable table clamp mounted to a workshop bench">View</button>
+</figure>
               <figure class="media drawing-slide" id="explodedDrawingPanel" role="tabpanel" aria-labelledby="explodedDrawingTab" aria-hidden="true" data-drawing-panel>
                 <img src="assets/Reverse Engineering Table Vise Assembly - Exploded View.png" alt="Exploded CAD drawing of the reverse engineered table vise assembly with numbered component callouts" width="1006" height="777" loading="lazy" decoding="async">
                 <figcaption>Exploded CAD View</figcaption>
@@ -71,7 +77,7 @@
             <div class="project-body">
               <span class="status done">Featured CAD Project</span>
               <h2 style="font-size:clamp(2rem,4vw,3.2rem)">Reverse Engineering Table Vise Assembly</h2>
-              <p>Measured and modeled the vise components in Creo, rebuilt the assembly, then produced an exploded view, GD&amp;T drawings, and a bill of materials.</p>
+              <p>I reverse engineered a real adjustable table clamp to understand how its parts fit and work together. I measured the components, rebuilt the assembly in Creo, and turned those measurements into an exploded view, GD&amp;T drawings, and a bill of materials.</p>
               <div class="meta">
                 <span>Course: MECH 3305 Computer Aided Design</span>
                 <span>Focus: Exploded assembly, GD&amp;T drawings, and BOM</span>
@@ -85,9 +91,24 @@
               </div>
             </div>
           </article>
+          <article class="project-card featured reveal" id="laptop-stand">
+            <figure class="media laptop-stand-media">
+              <img src="assets/Laptop Stand.jpeg" alt="Wooden laptop stand with black 3D-printed parts, fasteners, and an aluminum rod" width="3040" height="2666" loading="lazy" decoding="async">
+              <figcaption>Wood, 3D-Printed Parts &amp; Aluminum</figcaption>
+              <button class="preview-button" type="button" aria-label="View laptop stand photo" aria-haspopup="dialog" aria-controls="imageLightbox" data-preview-src="assets/Laptop Stand.jpeg" data-preview-title="Laptop Stand" data-preview-label="School Project · Fabrication" data-preview-alt="Wooden laptop stand with black 3D-printed parts, fasteners, and an aluminum rod">View</button>
+            </figure>
+            <div class="project-body">
+              <span class="status done">Completed · Fabrication Project</span>
+              <h2 style="font-size:clamp(2rem,4vw,3.2rem)">Laptop Stand</h2>
+              <p>I built a laptop stand to gain practical experience turning different materials into one assembly. I cut the wooden pieces and aluminum rod, then assembled them with the black 3D-printed parts. The project gave me hands-on woodworking experience and practice using a variety of shop tools and machines.</p>
+              <div class="meta"><span>Materials: Wood, 3D-printed parts, and aluminum rod</span><span>Process: Cutting, woodworking, and assembly</span></div>
+              <div class="tags"><span class="tag">Woodworking</span><span class="tag">3D-Printed Parts</span><span class="tag">Metal Cutting</span><span class="tag">Assembly</span><span class="tag">Shop Tools &amp; Machines</span></div>
+            </div>
+          </article>
           <article class="project-card featured reverse reveal" id="acrylic-bridge">
             <figure class="media">
               <img src="assets/acrylic-bridge.webp" alt="Laser-cut acrylic bridge during load testing" width="2000" height="1500" loading="lazy" decoding="async">
+              <button class="preview-button" type="button" aria-label="View acrylic bridge photo" aria-haspopup="dialog" aria-controls="imageLightbox" data-preview-src="assets/acrylic-bridge.webp" data-preview-title="Laser-Cut Acrylic Bridge" data-preview-label="School Project · Load Testing" data-preview-alt="Laser-cut acrylic bridge during load testing">View</button>
               <div class="placeholder">
                 <div><strong>Acrylic Bridge Load Test</strong><span>Project media unavailable</span></div>
               </div>
@@ -114,10 +135,10 @@
     <div class="image-lightbox-panel">
       <div class="image-lightbox-header">
         <div>
-          <span>Table Vise Drawing</span>
-          <h2 id="imageLightboxTitle">Drawing Viewer</h2>
+          <span>School Project Gallery</span>
+          <h2 id="imageLightboxTitle">Project Image Viewer</h2>
         </div>
-        <button class="image-lightbox-close" type="button" aria-label="Close drawing viewer">&times;</button>
+        <button class="image-lightbox-close" type="button" aria-label="Close project image viewer">&times;</button>
       </div>
       <div class="image-lightbox-stage">
         <img id="imageLightboxImage" alt="">

@@ -224,7 +224,20 @@ if (motionReduced()) {
       }
     });
   }, { threshold: 0.1, rootMargin: '0px 0px -7% 0px' });
-  reveals.forEach((element) => revealObserver.observe(element));
+  const scrollReveals = [];
+  reveals.forEach((element) => {
+    if (element.hasAttribute('data-reveal-on-scroll')) scrollReveals.push(element);
+    else revealObserver.observe(element);
+  });
+  if (scrollReveals.length) {
+    const observeAfterScroll = () => {
+      if (window.scrollY < 16) return;
+      scrollReveals.forEach((element) => revealObserver.observe(element));
+      removeEventListener('scroll', observeAfterScroll);
+    };
+    addEventListener('scroll', observeAfterScroll, { passive: true });
+    observeAfterScroll();
+  }
 } else {
   reveals.forEach((element) => element.classList.add('visible'));
 }
@@ -1079,6 +1092,7 @@ const quickAccessItems = () => [
   { group: 'Projects', label: 'Differential Mount & Drivetrain Development', description: 'Formula SAE · CAD, packaging, statics, FEA, prototyping', href: 'fsae.html#timeline', keywords: 'vehicle systems test mule eccentric mount chain tension' },
   { group: 'Projects', label: 'Differential-Mount Tab CAD & FEA', description: 'Formula SAE · Load cases, iteration, FOS, 4130 steel', href: 'fsae.html#tab-fea', keywords: 'structural analysis left right mount tabs factor safety' },
   { group: 'Projects', label: 'Reverse-Engineered Table Vise', description: 'Schoolwork · Creo, assembly modeling, GD&T, BOM', href: 'school-projects.html#table-vise', keywords: 'reverse engineering technical drawing exploded cad' },
+  { group: 'Projects', label: 'Laptop Stand', description: 'Schoolwork · Woodworking, aluminum cutting, 3D-printed parts, assembly', href: 'school-projects.html#laptop-stand', keywords: 'fabrication wood shop tools machines rod' },
   { group: 'Projects', label: 'Laser-Cut Acrylic Bridge', description: 'Schoolwork · AutoCAD, statics, fabrication, load testing', href: 'school-projects.html#acrylic-bridge', keywords: 'structural test laser cutting bridge' },
   { group: 'Projects', label: 'Machine Shop Training', description: 'Certifications · Cutting, drilling, tapping, fasteners', href: 'certifications.html#machine-shop', keywords: 'manufacturing aluminum machining' },
   { group: 'Projects', label: 'Electronics Cooling Test System', description: 'Personal · Duct CFD, fan operating points, fixture FEA, physical testing', href: 'cooling-test-bench.html', keywords: 'ansys fluent thermal forced convection fan duct pq curve pressure flow heatsink' },

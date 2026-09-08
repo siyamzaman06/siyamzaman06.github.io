@@ -2469,3 +2469,10 @@ body.light .page-hero > .container::after { --motif-final-opacity: .7; opacity: 
     border-bottom: 1px solid var(--line);
   }
 }
+
+/* Physical clamp evidence. */
+#clampPhotoPanel { background: transparent; }
+#clampPhotoPanel img { object-fit: contain; background: transparent; }
+#clampPhotoPanel::after { background: none; }
+
+.laptop-stand-media img { width: 100%; height: 100%; object-fit: cover; object-position: center; }
