@@ -1085,15 +1085,15 @@ const quickAccessClose = quickAccessDialog.querySelector('.quick-access-close');
 
 const quickAccessItems = () => [
   { group: 'Pages', label: 'Home', description: 'Introduction, selected work, and contact information', href: 'index.html', keywords: 'about overview landing' },
-  { group: 'Pages', label: 'Schoolwork', description: 'CAD, reverse engineering, manufacturing, and testing', href: 'school-projects.html', keywords: 'coursework table vise bridge machine shop' },
+  { group: 'Pages', label: 'Additional Projects', description: 'CAD, reverse engineering, manufacturing, and testing', href: 'additional-projects.html', keywords: 'fabrication table vise bridge machine shop' },
   { group: 'Pages', label: 'Formula SAE', description: 'Drivetrain and differential-mount development timeline', href: 'fsae.html', keywords: 'fsae dallas formula racing vehicle drivetrain' },
   { group: 'Pages', label: 'Personal Projects', description: 'Independent design, simulation, electronics, and prototyping', href: 'personal-projects.html', keywords: 'independent projects cad arduino cooling gearbox' },
   { group: 'Pages', label: 'Certifications', description: 'CAD, MATLAB, machining, and technical credentials', href: 'certifications.html', keywords: 'credentials training certificate' },
   { group: 'Projects', label: 'Differential Mount & Drivetrain Development', description: 'Formula SAE · CAD, packaging, statics, FEA, prototyping', href: 'fsae.html#timeline', keywords: 'vehicle systems test mule eccentric mount chain tension' },
   { group: 'Projects', label: 'Differential-Mount Tab CAD & FEA', description: 'Formula SAE · Load cases, iteration, FOS, 4130 steel', href: 'fsae.html#tab-fea', keywords: 'structural analysis left right mount tabs factor safety' },
-  { group: 'Projects', label: 'Reverse-Engineered Table Vise', description: 'Schoolwork · Creo, assembly modeling, GD&T, BOM', href: 'school-projects.html#table-vise', keywords: 'reverse engineering technical drawing exploded cad' },
-  { group: 'Projects', label: 'Laptop Stand', description: 'Schoolwork · Woodworking, aluminum cutting, 3D-printed parts, assembly', href: 'school-projects.html#laptop-stand', keywords: 'fabrication wood shop tools machines rod' },
-  { group: 'Projects', label: 'Laser-Cut Acrylic Bridge', description: 'Schoolwork · AutoCAD, statics, fabrication, load testing', href: 'school-projects.html#acrylic-bridge', keywords: 'structural test laser cutting bridge' },
+  { group: 'Projects', label: 'Reverse-Engineered Table Vise', description: 'Additional Projects · Creo, assembly modeling, GD&T, BOM', href: 'additional-projects.html#table-vise', keywords: 'reverse engineering technical drawing exploded cad' },
+  { group: 'Projects', label: 'Laptop Stand', description: 'Additional Projects · Woodworking, aluminum cutting, 3D-printed parts, assembly', href: 'additional-projects.html#laptop-stand', keywords: 'fabrication wood shop tools machines rod' },
+  { group: 'Projects', label: 'Laser-Cut Acrylic Bridge', description: 'Additional Projects · AutoCAD, statics, fabrication, load testing', href: 'additional-projects.html#acrylic-bridge', keywords: 'structural test laser cutting bridge' },
   { group: 'Projects', label: 'Machine Shop Training', description: 'Certifications · Cutting, drilling, tapping, fasteners', href: 'certifications.html#machine-shop', keywords: 'manufacturing aluminum machining' },
   { group: 'Projects', label: 'Electronics Cooling Test System', description: 'Personal · Duct CFD, fan operating points, fixture FEA, physical testing', href: 'cooling-test-bench.html', keywords: 'ansys fluent thermal forced convection fan duct pq curve pressure flow heatsink' },
   { group: 'Projects', label: '365 CAD Practice Problems', description: 'Personal · SOLIDWORKS, Creo, parametric modeling', href: 'personal-projects.html#cad-practice', keywords: 'sketching practice collage' },
@@ -1321,7 +1321,7 @@ if (location.hash === '#work' && projectOverviewTrigger) {
 // Pan cropped project photos without moving the surrounding card.
 document.querySelectorAll('[data-pan-photo]').forEach((frame) => {
   const photo = frame.querySelector('img');
-  let x = 50, y = 50, drag = null;
+  let x = 50, y = 0, drag = null;
   const clamp = (value) => Math.max(0, Math.min(100, value));
   const render = () => {
     frame.style.setProperty('--pan-x', x + '%');
@@ -1361,7 +1361,7 @@ document.querySelectorAll('[data-pan-photo]').forEach((frame) => {
     if (event.key === 'ArrowRight') x = clamp(x + 10);
     if (event.key === 'ArrowUp') y = clamp(y - 10);
     if (event.key === 'ArrowDown') y = clamp(y + 10);
-    if (event.key === 'Home') x = y = 50;
+    if (event.key === 'Home') { x = 50; y = 0; }
     render();
   });
 });
