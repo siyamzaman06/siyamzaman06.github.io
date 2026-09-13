@@ -648,3 +648,37 @@ body:is(.contact-open, .project-overview-open, .preview-open, .quick-access-open
     transition-duration: .001ms !important;
   }
 }
+
+/* Keep cooling-project copy legible against its dark panels. */
+body.cooling-project-page:not(.light) {
+  --text: #fff;
+  --muted: #fff;
+}
+body.cooling-project-page:not(.light) main :is(h1, h2, h3, p, li, figcaption, .eyebrow, .method-output, .method-output span, .method-output strong, .engineering-decision span, .solver-readout span, .solver-readout strong, .solver-readout b, .solver-readout em, .physical-result) {
+  color: #fff;
+}
+body.cooling-project-page .fixture-evidence-copy p {
+  font-size: 1rem;
+  line-height: 1.7;
+}
+body.cooling-project-page .engineering-decision p + p {
+  margin-top: .85rem;
+}
+
+body.cooling-project-page .engineering-decision + .roadmap-grid {
+  margin-top: 1.2rem;
+}
+
+/* Let the prototype cards show through around uncropped photos. */
+body.cooling-project-page #building-the-prototype .fixture-evidence-media {
+  background: transparent;
+}
+
+body.cooling-project-page .fabrication-candidate-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+@media (max-width: 900px) {
+  body.cooling-project-page .fabrication-candidate-grid {
+    grid-template-columns: 1fr;
+  }
+}

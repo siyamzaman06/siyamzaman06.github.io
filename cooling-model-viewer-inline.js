@@ -386,7 +386,7 @@
 
   async function initializeViewer() {
     if (!gl) {
-      setStatus('3D viewing is not supported in this browser.', 'has-error');
+      setStatus('This browser does not support the 3D viewer.', 'has-error');
       return;
     }
     try {
@@ -406,7 +406,7 @@
       loadAssembly();
     } catch (error) {
       console.error('Unable to load the inline cooling assembly.', error);
-      setStatus('The 3D assembly could not be loaded.', 'has-error');
+      setStatus('Could not load the 3D assembly. Refresh the page to try again.', 'has-error');
     }
   }
 

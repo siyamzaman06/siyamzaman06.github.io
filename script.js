@@ -332,7 +332,9 @@ if (timelineGuideButton && timelineItems.length) {
 const spotlightSelector = [
   '.page-card', '.panel', '.badge-card', '.project-card', '.cert-card',
   '.detail-panel', '.roadmap-card', '.iteration-card', '.future-artifact', '.timeline-copy',
-  '.project-overview-card', '.fea-load-card', '.certificate-attachment'
+  '.project-overview-card', '.fea-load-card', '.certificate-attachment',
+  '.cooling-method-card', '.fixture-evidence-card', '.fabrication-candidate-card',
+  '.fan-curve-panel', '.engineering-decision'
 ].join(',');
 
 const spotlightSurfaces = document.querySelectorAll(spotlightSelector);
@@ -1064,7 +1066,7 @@ quickAccessDialog.setAttribute('aria-labelledby', 'quickAccessTitle');
 quickAccessDialog.innerHTML = `
   <div class="quick-access-panel">
     <header class="quick-access-header">
-      <div><span>Portfolio Navigator</span><h2 id="quickAccessTitle">Quick access</h2></div>
+      <div><span>Search the portfolio</span><h2 id="quickAccessTitle">Quick access</h2></div>
       <button class="quick-access-close" type="button" aria-label="Close quick access">&times;</button>
     </header>
     <label class="quick-access-search">
@@ -1085,31 +1087,31 @@ const quickAccessClose = quickAccessDialog.querySelector('.quick-access-close');
 
 const quickAccessItems = () => [
   { group: 'Pages', label: 'Home', description: 'Introduction, selected work, and contact information', href: 'index.html', keywords: 'about overview landing' },
-  { group: 'Pages', label: 'Additional Projects', description: 'CAD, reverse engineering, manufacturing, and testing', href: 'additional-projects.html', keywords: 'fabrication table vise bridge machine shop' },
+  { group: 'Pages', label: 'School Projects', description: 'CAD, reverse engineering, manufacturing, and testing', href: 'additional-projects.html', keywords: 'fabrication table vise bridge machine shop' },
   { group: 'Pages', label: 'Formula SAE', description: 'Drivetrain and differential-mount development timeline', href: 'fsae.html', keywords: 'fsae dallas formula racing vehicle drivetrain' },
   { group: 'Pages', label: 'Personal Projects', description: 'Independent design, simulation, electronics, and prototyping', href: 'personal-projects.html', keywords: 'independent projects cad arduino cooling gearbox' },
   { group: 'Pages', label: 'Certifications', description: 'CAD, MATLAB, machining, and technical credentials', href: 'certifications.html', keywords: 'credentials training certificate' },
   { group: 'Projects', label: 'Differential Mount & Drivetrain Development', description: 'Formula SAE · CAD, packaging, statics, FEA, prototyping', href: 'fsae.html#timeline', keywords: 'vehicle systems test mule eccentric mount chain tension' },
   { group: 'Projects', label: 'Differential-Mount Tab CAD & FEA', description: 'Formula SAE · Load cases, iteration, FOS, 4130 steel', href: 'fsae.html#tab-fea', keywords: 'structural analysis left right mount tabs factor safety' },
-  { group: 'Projects', label: 'Reverse-Engineered Table Vise', description: 'Additional Projects · Creo, assembly modeling, GD&T, BOM', href: 'additional-projects.html#table-vise', keywords: 'reverse engineering technical drawing exploded cad' },
-  { group: 'Projects', label: 'Laptop Stand', description: 'Additional Projects · Woodworking, aluminum cutting, 3D-printed parts, assembly', href: 'additional-projects.html#laptop-stand', keywords: 'fabrication wood shop tools machines rod' },
-  { group: 'Projects', label: 'Laser-Cut Acrylic Bridge', description: 'Additional Projects · AutoCAD, statics, fabrication, load testing', href: 'additional-projects.html#acrylic-bridge', keywords: 'structural test laser cutting bridge' },
+  { group: 'Projects', label: 'Reverse-Engineered Table Vise', description: 'School Projects · Creo, assembly modeling, GD&T, BOM', href: 'additional-projects.html#table-vise', keywords: 'reverse engineering technical drawing exploded cad' },
+  { group: 'Projects', label: 'Laptop Stand', description: 'School Projects · Woodworking, aluminum cutting, 3D-printed parts, assembly', href: 'additional-projects.html#laptop-stand', keywords: 'fabrication wood shop tools machines rod' },
+  { group: 'Projects', label: 'Laser-Cut Acrylic Bridge', description: 'School Projects · AutoCAD, statics, fabrication, load testing', href: 'additional-projects.html#acrylic-bridge', keywords: 'structural test laser cutting bridge' },
   { group: 'Projects', label: 'Machine Shop Training', description: 'Certifications · Cutting, drilling, tapping, fasteners', href: 'certifications.html#machine-shop', keywords: 'manufacturing aluminum machining' },
-  { group: 'Projects', label: 'Electronics Cooling Test System', description: 'Personal · Duct CFD, fan operating points, fixture FEA, physical testing', href: 'cooling-test-bench.html', keywords: 'ansys fluent thermal forced convection fan duct pq curve pressure flow heatsink' },
+  { group: 'Projects', label: 'Electronics Cooling Test System', description: 'Personal · Duct CFD, fan operating points, fixture FEA, prototype assembly', href: 'cooling-test-bench.html', keywords: 'ansys fluent thermal forced convection fan duct pq curve pressure flow heatsink' },
   { group: 'Projects', label: '365 CAD Practice Problems', description: 'Personal · SOLIDWORKS, Creo, parametric modeling', href: 'personal-projects.html#cad-practice', keywords: 'sketching practice collage' },
-  { group: 'Projects', label: 'Instrumented Planetary Gearbox', description: 'Personal · Gear calculations, CAD, 3D printing, instrumented testing', href: 'planetary-gearbox.html', keywords: 'mechanical systems torque test fixture' },
+  { group: 'Projects', label: 'Instrumented Planetary Gearbox', description: 'Personal · Gear calculations and plans for CAD, fabrication, and testing', href: 'planetary-gearbox.html', keywords: 'mechanical systems torque test fixture' },
   { group: 'Projects', label: 'Arduino Electronics Learning Projects', description: 'Personal · Circuits, breadboarding, programming, I/O', href: 'personal-projects.html#arduino-projects', keywords: 'embedded electronics troubleshooting uno r3' },
   { group: 'Projects', label: 'Competitive Programming & Algorithms', description: 'Personal · Approximately 200 Codeforces problems, C/C++, algorithms', href: 'personal-projects.html#competitive-programming', keywords: 'codeforces usaco competitive programming data structures dynamic programming graph algorithms complexity' },
   { group: 'Quick Actions', label: 'Open contact card', description: 'Email, phone, LinkedIn, and GitHub', action: 'contact', keywords: 'reach call message social' },
-  { group: 'Quick Actions', label: 'View all projects', description: 'Open the complete project and skills overview', action: 'projects', keywords: 'portfolio map overview' },
+  { group: 'Quick Actions', label: 'View all projects', description: 'Browse projects and skills', action: 'projects', keywords: 'portfolio map overview' },
   { group: 'Quick Actions', label: document.body.classList.contains('light') ? 'Switch to dark theme' : 'Switch to light theme', description: 'Change the site color theme', action: 'theme', keywords: 'appearance color dark light' },
   { group: 'Quick Actions', label: 'Copy email address', description: 'Copy siyamzaman06@gmail.com', action: 'email', keywords: 'contact clipboard' },
   { group: 'Quick Actions', label: 'Share this page', description: 'Use the device share menu or copy the page link', action: 'share', keywords: 'send link url' },
   { group: 'Quick Actions', label: 'Copy page link', description: 'Copy the current page URL', action: 'copy-link', keywords: 'clipboard share url' },
   { group: 'Quick Actions', label: 'Back to top', description: 'Return to the beginning of this page', action: 'top', keywords: 'scroll start' },
   { group: 'Accessibility', label: document.body.classList.contains('user-high-contrast') ? 'Use standard contrast' : 'Use high contrast', description: 'Increase text and border contrast across the site', action: 'contrast', keywords: 'accessibility vision readable display' },
-  { group: 'Accessibility', label: 'Cycle text size', description: `Current size: ${root.dataset.textScale || 'normal'}`, action: 'text-size', keywords: 'accessibility larger font reading zoom' },
-  { group: 'Accessibility', label: document.body.classList.contains('user-reduce-motion') ? 'Restore site motion' : 'Reduce site motion', description: 'Control nonessential animation and 3D movement', action: 'motion', keywords: 'accessibility animation tilt vestibular' },
+  { group: 'Accessibility', label: 'Change text size', description: `Current size: ${root.dataset.textScale || 'normal'}`, action: 'text-size', keywords: 'accessibility larger font reading zoom' },
+  { group: 'Accessibility', label: document.body.classList.contains('user-reduce-motion') ? 'Restore site motion' : 'Reduce site motion', description: 'Reduce animation and 3D movement', action: 'motion', keywords: 'accessibility animation tilt vestibular' },
   { group: 'Accessibility', label: 'Reset display preferences', description: 'Restore standard text, contrast, and motion settings', action: 'reset', keywords: 'accessibility defaults' }
 ];
 
@@ -1131,10 +1133,10 @@ const runQuickAction = async (action) => {
       try {
         await navigator.share(shareData);
       } catch (error) {
-        if (error.name !== 'AbortError') showToast(await copyText(location.href) ? 'Page link copied instead.' : 'Sharing is unavailable.');
+        if (error.name !== 'AbortError') showToast(await copyText(location.href) ? 'Page link copied instead.' : 'Could not share this page. Copy the URL from your address bar.');
       }
     } else {
-      showToast(await copyText(location.href) ? 'Page link copied.' : 'Sharing is unavailable.');
+      showToast(await copyText(location.href) ? 'Page link copied.' : 'Could not share this page. Copy the URL from your address bar.');
     }
   }
   if (action === 'contrast') {

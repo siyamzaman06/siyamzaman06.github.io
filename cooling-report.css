@@ -1,0 +1,42 @@
+.cooling-project-page main section[id] { scroll-margin-top: 100px; }
+.cooling-project-page .fabrication-candidate-card figure { display: block; height: auto; }
+.cooling-project-page .fabrication-candidate-card figure img { display: block; width: 100%; height: auto; object-fit: contain; }
+.cooling-overview { padding-top: 3rem; }
+.cooling-overview .section-head { align-items: center; }
+.cooling-overview .section-head h2 { font-size: clamp(2rem, 4vw, 3.4rem); }
+.cooling-overview .section-head > p { max-width: 44ch; }
+.cooling-overview-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem; align-items: start; }
+.cooling-build-photo { overflow: hidden; border: 1px solid var(--line); border-radius: 22px; background: var(--panel); }
+.cooling-build-photo img { width: 100%; height: auto; max-height: 540px; object-fit: contain; background: var(--bg2); }
+.cooling-build-photo figcaption { padding: 1.2rem 1.4rem; color: var(--muted); font-size: .9rem; }
+.cooling-build-photo figcaption strong { display: block; color: var(--text); margin-bottom: .3rem; }
+.cooling-contributions { display: grid; gap: 1.5rem; }
+.cooling-contributions article { padding-bottom: 1.5rem; border-bottom: 1px solid var(--line); }
+.cooling-contributions article > span, .cooling-status-strip span { display: block; color: var(--accent); font-size: .75rem; font-weight: 800; letter-spacing: .07em; text-transform: uppercase; margin-bottom: .65rem; }
+.cooling-contributions h3 { font-size: 1.4rem; line-height: 1.2; margin-bottom: .65rem; }
+.cooling-contributions a { display: inline-block; margin-top: .65rem; font-size: .85rem; color: var(--accent); font-weight: 750; }
+.cooling-status-strip { display: grid; grid-template-columns: repeat(3, 1fr); margin-top: 2.5rem; border: 1px solid var(--line); border-radius: 18px; background: var(--panel); }
+.cooling-status-strip > div { padding: 1.5rem; }
+.cooling-status-strip > div + div { border-left: 1px solid var(--line); }
+.cooling-status-strip p { font-size: .92rem; }
+.cooling-report-intro { background: var(--bg2); border-block: 1px solid var(--line); }
+.cooling-report-intro h2 { max-width: 850px; }
+.cooling-report-intro > .container > p { max-width: 70ch; margin-top: 1.2rem; }
+.cooling-report-index { display: grid; grid-template-columns: repeat(3, 1fr); gap: .75rem; margin-top: 2rem; }
+.cooling-report-index a { display: flex; align-items: center; gap: 1rem; padding: 1rem; border: 1px solid var(--line); border-radius: 12px; background: var(--panel); font-weight: 650; }
+.cooling-report-index span { color: var(--accent); font-size: .8rem; }
+.cooling-report-index a:hover { border-color: var(--accent); }
+.cooling-report-chapter { border-bottom: 1px solid var(--line); }
+.cooling-back-link { display: inline-block; margin-top: 2rem; color: var(--accent); font-size: .85rem; }
+.cooling-project-page .cooling-report-chapter .section-head h2 { font-size: clamp(1.9rem, 3.5vw, 3rem); }
+@media (max-width: 850px) {
+  .cooling-overview-layout { grid-template-columns: 1fr; }
+  .cooling-report-index { grid-template-columns: repeat(2, 1fr); }
+  .cooling-overview .section-head { flex-direction: column; align-items: start; }
+  .cooling-overview .section-head > p { max-width: 65ch; }
+}
+@media (max-width: 560px) {
+  .cooling-report-index, .cooling-status-strip { grid-template-columns: 1fr; }
+  .cooling-status-strip > div + div { border-left: 0; border-top: 1px solid var(--line); }
+  .cooling-overview-layout { gap: 1.5rem; }
+}

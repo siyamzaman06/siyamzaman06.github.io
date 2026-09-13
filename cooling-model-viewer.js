@@ -299,7 +299,7 @@
         loadingPromise = null;
         dataScriptPromise = null;
         console.error('Unable to load cooling assembly model.', error);
-        setStatus('The 3D model could not be loaded. Please try again.', 'has-error');
+        setStatus('Could not load the 3D model. Refresh the page to try again.', 'has-error');
       });
       return loadingPromise;
     }
@@ -319,7 +319,7 @@
           startRendering();
         }).catch(function (error) {
           console.error('Unable to initialize cooling assembly viewer.', error);
-          setStatus('The 3D model could not be loaded. Please try again.', 'has-error');
+          setStatus('Could not load the 3D model. Refresh the page to try again.', 'has-error');
         });
       });
       closeButton.addEventListener('click', function () { dialog.close(); });
@@ -336,7 +336,7 @@
         startRendering();
       }).catch(function (error) {
         console.error('Unable to initialize cooling assembly viewer.', error);
-        setStatus('The 3D model could not be loaded. Please try again.', 'has-error');
+        setStatus('Could not load the 3D model. Refresh the page to try again.', 'has-error');
       });
     }
   }
