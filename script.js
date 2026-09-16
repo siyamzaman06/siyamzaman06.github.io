@@ -464,7 +464,7 @@ document.querySelectorAll('[data-drawing-switcher]').forEach((switcher) => {
 });
 
 const heroMotifSurface = document.body.dataset.page === 'home'
-  ? document.querySelector('.home-hero')
+  ? null
   : document.body.dataset.page === 'fsae'
     ? null
     : document.body.dataset.page === 'certifications'
@@ -472,6 +472,27 @@ const heroMotifSurface = document.body.dataset.page === 'home'
       : document.querySelector('.page-hero > .container');
 const heroMotifRegion = heroMotifSurface?.closest('.home-hero, .page-hero');
 heroMotifSurface?.classList.add('hero-motif-tilt');
+
+const portrait = document.querySelector('.home-portrait');
+if (portrait) {
+  portrait.querySelector('img')?.setAttribute('draggable', 'false');
+  portrait.addEventListener('pointermove', event => {
+    if (event.pointerType === 'touch' || !finePointer.matches || reducedMotion.matches || savedPreferences.motion) return;
+    const rect = portrait.getBoundingClientRect();
+    const limit = value => Math.max(-1, Math.min(1, value));
+    const x = limit((event.clientX - rect.left) / rect.width * 2 - 1);
+    const y = limit((event.clientY - rect.top) / rect.height * 2 - 1);
+    portrait.style.setProperty('--portrait-x', `${-y * 2.5}deg`);
+    portrait.style.setProperty('--portrait-y', `${x * 2.5}deg`);
+  });
+  const resetPortrait = () => {
+    portrait.style.removeProperty('--portrait-x');
+    portrait.style.removeProperty('--portrait-y');
+  };
+  ['pointerleave', 'pointercancel'].forEach(type => portrait.addEventListener(type, resetPortrait));
+  window.addEventListener('blur', resetPortrait);
+  reducedMotion.addEventListener('change', resetPortrait);
+}
 
 let resetInteractiveTilts = () => {};
 

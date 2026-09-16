@@ -682,3 +682,32 @@ body.cooling-project-page .fabrication-candidate-grid {
     grid-template-columns: 1fr;
   }
 }
+
+/* Homepage portrait */
+body[data-page="home"] .home-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(2rem, 5vw, 4rem);
+}
+body[data-page="home"] .home-hero::before { content: none; }
+.home-portrait {
+  margin: 0;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 28px;
+  box-shadow: var(--shadow);
+  translate: 18px 0;
+  transform: perspective(900px) rotateX(var(--portrait-x, 0deg)) rotateY(var(--portrait-y, 0deg));
+  transition: transform .45s cubic-bezier(.22, 1, .36, 1);
+}
+.home-portrait img {
+  pointer-events: none;
+  display: block;
+  width: 100%;
+  height: auto;
+}
+@media (max-width: 780px) {
+  body[data-page="home"] .home-grid { grid-template-columns: minmax(0, 1fr); }
+  .home-portrait { width: min(100%, 380px); justify-self: center; translate: none; }
+}
