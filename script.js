@@ -32,7 +32,54 @@ const openingTitle = document.querySelector('main h1');
 if (openingTitle) {
   const titleText = openingTitle.textContent.trim();
   openingTitle.setAttribute('aria-label', titleText);
-  document.body.classList.add('opening-accents-ready');
+
+  if (motionReduced()) {
+    document.body.classList.add('opening-accents-ready');
+  } else {
+    const titleCharacters = [];
+    const titleTokens = [];
+    const titleWords = titleText.split(/\s+/);
+
+    titleWords.forEach((word, wordIndex) => {
+      if (wordIndex > 0) titleTokens.push(document.createTextNode(' '));
+
+      const wordSpan = document.createElement('span');
+      wordSpan.className = 'typed-title-word';
+
+      [...word].forEach((character) => {
+        const characterSpan = document.createElement('span');
+        characterSpan.className = 'typed-title-character';
+        characterSpan.setAttribute('aria-hidden', 'true');
+        characterSpan.textContent = character;
+        titleCharacters.push(characterSpan);
+        wordSpan.append(characterSpan);
+      });
+
+      titleTokens.push(wordSpan);
+    });
+    let characterIndex = 0;
+    let currentCharacter;
+
+    openingTitle.classList.add('type-title-active');
+    openingTitle.replaceChildren(...titleTokens);
+
+    const typeNextCharacter = () => {
+      currentCharacter?.classList.remove('is-current');
+      currentCharacter = titleCharacters[characterIndex];
+      currentCharacter.classList.add('is-visible', 'is-current');
+      characterIndex += 1;
+      if (characterIndex < titleCharacters.length) {
+        const character = currentCharacter.textContent;
+        const pause = /[.,:]/.test(character) ? 82 : 23;
+        setTimeout(typeNextCharacter, pause);
+      } else {
+        openingTitle.classList.add('typing-complete');
+        document.body.classList.add('opening-accents-ready');
+      }
+    };
+
+    setTimeout(typeNextCharacter, 210);
+  }
 }
 
 document.querySelectorAll('[data-year]').forEach((element) => {
@@ -1067,8 +1114,7 @@ const copyText = async (text) => {
 const navActions = document.querySelector('.nav-actions');
 const quickAccessTrigger = document.createElement('button');
 const quickAccessDialog = document.createElement('dialog');
-const isMac = /Mac|iPhone|iPad/.test(navigator.userAgentData?.platform || navigator.platform || '');
-const shortcutLabel = isMac ? '\u2318 K' : 'Ctrl K';
+const shortcutLabel = 'Middle mouse button';
 let quickAccessReturnFocus;
 
 quickAccessTrigger.type = 'button';
@@ -1078,7 +1124,7 @@ quickAccessTrigger.setAttribute('aria-haspopup', 'dialog');
 quickAccessTrigger.setAttribute('aria-controls', 'quickAccessDialog');
 quickAccessTrigger.setAttribute('aria-expanded', 'false');
 quickAccessTrigger.title = `Quick access (${shortcutLabel})`;
-quickAccessTrigger.innerHTML = `<span aria-hidden="true">\u2315</span><kbd>${shortcutLabel}</kbd>`;
+quickAccessTrigger.innerHTML = `<svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4 4"/></svg><kbd>${shortcutLabel}</kbd>`;
 navActions?.prepend(quickAccessTrigger);
 
 quickAccessDialog.id = 'quickAccessDialog';
@@ -1119,6 +1165,7 @@ const quickAccessItems = () => [
   { group: 'Projects', label: 'Laser-Cut Acrylic Bridge', description: 'School Projects · AutoCAD, statics, fabrication, load testing', href: 'additional-projects.html#acrylic-bridge', keywords: 'structural test laser cutting bridge' },
   { group: 'Projects', label: 'Machine Shop Training', description: 'Certifications · Cutting, drilling, tapping, fasteners', href: 'certifications.html#machine-shop', keywords: 'manufacturing aluminum machining' },
   { group: 'Projects', label: 'Electronics Cooling Test System', description: 'Personal · Duct CFD, fan operating points, fixture FEA, prototype assembly', href: 'cooling-test-bench.html', keywords: 'ansys fluent thermal forced convection fan duct pq curve pressure flow heatsink' },
+  { group: 'Projects', label: 'Commercial HVAC BIM Model', description: 'Personal · Revit ductwork, chilled-water piping, and coordinated HVAC documentation', href: 'personal-projects.html#hvac-bim', keywords: 'autodesk revit autocad mechanical building fcu fan coil units air terminals valves insulation fittings supply return' },
   { group: 'Projects', label: '365 CAD Practice Problems', description: 'Personal · SOLIDWORKS, Creo, parametric modeling', href: 'personal-projects.html#cad-practice', keywords: 'sketching practice collage' },
   { group: 'Projects', label: 'Instrumented Planetary Gearbox', description: 'Personal · Gear calculations and plans for CAD, fabrication, and testing', href: 'planetary-gearbox.html', keywords: 'mechanical systems torque test fixture' },
   { group: 'Projects', label: 'Arduino Electronics Learning Projects', description: 'Personal · Circuits, breadboarding, programming, I/O', href: 'personal-projects.html#arduino-projects', keywords: 'embedded electronics troubleshooting uno r3' },
@@ -1325,11 +1372,22 @@ quickAccessResults.addEventListener('keydown', (event) => {
 addEventListener('keydown', (event) => {
   const target = event.target;
   const editing = target instanceof HTMLElement && (target.matches('input, textarea, select') || target.isContentEditable);
-  const commandShortcut = (event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'k';
   const slashShortcut = event.key === '/' && !editing && !event.ctrlKey && !event.metaKey && !event.altKey;
-  if (!commandShortcut && !slashShortcut) return;
+  if (!slashShortcut) return;
   event.preventDefault();
-  if (quickAccessDialog.open && commandShortcut) closeQuickAccess();
+  openQuickAccess();
+});
+
+// Preserve middle-click link navigation and suppress autoscroll on the search gesture.
+const isQuickAccessMiddleClick = (event) => event.button === 1
+  && !(event.target instanceof Element && event.target.closest('a[href], input, textarea, select, [contenteditable="true"]'));
+addEventListener('mousedown', (event) => {
+  if (isQuickAccessMiddleClick(event)) event.preventDefault();
+});
+addEventListener('auxclick', (event) => {
+  if (!isQuickAccessMiddleClick(event)) return;
+  event.preventDefault();
+  if (quickAccessDialog.open) closeQuickAccess();
   else openQuickAccess();
 });
 
