@@ -112,7 +112,8 @@
           <a href="#duct-results"><span>03</span> Duct comparison</a>
           <a href="#support-fixture"><span>04</span> Support fixture</a>
           <a href="#building-the-prototype"><span>05</span> Fabrication &amp; assembly</a>
-          <a href="#validation-plan"><span>06</span> Validation plan</a>
+          <a href="#python-data-logging"><span>06</span> Python data logging</a>
+          <a href="#validation-plan"><span>07</span> Validation plan</a>
         </nav>
       </div>
     </section>
@@ -396,11 +397,46 @@
       </div>
     </section>
 
+    <section class="section project-detail-section cooling-report-chapter" id="python-data-logging">
+      <div class="container">
+        <div class="section-head reveal">
+          <div>
+            <span class="eyebrow">06 · Python data logging</span>
+            <h2>From serial readings to a live temperature graph</h2>
+          </div>
+          <p>Reading the Arduino serial monitor alone was inefficient: the scrolling numbers made it difficult to follow temperature changes over time, and recording readings manually added extra work. I wrote a Python script to read the serial data, automatically save it to a CSV file that opens in Excel, and display a graph that updates live as new readings arrive.</p>
+        </div>
+        <div class="fabrication-candidate-grid">
+          <article class="fabrication-candidate-card reveal">
+            <figure>
+              <img src="assets/Before Python.png" alt="Arduino serial monitor showing successive temperature readings as lines of text" width="689" height="431" loading="lazy" decoding="async">
+              <figcaption>Before · Reading the serial monitor</figcaption>
+            </figure>
+            <div class="fabrication-candidate-body">
+              <h3>Individual readings were hard to track</h3>
+              <p>The serial monitor showed the current temperature, but following the overall trend meant watching a stream of numbers and manually transferring readings for analysis.</p>
+            </div>
+          </article>
+          <article class="fabrication-candidate-card reveal">
+            <figure>
+              <img src="assets/Python Cooling Test Bench Arduino Serial Monitor.webp" alt="Python cooling test logger with saved CSV files and a live temperature-versus-time graph" width="1280" height="689" loading="lazy" decoding="async">
+              <figcaption>After · Automatic CSV logging and live plotting</figcaption>
+            </figure>
+            <div class="fabrication-candidate-body">
+              <h3>See the trend and save the data automatically</h3>
+              <p>The Python script records time and temperature in a CSV file for later analysis in Excel while updating the temperature-versus-time graph during the run. This makes the temperature response easier to follow and removes the need to copy readings by hand.</p>
+            </div>
+          </article>
+        </div>
+        <a class="cooling-back-link" href="#technical-report">↑ Report contents</a>
+      </div>
+    </section>
+
     <section class="section project-detail-section cooling-report-chapter" id="validation-plan">
       <div class="container">
         <div class="section-head reveal">
           <div>
-            <span class="eyebrow">06 · Validation plan</span>
+            <span class="eyebrow">07 · Validation plan</span>
             <h2>Duct temperature tests and fan RPM measurement</h2>
           </div>
           <p>The heater block and wiring are built. Next I’ll print the rounded 70 × 40 mm and 70 × 70 mm ducts and compare temperatures at the same input power and fan control setting. I will compare the measurements with the simulations.</p>
