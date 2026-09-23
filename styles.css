@@ -615,6 +615,9 @@ h1,h2,h3{text-wrap:balance;letter-spacing:-.04em}
 .table-vise-card>.drawing-switcher{grid-template-rows:max-content auto;align-content:start}
 .table-vise-card .drawing-tabs{align-self:start;align-items:center}
 .table-vise-card .drawing-tabs button{height:42px;min-height:42px;padding:.45rem .8rem}
+#acrylic-bridge>.drawing-switcher{grid-template-rows:max-content max-content 1fr;align-content:stretch}
+#acrylic-bridge .drawing-slide img{object-fit:cover}
+@media(min-width:981px){#acrylic-bridge .drawing-stage{aspect-ratio:auto;min-height:320px}}
 @media(max-width:980px){.project-card.featured.table-vise-card{grid-template-columns:minmax(0,1fr)}.table-vise-card>.project-gallery,.table-vise-card>.project-body{grid-column:1}.table-vise-card>.project-gallery{grid-row:1;border-right:0;border-bottom:1px solid var(--line)}.table-vise-card>.project-body{grid-row:2}}
 
 .home-grid{grid-template-columns:minmax(0,850px)}

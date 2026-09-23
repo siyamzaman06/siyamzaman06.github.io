@@ -90,28 +90,29 @@
               </div>
             </div>
           </article>
-          <article class="project-card featured reveal" id="laptop-stand">
-            <figure class="media laptop-stand-media">
-              <img src="assets/Laptop Stand.jpeg" alt="Wooden laptop stand with black 3D-printed parts, fasteners, and an aluminum rod" width="3040" height="2666" loading="lazy" decoding="async">
-              <figcaption>Wood, 3D-Printed Parts &amp; Aluminum</figcaption>
-              <button class="preview-button" type="button" aria-label="View laptop stand photo" aria-haspopup="dialog" aria-controls="imageLightbox" data-preview-src="assets/Laptop Stand.jpeg" data-preview-title="Laptop Stand" data-preview-label="Project · Fabrication" data-preview-alt="Wooden laptop stand with black 3D-printed parts, fasteners, and an aluminum rod">View</button>
-            </figure>
-            <div class="project-body">
-              <span class="status done">Completed · Fabrication Project</span>
-              <h2 style="font-size:clamp(2rem,4vw,3.2rem)">Laptop Stand</h2>
-              <p>I fabricated a laptop stand from wood, aluminum rod, and 3D-printed parts. I cut the wood and rod to size and assembled the components using shop tools.</p>
-              <div class="meta"><span>Materials: Wood, 3D-printed parts, and aluminum rod</span><span>Process: Cutting, woodworking, and assembly</span></div>
-              <div class="tags"><span class="tag">Woodworking</span><span class="tag">3D-Printed Parts</span><span class="tag">Metal Cutting</span><span class="tag">Assembly</span><span class="tag">Shop Tools &amp; Machines</span></div>
-            </div>
-          </article>
-          <article class="project-card featured reverse reveal" id="acrylic-bridge">
-            <figure class="media">
-              <img src="assets/acrylic-bridge.webp" alt="Laser-cut acrylic bridge during load testing" width="2000" height="1500" loading="lazy" decoding="async">
-              <button class="preview-button" type="button" aria-label="View acrylic bridge photo" aria-haspopup="dialog" aria-controls="imageLightbox" data-preview-src="assets/acrylic-bridge.webp" data-preview-title="Laser-Cut Acrylic Bridge" data-preview-label="Project · Load Testing" data-preview-alt="Laser-cut acrylic bridge during load testing">View</button>
-              <div class="placeholder">
-                <div><strong>Acrylic Bridge Load Test</strong><span>Project media unavailable</span></div>
+          <article class="project-card featured table-vise-card reveal" id="acrylic-bridge">
+            <div class="project-gallery drawing-switcher" data-drawing-switcher data-drawing-autoplay>
+              <div class="drawing-controls">
+                <div class="drawing-tabs" role="tablist" aria-label="Acrylic bridge photo and AutoCAD drawing">
+                  <button id="bridgePhotoTab" type="button" role="tab" aria-selected="true" aria-controls="bridgePhotoPanel" data-drawing-tab>Load Test</button>
+                  <button id="bridgeDrawingTab" type="button" role="tab" aria-selected="false" aria-controls="bridgeDrawingPanel" data-drawing-tab>AutoCAD Drawing</button>
+                </div>
+                <button class="drawing-autoplay-toggle" type="button" data-drawing-autoplay-toggle aria-pressed="false" aria-label="Pause slideshow" title="Pause slideshow">⏸</button>
               </div>
-            </figure>
+              <div class="drawing-progress" data-drawing-progress aria-hidden="true"><span></span></div>
+              <div class="drawing-stage">
+                <figure class="media drawing-slide active" id="bridgePhotoPanel" role="tabpanel" aria-labelledby="bridgePhotoTab" data-drawing-panel>
+                  <img src="assets/acrylic-bridge.webp" alt="Laser-cut acrylic bridge during load testing" width="2000" height="1500" loading="lazy" decoding="async">
+                  <figcaption>Acrylic Bridge · Load Test</figcaption>
+                  <button class="preview-button" type="button" aria-label="View acrylic bridge photo" aria-haspopup="dialog" aria-controls="imageLightbox" data-preview-src="assets/acrylic-bridge.webp" data-preview-title="Laser-Cut Acrylic Bridge · Load Test" data-preview-alt="Laser-cut acrylic bridge during load testing">View</button>
+                </figure>
+                <figure class="media drawing-slide" id="bridgeDrawingPanel" role="tabpanel" aria-labelledby="bridgeDrawingTab" aria-hidden="true" data-drawing-panel>
+                  <img src="assets/acrylic-bridge-autocad.png" alt="AutoCAD side-profile drawing of the acrylic bridge with red arched truss outlines on a dark grid" width="852" height="504" loading="lazy" decoding="async">
+                  <figcaption>Acrylic Bridge · AutoCAD Drawing</figcaption>
+                  <button class="preview-button" type="button" aria-label="View acrylic bridge AutoCAD drawing" aria-haspopup="dialog" aria-controls="imageLightbox" data-preview-src="assets/acrylic-bridge-autocad.png" data-preview-title="Laser-Cut Acrylic Bridge · AutoCAD Drawing" data-preview-alt="AutoCAD side-profile drawing of the acrylic bridge with red arched truss outlines on a dark grid">View</button>
+                </figure>
+              </div>
+            </div>
             <div class="project-body">
               <span class="status done">Completed</span>
               <h2 style="font-size:clamp(2rem,4vw,3.2rem)">Laser-Cut Acrylic Bridge</h2>
@@ -124,6 +125,20 @@
                 <span class="tag">Structural Testing</span>
                 <span class="tag">Force Analysis</span>
               </div>
+            </div>
+          </article>
+          <article class="project-card featured reveal" id="laptop-stand">
+            <figure class="media laptop-stand-media">
+              <img src="assets/Laptop Stand.jpeg" alt="Wooden laptop stand with black 3D-printed parts, fasteners, and an aluminum rod" width="3040" height="2666" loading="lazy" decoding="async">
+              <figcaption>Wood, 3D-Printed Parts &amp; Aluminum</figcaption>
+              <button class="preview-button" type="button" aria-label="View laptop stand photo" aria-haspopup="dialog" aria-controls="imageLightbox" data-preview-src="assets/Laptop Stand.jpeg" data-preview-title="Laptop Stand" data-preview-label="Project · Fabrication" data-preview-alt="Wooden laptop stand with black 3D-printed parts, fasteners, and an aluminum rod">View</button>
+            </figure>
+            <div class="project-body">
+              <span class="status done">Completed · Fabrication Project</span>
+              <h2 style="font-size:clamp(2rem,4vw,3.2rem)">Laptop Stand</h2>
+              <p>I fabricated a laptop stand from wood, aluminum rod, and 3D-printed parts. I cut the wood and rod to size and assembled the components using shop tools.</p>
+              <div class="meta"><span>Materials: Wood, 3D-printed parts, and aluminum rod</span><span>Process: Cutting, woodworking, and assembly</span></div>
+              <div class="tags"><span class="tag">Woodworking</span><span class="tag">3D-Printed Parts</span><span class="tag">Metal Cutting</span><span class="tag">Assembly</span><span class="tag">Shop Tools &amp; Machines</span></div>
             </div>
           </article>
         </div>
